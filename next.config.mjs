@@ -19,6 +19,13 @@ const nextConfig = {
   outputFileTracingRoot: dirname(fileURLToPath(import.meta.url)),
   // Fixtures are read with fs at runtime (dynamic paths), so bundle them into every server function.
   outputFileTracingIncludes: { "/**": ["./data/**/*"], "/**/*": ["./data/**/*"] },
+  // Paths built from process.cwd() make the tracer pull in the whole project, including the build
+  // cache Vercel restores (~350 MB). That pushes every route over the function size budget, so
+  // Vercel stops grouping them: 40 functions, past the Hobby limit of 12. Nothing reads these at runtime.
+  outputFileTracingExcludes: {
+    "/**": ["./.next/cache/**/*", "./scripts/**/*", "./evals/**/*", "./*.md"],
+    "/**/*": ["./.next/cache/**/*", "./scripts/**/*", "./evals/**/*", "./*.md"],
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
