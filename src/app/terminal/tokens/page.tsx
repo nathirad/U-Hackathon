@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { RECIPIENT_LABEL } from "@/components/fx";
+import { TokenLogo } from "@/components/TokenLogo";
 import { LEVEL_LABEL, shortDate, usd } from "@/lib/format";
 import type { ScreenResult, ScreenRow } from "@/lib/screener";
 
@@ -83,8 +84,8 @@ export default function TokensPage() {
     return [...rows].sort((a, b) => (value(b, sort.key) - value(a, sort.key)) * sort.dir);
   }, [data, windowDays, query, sort]);
 
-  const head = (key: SortKey, label: string, title?: string, num = true) => (
-    <th className={num ? "num" : undefined} aria-sort={sort.key === key ? (sort.dir === 1 ? "descending" : "ascending") : "none"} title={title}>
+  const head = (key: SortKey, label: string, title?: string, num = true, extra = "") => (
+    <th className={`${num ? "num" : ""} ${extra}`.trim() || undefined} aria-sort={sort.key === key ? (sort.dir === 1 ? "descending" : "ascending") : "none"} title={title}>
       <button className="sort-btn" onClick={() => setSort((s) => ({ key, dir: s.key === key ? ((-s.dir) as 1 | -1) : 1 }))}>
         {label}
         <span aria-hidden="true" className={sort.key === key ? "on" : ""}>{sort.key === key ? (sort.dir === 1 ? "▼" : "▲") : "⇅"}</span>
@@ -111,7 +112,7 @@ export default function TokensPage() {
       <div className="page-title">
         <h1>Token screener</h1>
         <p>
-          Top tokens by market cap · prices {data?.sources.market === "live" ? "live (Hyperliquid, CoinGecko)" : "from Tokenomist"} · unlocks from the Tokenomist API
+          Top tokens by market cap · {!data ? "loading live prices" : data.sources.market === "live" ? "prices live (Hyperliquid, CoinGecko)" : "prices from Tokenomist"} · unlocks from the Tokenomist API
           {data ? ` (${data.sources.tokens === "live" ? "live" : "saved"}, ${shortDate(data.sources.asOf)})` : ""}
         </p>
       </div>
@@ -122,7 +123,7 @@ export default function TokensPage() {
         <div className="kpi">
           <span>High-risk unlocks (30 days)</span>
           <b style={{ color: flagged.length ? "var(--coral)" : undefined }}>{data ? flagged.length : "…"}</b>
-          <small>{flagged.slice(0, 4).map((r) => r.symbol).join(", ") || "none"}</small>
+          <small>{data ? flagged.slice(0, 4).map((r) => r.symbol).join(", ") || "none" : "…"}</small>
         </div>
       </div>
 
@@ -146,14 +147,14 @@ export default function TokensPage() {
               <th>Token</th>
               {head("price", "Price")}
               {head("ch24", "24h")}
-              {head("ch7", "7d")}
-              {head("mcap", "Market cap")}
-              {head("fdv", "FDV", "Fully diluted value: price × max supply")}
-              {head("float", "Float", "Circulating ÷ max supply. Lower means more supply still to come")}
+              {head("ch7", "7d", undefined, true, "col-opt")}
+              {head("mcap", "Market cap", undefined, true, "col-opt2")}
+              {head("fdv", "FDV", "Fully diluted value: price × max supply", true, "col-opt")}
+              {head("float", "Float", "Circulating ÷ max supply. Lower means more supply still to come", true, "col-opt2")}
               {head("next", "Next unlock", "Next scheduled cliff unlock in the next 60 days", false)}
               {head("size", "Unlock size", "Next unlock as % of circulating supply, and its value")}
               {head("grade", "Unlock risk", "Full U-Guard score for tokens it follows; size grade for the rest", false)}
-              <th aria-label="Details" />
+              <th aria-label="Details" className="col-opt2" />
             </tr>
           </thead>
           <tbody>
@@ -170,12 +171,7 @@ export default function TokensPage() {
                 <td className="num muted">{r.rank}</td>
                 <td>
                   <span className="tok">
-                    {r.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={r.image} alt="" width={22} height={22} loading="lazy" />
-                    ) : (
-                      <i>{r.symbol.slice(0, 3)}</i>
-                    )}
+                    <TokenLogo symbol={r.symbol} src={r.image} size={22} />
                     <span>
                       <b>{r.name}</b>
                       <small>
@@ -187,10 +183,10 @@ export default function TokensPage() {
                 </td>
                 <td className="num">{price(r.priceUsd)}</td>
                 <td className="num"><Change v={r.change24hPct} /></td>
-                <td className="num"><Change v={r.change7dPct} /></td>
-                <td className="num">{r.marketCapUsd ? usd(r.marketCapUsd) : "–"}</td>
-                <td className="num">{r.fdvUsd ? usd(r.fdvUsd) : "–"}</td>
-                <td className="num">
+                <td className="num col-opt"><Change v={r.change7dPct} /></td>
+                <td className="num col-opt2">{r.marketCapUsd ? usd(r.marketCapUsd) : "–"}</td>
+                <td className="num col-opt">{r.fdvUsd ? usd(r.fdvUsd) : "–"}</td>
+                <td className="num col-opt2">
                   <span className="floatbar">
                     <span>
                       <i style={{ width: `${r.floatPct ?? 0}%`, background: floatColor(r.floatPct) }} />
@@ -228,7 +224,7 @@ export default function TokensPage() {
                     {r.grade.kind === "size" && r.grade.level !== "none" ? " · size" : ""}
                   </span>
                 </td>
-                <td>
+                <td className="col-opt2">
                   <Link className="btn btn-sm" href={`/terminal/tokens/${r.symbol}`} onClick={(e) => e.stopPropagation()}>
                     Details ›
                   </Link>

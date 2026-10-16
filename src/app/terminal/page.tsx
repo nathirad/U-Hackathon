@@ -8,6 +8,7 @@ import { CountUp, Spotlight, useTypewriter } from "@/components/fx";
 import { LEVEL_LABEL, thb, shortDate, unlockWhen, usd, compact } from "@/lib/format";
 import type { ScreenRow } from "@/lib/screener";
 import type { NewsItem, RiskCard } from "@/lib/types";
+import { TokenLogo } from "@/components/TokenLogo";
 
 const PROMPTS = [
   "Is buying 5,000 THB of ARB risky right now?",
@@ -161,12 +162,7 @@ export default function TerminalHome() {
                 {r.nextUnlock!.daysUntil <= 0 ? "today" : `in ${r.nextUnlock!.daysUntil} d`}
               </span>
               <span className="tok">
-                {r.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={r.image} alt="" width={20} height={20} loading="lazy" />
-                ) : (
-                  <i>{r.symbol.slice(0, 3)}</i>
-                )}
+                <TokenLogo symbol={r.symbol} src={r.image} size={20} />
                 <span>
                   <b>{r.symbol}</b>
                   <small>

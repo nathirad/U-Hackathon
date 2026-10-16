@@ -273,25 +273,25 @@ body:has(.report-page) { background: #fff; color: #10151f; color-scheme: light; 
 }
 
 /* ── U-Guard Terminal ─────────────────────────── */
-.term { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 100vh; }
-.term-collapsed { grid-template-columns: 68px minmax(0, 1fr); }
+.term { display: grid; grid-template-columns: 256px minmax(0, 1fr); min-height: 100vh; }
+.term-collapsed { grid-template-columns: 76px minmax(0, 1fr); }
 .term-side {
   position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 6px;
-  background: #0a111f; border-right: 1px solid var(--border); padding: 14px 10px; overflow-y: auto;
+  background: #0a111f; border-right: 1px solid var(--border); padding: 20px 16px 16px; overflow-y: auto;
 }
-.term-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 14px; text-decoration: none; font-weight: 600; }
+.term-brand { display: flex; align-items: center; gap: 12px; padding: 2px 12px 22px; text-decoration: none; font-weight: 600; }
 .term-brand small { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.6px; color: var(--teal); font-weight: 500; text-transform: uppercase; }
-.term-group { margin-bottom: 10px; }
-.term-group-label { margin: 6px 10px 4px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.4px; color: var(--muted); text-transform: uppercase; }
+.term-group { margin-bottom: 18px; display: grid; gap: 2px; }
+.term-group-label { margin: 0 12px 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.4px; color: var(--muted); text-transform: uppercase; }
 .term-link {
-  display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border-radius: 10px;
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 9px 12px; border-radius: 10px;
   color: var(--text-2); text-decoration: none; font-size: 14px; background: transparent; border: 0; text-align: left; position: relative;
 }
 .term-link:hover { background: var(--surface); color: var(--text); }
 .term-link[aria-current="page"] { background: var(--surface-2); color: var(--text); }
-.term-link[aria-current="page"]::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: var(--teal); }
+.term-link[aria-current="page"]::before { content: ""; position: absolute; left: 0; top: 9px; bottom: 9px; width: 3px; border-radius: 0 3px 3px 0; background: var(--teal); }
 .term-link kbd, .term-search kbd { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--muted); border: 1px solid var(--border-strong); border-radius: 5px; padding: 0 5px; }
-.term-collapse { margin-top: auto; }
+.term-collapse { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
 .term-collapsed .term-brand span, .term-collapsed .term-link span, .term-collapsed .term-link kbd, .term-collapsed .term-group-label { display: none; }
 .term-collapsed .term-link { justify-content: center; }
 .term-main { min-width: 0; display: flex; flex-direction: column; }
@@ -923,3 +923,7 @@ td.drift-under { color: var(--amber); }
 .sched-recips { display: inline-flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--text-2); }
 .sched-recips span { display: inline-flex; align-items: center; gap: 4px; }
 .sched-recips i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+
+/* Screener: drop the secondary columns on narrower screens so the table fits without scrolling. */
+@media (max-width: 1320px) { .screen-table .col-opt { display: none; } }
+@media (max-width: 1100px) { .screen-table .col-opt2 { display: none; } }

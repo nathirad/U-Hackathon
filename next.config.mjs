@@ -13,6 +13,8 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Keep Next's dev badge away from the sidebar's Collapse button.
+  devIndicators: { position: "bottom-right" },
   // Pin the project root so a lockfile higher up the disk isn't picked as the workspace root.
   outputFileTracingRoot: dirname(fileURLToPath(import.meta.url)),
   async headers() {
