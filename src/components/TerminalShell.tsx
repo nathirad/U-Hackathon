@@ -17,6 +17,7 @@ const NAV: { label: string; items: { href: string; icon: IconName; th: string }[
     items: [
       { href: "/terminal", icon: "home", th: "Today" },
       { href: "/terminal/agent", icon: "spark", th: "Ask U-Bot" },
+      { href: "/terminal/voice", icon: "mic", th: "Voice assistant" },
     ],
   },
   {
@@ -200,6 +201,9 @@ export function TerminalShell({ children }: { children: React.ReactNode }) {
             </span>
           </div>
           <UBotInbox />
+          <Link href="/terminal/voice" className="btn btn-sm term-voice" title="Talk with U-Bot hands-free (ElevenLabs voice)">
+            <Icon name="mic" size={15} /> Voice
+          </Link>
           <Link href="/terminal/agent" className="btn btn-sm">
             Ask U-Bot
           </Link>
