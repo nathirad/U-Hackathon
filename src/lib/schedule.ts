@@ -60,7 +60,7 @@ export async function holdingsSchedule(userId: string, now: number, months = 6):
           source = events.source;
           asOf = events.asOf;
         }
-        const mine = events.data.filter((e) => (e.cliffUnlocks?.cliffAmount ?? 0) > 0 || (e.linearUnlocks?.linearAmount ?? e.linearUnlocks?.amount ?? 0) > 0);
+        const mine = (events.data ?? []).filter((e) => (e.cliffUnlocks?.cliffAmount ?? 0) > 0 || (e.linearUnlocks?.linearAmount ?? e.linearUnlocks?.amount ?? 0) > 0);
         if (mine.length === 0) {
           noSchedule.push(h.symbol);
           return;

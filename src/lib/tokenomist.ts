@@ -181,7 +181,8 @@ async function fetchOrFallback<T>(cacheKey: string, livePath: string, fixturePat
     try {
       const body = await fetchLive<T>(livePath);
       const value: Sourced<T> = {
-        data: body.data,
+        // The API can answer 200 with `data: null` (e.g. no daily emission for a token).
+        data: body.data ?? empty,
         source: "live",
         asOf: body.metadata?.queryDate ?? new Date().toISOString(),
       };
@@ -273,7 +274,7 @@ export async function getCliffEvents(tokenId: string, start: string, end: string
     [],
   );
   const day = (iso: string) => iso.slice(0, 10);
-  return { ...res, data: res.data.filter((e) => (e.cliffUnlocks?.cliffAmount ?? 0) > 0 && day(e.unlockDate) >= start && day(e.unlockDate) <= end) };
+  return { ...res, data: (res.data ?? []).filter((e) => (e.cliffUnlocks?.cliffAmount ?? 0) > 0 && day(e.unlockDate) >= start && day(e.unlockDate) <= end) };
 }
 
 export async function getUnlockEvents(tokenId: string, start: string, end: string): Promise<Sourced<UnlockEvent[]>> {
@@ -286,7 +287,7 @@ export async function getUnlockEvents(tokenId: string, start: string, end: strin
   );
   // Fixtures hold every event; apply the same window the live API applies. A linear
   // window counts when it overlaps the requested range.
-  const events = res.data.filter(
+  const events = (res.data ?? []).filter(
     (e) => e.unlockDate.slice(0, 10) <= end && (e.endDate ?? e.unlockDate).slice(0, 10) >= start,
   );
   if (events.some((e) => e.linearUnlocks)) return { ...res, data: events };
@@ -295,7 +296,7 @@ export async function getUnlockEvents(tokenId: string, start: string, end: strin
   // are in daily emission; fold them into one linear event so the scorer and the forecast
   // see them. Without this, a token that unlocks every day reads as "no unlock".
   const emission = await getDailyEmission(tokenId, start, end);
-  const linear = linearFromEmission(emission.data, events, start, end);
+  const linear = linearFromEmission(emission.data ?? [], events, start, end);
   return linear ? { ...res, data: [...events, linear] } : { ...res, data: events };
 }
 
