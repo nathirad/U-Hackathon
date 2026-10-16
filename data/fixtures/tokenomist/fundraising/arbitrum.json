@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:48Z",
+    "queryDate": "2026-10-16T06:04:45Z",
     "credit": {
-      "used": 29,
+      "used": 7881,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
@@ -15,7 +15,7 @@
     "tokenSymbol": "ARB",
     "listedMethod": "INTERNAL",
     "totalAmountRaised": 123700000,
-    "unlockedInvestor": 295984189.43288946,
+    "unlockedInvestor": 300140990.6837024,
     "investorReleasedPercentage": 87.50000000213919,
     "fundingRounds": [
       {

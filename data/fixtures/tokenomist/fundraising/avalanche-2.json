@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:50Z",
+    "queryDate": "2026-10-16T06:04:57Z",
     "credit": {
-      "used": 41,
+      "used": 7893,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
@@ -15,7 +15,7 @@
     "tokenSymbol": "AVAX",
     "listedMethod": "INTERNAL",
     "totalAmountRaised": 498000000,
-    "unlockedInvestor": 1156739040,
+    "unlockedInvestor": 1157888880,
     "investorReleasedPercentage": 100,
     "fundingRounds": [
       {

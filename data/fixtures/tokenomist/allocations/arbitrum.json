@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:48Z",
+    "queryDate": "2026-10-16T06:04:44Z",
     "credit": {
-      "used": 28,
+      "used": 7881,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
@@ -15,8 +15,8 @@
     "listedMethod": "INTERNAL",
     "maxSupply": 10000000000,
     "lastUpdatedDate": "2026-10-06T07:31:16Z",
-    "totalUnlockedAmount": 5951920095.132517,
-    "totalLockedAmount": 643949708.8161879,
+    "totalUnlockedAmount": 6045044709.787233,
+    "totalLockedAmount": 643750225.8169794,
     "totalUntrackedAmount": 0,
     "totalTBDLockedAmount": 3403750000,
     "allocations": [
@@ -33,8 +33,8 @@
         "allocationName": "Team, Future Team + Advisors",
         "allocationType": "Scheduled",
         "standardAllocationName": "Founder / Team",
-        "allocationUnlockedAmount": 2357250000,
-        "allocationLockedAmount": 336750000,
+        "allocationUnlockedAmount": 2413375000,
+        "allocationLockedAmount": 280625000,
         "allocationAmount": 2694000000,
         "trackedAllocationPercentage": 26.939999999999998
       },
@@ -42,8 +42,8 @@
         "allocationName": "Investors",
         "allocationType": "Scheduled",
         "standardAllocationName": "Private Investors",
-        "allocationUnlockedAmount": 1533875000.2999997,
-        "allocationLockedAmount": 219124999.7000003,
+        "allocationUnlockedAmount": 1570395833.2999997,
+        "allocationLockedAmount": 182604166.7000003,
         "allocationAmount": 1753000000,
         "trackedAllocationPercentage": 17.53
       },
@@ -60,8 +60,8 @@
         "allocationName": "Arbitrum DAO Treasury",
         "allocationType": "Scheduled",
         "standardAllocationName": "Reserve",
-        "allocationUnlockedAmount": 785795094.8325174,
-        "allocationLockedAmount": 88454905.16748261,
+        "allocationUnlockedAmount": 786273876.4872344,
+        "allocationLockedAmount": 87976123.51276565,
         "allocationAmount": 874250000,
         "trackedAllocationPercentage": 8.7425
       },

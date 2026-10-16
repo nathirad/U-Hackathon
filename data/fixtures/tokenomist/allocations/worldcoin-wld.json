@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:49Z",
+    "queryDate": "2026-10-16T06:04:56Z",
     "credit": {
-      "used": 33,
+      "used": 7886,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
@@ -15,8 +15,8 @@
     "listedMethod": "INTERNAL",
     "maxSupply": 10000000000,
     "lastUpdatedDate": "2026-10-06T07:32:18Z",
-    "totalUnlockedAmount": 5788889497.716847,
-    "totalLockedAmount": 4208805826.309313,
+    "totalUnlockedAmount": 5791791780.82187,
+    "totalLockedAmount": 4207596598.4021034,
     "totalUntrackedAmount": 0,
     "totalTBDLockedAmount": 0,
     "allocations": [
@@ -24,8 +24,8 @@
         "allocationName": "Worldcoin Community",
         "allocationType": "Scheduled",
         "standardAllocationName": "Community",
-        "allocationUnlockedAmount": 4132648401.826447,
-        "allocationLockedAmount": 3367351598.173553,
+        "allocationUnlockedAmount": 4134246575.3424287,
+        "allocationLockedAmount": 3365753424.6575713,
         "allocationAmount": 7500000000,
         "trackedAllocationPercentage": 75
       },
@@ -33,8 +33,8 @@
         "allocationName": "TFH Investors",
         "allocationType": "Scheduled",
         "standardAllocationName": "Private Investors",
-        "allocationUnlockedAmount": 889470684.9315001,
-        "allocationLockedAmount": 488529315.0684999,
+        "allocationUnlockedAmount": 890225753.4246508,
+        "allocationLockedAmount": 487774246.5753492,
         "allocationAmount": 1378000000,
         "trackedAllocationPercentage": 13.780000000000001
       },
@@ -42,8 +42,8 @@
         "allocationName": "Initial Development Team",
         "allocationType": "Scheduled",
         "standardAllocationName": "Founder / Team",
-        "allocationUnlockedAmount": 646770410.9589014,
-        "allocationLockedAmount": 355229589.0410986,
+        "allocationUnlockedAmount": 647319452.0547918,
+        "allocationLockedAmount": 354680547.9452082,
         "allocationAmount": 1002000000,
         "trackedAllocationPercentage": 10.02
       },

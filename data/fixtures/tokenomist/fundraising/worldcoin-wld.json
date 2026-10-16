@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:49Z",
+    "queryDate": "2026-10-16T06:04:56Z",
     "credit": {
-      "used": 34,
+      "used": 7887,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
@@ -15,8 +15,8 @@
     "tokenSymbol": "WLD",
     "listedMethod": "INTERNAL",
     "totalAmountRaised": 375000000,
-    "unlockedInvestor": 449290322.6541124,
-    "investorReleasedPercentage": 64.59282978183663,
+    "unlockedInvestor": 445565106.3294154,
+    "investorReleasedPercentage": 64.61642376966009,
     "fundingRounds": [
       {
         "fundingRound": "Private Round",

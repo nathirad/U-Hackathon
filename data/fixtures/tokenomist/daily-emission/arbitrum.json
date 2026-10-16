@@ -1,40 +1,19 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:49Z",
+    "queryDate": "2026-10-16T06:04:45Z",
     "credit": {
-      "used": 30,
+      "used": 7883,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
     "page": 1,
     "totalPages": 1,
-    "pageSize": 199,
-    "total": 199,
+    "pageSize": 198,
+    "total": 198,
     "mode": "snapshot"
   },
   "status": true,
   "data": [
-    {
-      "startDate": "2026-10-01T00:00:00Z",
-      "endDate": "2026-10-02T00:00:00Z",
-      "tokenName": "Arbitrum",
-      "tokenSymbol": "ARB",
-      "listedMethod": "INTERNAL",
-      "unlockAmount": 478781.65471694345,
-      "unlockValue": 97168.25804314895,
-      "referencePrice": 0.202949,
-      "allocations": [
-        {
-          "allocationName": "Arbitrum DAO Treasury",
-          "standardAllocationName": "Reserve",
-          "unlockAmount": 478781.65471694345,
-          "unlockValue": 97168.25804314895,
-          "committedClaim": null
-        }
-      ],
-      "totalCumulativeUnlockedAmount": 5945695933.620966,
-      "committedClaim": null
-    },
     {
       "startDate": "2026-10-02T00:00:00Z",
       "endDate": "2026-10-03T00:00:00Z",
@@ -315,14 +294,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 92422.0954999399,
-      "referencePrice": 0.193036,
+      "unlockValue": 87004.68107681768,
+      "referencePrice": 0.181721,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 92422.0954999399,
+          "unlockValue": 87004.68107681768,
           "committedClaim": null
         }
       ],
@@ -336,28 +315,28 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 93124614.65471694,
-      "unlockValue": 18202882.177328214,
-      "referencePrice": 0.195468,
+      "unlockValue": 17925370.825657155,
+      "referencePrice": 0.192488,
       "allocations": [
         {
           "allocationName": "Team, Future Team + Advisors",
           "standardAllocationName": "Founder / Team",
           "unlockAmount": 56125000,
-          "unlockValue": 10970641.5,
+          "unlockValue": 10803389,
           "committedClaim": null
         },
         {
           "allocationName": "Investors",
           "standardAllocationName": "Private Investors",
           "unlockAmount": 36520833,
-          "unlockValue": 7138654.184844,
+          "unlockValue": 7029822.102504,
           "committedClaim": null
         },
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 92159.723153155,
           "committedClaim": null
         }
       ],
@@ -371,14 +350,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -392,14 +371,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -413,14 +392,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -434,14 +413,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -455,14 +434,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -476,14 +455,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -497,14 +476,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -518,14 +497,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -539,14 +518,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -560,14 +539,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -581,14 +560,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -602,14 +581,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -623,14 +602,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -644,14 +623,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -665,14 +644,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -686,14 +665,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -707,14 +686,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -728,14 +707,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -749,14 +728,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -770,14 +749,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -791,14 +770,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -812,14 +791,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -833,14 +812,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -854,14 +833,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -875,14 +854,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -896,14 +875,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -917,14 +896,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -938,14 +917,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -959,14 +938,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -980,14 +959,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1001,28 +980,28 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 93124615.65471694,
-      "unlockValue": 18202882.37279621,
-      "referencePrice": 0.195468,
+      "unlockValue": 18222159.168236736,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Team, Future Team + Advisors",
           "standardAllocationName": "Founder / Team",
           "unlockAmount": 56125000,
-          "unlockValue": 10970641.5,
+          "unlockValue": 10982259.375,
           "committedClaim": null
         },
         {
           "allocationName": "Investors",
           "standardAllocationName": "Private Investors",
           "unlockAmount": 36520834,
-          "unlockValue": 7138654.380312,
+          "unlockValue": 7146214.192949999,
           "committedClaim": null
         },
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1036,14 +1015,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1057,14 +1036,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1078,14 +1057,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1099,14 +1078,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1120,14 +1099,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1141,14 +1120,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1162,14 +1141,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1183,14 +1162,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1204,14 +1183,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1225,14 +1204,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1246,14 +1225,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1267,14 +1246,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1288,14 +1267,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1309,14 +1288,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1330,14 +1309,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1351,14 +1330,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1372,14 +1351,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1393,14 +1372,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1414,14 +1393,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1435,14 +1414,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1456,14 +1435,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1477,14 +1456,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1498,14 +1477,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1519,14 +1498,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1540,14 +1519,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1561,14 +1540,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1582,14 +1561,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1603,14 +1582,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1624,14 +1603,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1645,28 +1624,28 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 93124614.65471694,
-      "unlockValue": 18202882.177328214,
-      "referencePrice": 0.195468,
+      "unlockValue": 18222158.972561736,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Team, Future Team + Advisors",
           "standardAllocationName": "Founder / Team",
           "unlockAmount": 56125000,
-          "unlockValue": 10970641.5,
+          "unlockValue": 10982259.375,
           "committedClaim": null
         },
         {
           "allocationName": "Investors",
           "standardAllocationName": "Private Investors",
           "unlockAmount": 36520833,
-          "unlockValue": 7138654.184844,
+          "unlockValue": 7146213.9972749995,
           "committedClaim": null
         },
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1680,14 +1659,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1701,14 +1680,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1722,14 +1701,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1743,14 +1722,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1764,14 +1743,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1785,14 +1764,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1806,14 +1785,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1827,14 +1806,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1848,14 +1827,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1869,14 +1848,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1890,14 +1869,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1911,14 +1890,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1932,14 +1911,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1953,14 +1932,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1974,14 +1953,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -1995,14 +1974,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2016,14 +1995,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2037,14 +2016,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2058,14 +2037,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2079,14 +2058,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2100,14 +2079,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2121,14 +2100,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2142,14 +2121,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2163,14 +2142,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2184,14 +2163,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2205,14 +2184,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2226,14 +2205,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2247,14 +2226,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2268,14 +2247,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2289,14 +2268,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2310,28 +2289,28 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 93124614.65471694,
-      "unlockValue": 18202882.177328214,
-      "referencePrice": 0.195468,
+      "unlockValue": 18222158.972561736,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Team, Future Team + Advisors",
           "standardAllocationName": "Founder / Team",
           "unlockAmount": 56125000,
-          "unlockValue": 10970641.5,
+          "unlockValue": 10982259.375,
           "committedClaim": null
         },
         {
           "allocationName": "Investors",
           "standardAllocationName": "Private Investors",
           "unlockAmount": 36520833,
-          "unlockValue": 7138654.184844,
+          "unlockValue": 7146213.9972749995,
           "committedClaim": null
         },
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2345,14 +2324,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2366,14 +2345,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2387,14 +2366,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2408,14 +2387,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2429,14 +2408,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2450,14 +2429,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2471,14 +2450,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2492,14 +2471,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2513,14 +2492,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2534,14 +2513,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2555,14 +2534,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2576,14 +2555,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2597,14 +2576,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2618,14 +2597,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2639,14 +2618,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2660,14 +2639,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2681,14 +2660,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2702,14 +2681,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2723,14 +2702,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2744,14 +2723,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2765,14 +2744,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2786,14 +2765,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2807,14 +2786,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2828,14 +2807,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2849,14 +2828,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2870,14 +2849,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2891,14 +2870,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2912,14 +2891,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2933,14 +2912,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2954,14 +2933,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -2975,28 +2954,28 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 93124615.65471694,
-      "unlockValue": 18202882.37279621,
-      "referencePrice": 0.195468,
+      "unlockValue": 18222159.168236736,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Team, Future Team + Advisors",
           "standardAllocationName": "Founder / Team",
           "unlockAmount": 56125000,
-          "unlockValue": 10970641.5,
+          "unlockValue": 10982259.375,
           "committedClaim": null
         },
         {
           "allocationName": "Investors",
           "standardAllocationName": "Private Investors",
           "unlockAmount": 36520834,
-          "unlockValue": 7138654.380312,
+          "unlockValue": 7146214.192949999,
           "committedClaim": null
         },
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3010,14 +2989,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3031,14 +3010,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3052,14 +3031,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3073,14 +3052,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3094,14 +3073,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3115,14 +3094,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3136,14 +3115,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3157,14 +3136,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3178,14 +3157,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3199,14 +3178,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3220,14 +3199,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3241,14 +3220,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3262,14 +3241,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3283,14 +3262,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3304,14 +3283,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3325,14 +3304,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3346,14 +3325,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3367,14 +3346,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3388,14 +3367,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3409,14 +3388,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3430,14 +3409,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3451,14 +3430,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3472,14 +3451,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3493,14 +3472,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3514,14 +3493,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3535,14 +3514,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3556,14 +3535,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3577,28 +3556,28 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 93124614.65471694,
-      "unlockValue": 18202882.177328214,
-      "referencePrice": 0.195468,
+      "unlockValue": 18222158.972561736,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Team, Future Team + Advisors",
           "standardAllocationName": "Founder / Team",
           "unlockAmount": 56125000,
-          "unlockValue": 10970641.5,
+          "unlockValue": 10982259.375,
           "committedClaim": null
         },
         {
           "allocationName": "Investors",
           "standardAllocationName": "Private Investors",
           "unlockAmount": 36520833,
-          "unlockValue": 7138654.184844,
+          "unlockValue": 7146213.9972749995,
           "committedClaim": null
         },
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3612,14 +3591,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3633,14 +3612,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3654,14 +3633,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3675,14 +3654,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3696,14 +3675,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3717,14 +3696,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3738,14 +3717,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3759,14 +3738,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3780,14 +3759,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3801,14 +3780,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3822,14 +3801,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3843,14 +3822,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3864,14 +3843,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3885,14 +3864,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3906,14 +3885,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3927,14 +3906,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3948,14 +3927,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3969,14 +3948,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -3990,14 +3969,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4011,14 +3990,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4032,14 +4011,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4053,14 +4032,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4074,14 +4053,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4095,14 +4074,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4116,14 +4095,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4137,14 +4116,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4158,14 +4137,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4179,14 +4158,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4200,14 +4179,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4221,14 +4200,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4242,14 +4221,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 478781.65471694345,
-      "unlockValue": 93586.4924842115,
-      "referencePrice": 0.195468,
+      "unlockValue": 93685.6002867379,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 478781.65471694345,
-          "unlockValue": 93586.4924842115,
+          "unlockValue": 93685.6002867379,
           "committedClaim": null
         }
       ],
@@ -4263,14 +4242,14 @@
       "tokenSymbol": "ARB",
       "listedMethod": "INTERNAL",
       "unlockAmount": 359080.6995833706,
-      "unlockValue": 70188.78618616228,
-      "referencePrice": 0.195468,
+      "unlockValue": 70263.11589097604,
+      "referencePrice": 0.195675,
       "allocations": [
         {
           "allocationName": "Arbitrum DAO Treasury",
           "standardAllocationName": "Reserve",
           "unlockAmount": 359080.6995833706,
-          "unlockValue": 70188.78618616228,
+          "unlockValue": 70263.11589097604,
           "committedClaim": null
         }
       ],

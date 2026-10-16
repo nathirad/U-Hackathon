@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:50Z",
+    "queryDate": "2026-10-16T06:04:57Z",
     "credit": {
-      "used": 39,
+      "used": 7892,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
@@ -15,8 +15,8 @@
     "listedMethod": "INTERNAL",
     "maxSupply": 720000000,
     "lastUpdatedDate": "2026-10-06T07:31:16Z",
-    "totalUnlockedAmount": 555931200,
-    "totalLockedAmount": 163989390.9316771,
+    "totalUnlockedAmount": 556031200,
+    "totalLockedAmount": 163947726.21932983,
     "totalUntrackedAmount": 0,
     "totalTBDLockedAmount": 0,
     "allocations": [
@@ -24,8 +24,8 @@
         "allocationName": "Staking Reward",
         "allocationType": "Scheduled",
         "standardAllocationName": "Community",
-        "allocationUnlockedAmount": 222600000,
-        "allocationLockedAmount": 137400000,
+        "allocationUnlockedAmount": 222700000,
+        "allocationLockedAmount": 137300000,
         "allocationAmount": 360000000,
         "trackedAllocationPercentage": 50
       },

@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:48Z",
+    "queryDate": "2026-10-16T06:04:41Z",
     "credit": {
-      "used": 28,
+      "used": 7880,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
@@ -22,17 +22,17 @@
       "dataSource": "Whitepaper",
       "cliffUnlocks": {
         "cliffAmount": 92645833,
-        "cliffValue": 18109295.684844,
-        "valueToMarketCap": 1.3830500350390373,
+        "cliffValue": 18104385.455695,
+        "valueToMarketCap": 1.3670544962674762,
         "allocationBreakdown": [
           {
             "unlockDate": "2026-10-16T13:00:00Z",
             "allocationName": "Team, Future Team + Advisors",
             "standardAllocationName": "Founder / Team",
             "cliffAmount": 56125000,
-            "cliffValue": 10970641.5,
-            "referencePrice": 0.195468,
-            "referencePriceUpdatedTime": "2026-10-16T13:00:00Z",
+            "cliffValue": 10967666.875,
+            "referencePrice": 0.195415,
+            "referencePriceUpdatedTime": "2026-10-16T00:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
           },
@@ -41,9 +41,9 @@
             "allocationName": "Investors",
             "standardAllocationName": "Private Investors",
             "cliffAmount": 36520833,
-            "cliffValue": 7138654.184844,
-            "referencePrice": 0.195468,
-            "referencePriceUpdatedTime": "2026-10-16T13:00:00Z",
+            "cliffValue": 7136718.5806950005,
+            "referencePrice": 0.195415,
+            "referencePriceUpdatedTime": "2026-10-16T00:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
           }
@@ -59,16 +59,16 @@
       "dataSource": "Whitepaper",
       "cliffUnlocks": {
         "cliffAmount": 92645834,
-        "cliffValue": 18109295.880312,
-        "valueToMarketCap": 1.3830500499673941,
+        "cliffValue": 18122358.942906,
+        "valueToMarketCap": 1.368411666692594,
         "allocationBreakdown": [
           {
             "unlockDate": "2026-11-16T13:00:00Z",
             "allocationName": "Team, Future Team + Advisors",
             "standardAllocationName": "Founder / Team",
             "cliffAmount": 56125000,
-            "cliffValue": 10970641.5,
-            "referencePrice": 0.195468,
+            "cliffValue": 10978555.125,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2026-11-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
@@ -78,8 +78,8 @@
             "allocationName": "Investors",
             "standardAllocationName": "Private Investors",
             "cliffAmount": 36520834,
-            "cliffValue": 7138654.380312,
-            "referencePrice": 0.195468,
+            "cliffValue": 7143803.817906001,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2026-11-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
@@ -96,16 +96,16 @@
       "dataSource": "Whitepaper",
       "cliffUnlocks": {
         "cliffAmount": 92645833,
-        "cliffValue": 18109295.684844,
-        "valueToMarketCap": 1.3830500350390373,
+        "cliffValue": 18122358.747297,
+        "valueToMarketCap": 1.3684116519222411,
         "allocationBreakdown": [
           {
             "unlockDate": "2026-12-16T13:00:00Z",
             "allocationName": "Team, Future Team + Advisors",
             "standardAllocationName": "Founder / Team",
             "cliffAmount": 56125000,
-            "cliffValue": 10970641.5,
-            "referencePrice": 0.195468,
+            "cliffValue": 10978555.125,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2026-12-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
@@ -115,8 +115,8 @@
             "allocationName": "Investors",
             "standardAllocationName": "Private Investors",
             "cliffAmount": 36520833,
-            "cliffValue": 7138654.184844,
-            "referencePrice": 0.195468,
+            "cliffValue": 7143803.622297,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2026-12-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
@@ -133,27 +133,27 @@
       "dataSource": "Whitepaper",
       "cliffUnlocks": {
         "cliffAmount": 92645833,
-        "cliffValue": 18109295.684844,
-        "valueToMarketCap": 1.3830500350390373,
+        "cliffValue": 18122358.747297,
+        "valueToMarketCap": 1.3684116519222411,
         "allocationBreakdown": [
           {
             "unlockDate": "2027-01-16T13:00:00Z",
-            "allocationName": "Investors",
-            "standardAllocationName": "Private Investors",
-            "cliffAmount": 36520833,
-            "cliffValue": 7138654.184844,
-            "referencePrice": 0.195468,
+            "allocationName": "Team, Future Team + Advisors",
+            "standardAllocationName": "Founder / Team",
+            "cliffAmount": 56125000,
+            "cliffValue": 10978555.125,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2027-01-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
           },
           {
             "unlockDate": "2027-01-16T13:00:00Z",
-            "allocationName": "Team, Future Team + Advisors",
-            "standardAllocationName": "Founder / Team",
-            "cliffAmount": 56125000,
-            "cliffValue": 10970641.5,
-            "referencePrice": 0.195468,
+            "allocationName": "Investors",
+            "standardAllocationName": "Private Investors",
+            "cliffAmount": 36520833,
+            "cliffValue": 7143803.622297,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2027-01-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
@@ -170,27 +170,27 @@
       "dataSource": "Whitepaper",
       "cliffUnlocks": {
         "cliffAmount": 92645834,
-        "cliffValue": 18109295.880312,
-        "valueToMarketCap": 1.3830500499673941,
+        "cliffValue": 18122358.942906,
+        "valueToMarketCap": 1.368411666692594,
         "allocationBreakdown": [
           {
             "unlockDate": "2027-02-16T13:00:00Z",
-            "allocationName": "Team, Future Team + Advisors",
-            "standardAllocationName": "Founder / Team",
-            "cliffAmount": 56125000,
-            "cliffValue": 10970641.5,
-            "referencePrice": 0.195468,
+            "allocationName": "Investors",
+            "standardAllocationName": "Private Investors",
+            "cliffAmount": 36520834,
+            "cliffValue": 7143803.817906001,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2027-02-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
           },
           {
             "unlockDate": "2027-02-16T13:00:00Z",
-            "allocationName": "Investors",
-            "standardAllocationName": "Private Investors",
-            "cliffAmount": 36520834,
-            "cliffValue": 7138654.380312,
-            "referencePrice": 0.195468,
+            "allocationName": "Team, Future Team + Advisors",
+            "standardAllocationName": "Founder / Team",
+            "cliffAmount": 56125000,
+            "cliffValue": 10978555.125,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2027-02-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
@@ -207,16 +207,16 @@
       "dataSource": "Whitepaper",
       "cliffUnlocks": {
         "cliffAmount": 92645833,
-        "cliffValue": 18109295.684844,
-        "valueToMarketCap": 1.3830500350390373,
+        "cliffValue": 18122358.747297,
+        "valueToMarketCap": 1.3684116519222411,
         "allocationBreakdown": [
           {
             "unlockDate": "2027-03-16T13:00:00Z",
             "allocationName": "Team, Future Team + Advisors",
             "standardAllocationName": "Founder / Team",
             "cliffAmount": 56125000,
-            "cliffValue": 10970641.5,
-            "referencePrice": 0.195468,
+            "cliffValue": 10978555.125,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2027-03-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
@@ -226,8 +226,8 @@
             "allocationName": "Investors",
             "standardAllocationName": "Private Investors",
             "cliffAmount": 36520833,
-            "cliffValue": 7138654.184844,
-            "referencePrice": 0.195468,
+            "cliffValue": 7143803.622297,
+            "referencePrice": 0.195609,
             "referencePriceUpdatedTime": "2027-03-16T13:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null

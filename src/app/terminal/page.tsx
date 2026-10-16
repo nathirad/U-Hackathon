@@ -44,7 +44,11 @@ export default function TerminalHome() {
   const [unlocks, setUnlocks] = useState<ScreenRow[] | null>(null);
   const [news, setNews] = useState<NewsItem[] | null>(null);
   const [plan, setPlan] = useState<{ generatedAt: string; items: PlanItemLite[]; decisions: unknown[]; summary: string[] } | null>(null);
-  const [portfolio, setPortfolio] = useState<{ totalThb: number; atRiskThb: number; rows: { symbol: string; card: RiskCard | null }[] } | null>(null);
+  const [portfolio, setPortfolio] = useState<{
+    totalThb: number;
+    atRiskThb: number;
+    rows: { symbol: string; name?: string; amount?: number; valueThb?: number; weightPct?: number; card: RiskCard | null }[];
+  } | null>(null);
 
   useEffect(() => {
     fetch("/api/calendar").then((r) => r.json()).then((b) => setCalendar(b.analysed ?? [])).catch(() => undefined);
@@ -212,38 +216,137 @@ export default function TerminalHome() {
         </div>
         {!news && <p className="note">Loading headlines…</p>}
         <div className="today-news">
-          {news?.map((n) => (
-            <a key={n.id} href={n.url} target="_blank" rel="noreferrer noopener" className="today-news-item">
-              {n.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={n.image} alt="" loading="lazy" referrerPolicy="no-referrer" />
-              ) : (
-                <span className="today-news-ph">{n.source}</span>
-              )}
-              <small>
-                {n.source}
-                {n.symbols.length ? ` · ${n.symbols.join(", ")}` : ""}
-              </small>
-              <b>{n.summary}</b>
-            </a>
-          ))}
+          {news?.map((n) => {
+            const sym = n.symbols[0] ?? "";
+            const isArb = n.symbols.includes("ARB");
+            const isEth = n.symbols.includes("ETH");
+            const isBtc = n.symbols.includes("BTC");
+            const bgGradient = isArb
+              ? "linear-gradient(135deg, rgba(40, 160, 240, 0.35) 0%, rgba(15, 23, 42, 0.95) 100%)"
+              : isEth
+              ? "linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(15, 23, 42, 0.95) 100%)"
+              : isBtc
+              ? "linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(15, 23, 42, 0.95) 100%)"
+              : "linear-gradient(135deg, rgba(45, 212, 191, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%)";
+
+            return (
+              <a key={n.id} href={n.url} target="_blank" rel="noreferrer noopener" className="today-news-item">
+                {n.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={n.image} alt="" loading="lazy" referrerPolicy="no-referrer" />
+                ) : (
+                  <div
+                    style={{
+                      width: "100%",
+                      aspectRatio: "16 / 9",
+                      borderRadius: 10,
+                      background: bgGradient,
+                      border: "1px solid var(--border)",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      padding: "10px 12px",
+                      position: "relative",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 1 }}>
+                      <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", color: "var(--teal-2)", background: "rgba(10,15,30,0.85)", padding: "2px 6px", borderRadius: 4 }}>
+                        {n.topics[0] ?? "INTEL"}
+                      </span>
+                      <span style={{ fontSize: 10.5, color: "var(--muted)", fontWeight: 500 }}>{n.source}</span>
+                    </div>
+                    <div style={{ zIndex: 1 }}>
+                      <b style={{ fontSize: 17, color: "#fff", letterSpacing: "0.5px" }}>
+                        {n.symbols.join(" · ") || n.source}
+                      </b>
+                    </div>
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: -6,
+                        bottom: -18,
+                        fontSize: 60,
+                        fontWeight: 900,
+                        opacity: 0.12,
+                        userSelect: "none",
+                        pointerEvents: "none",
+                        color: "#fff",
+                        fontFamily: "var(--mono)",
+                      }}
+                    >
+                      {sym || "NEWS"}
+                    </div>
+                  </div>
+                )}
+                <small>
+                  {n.source}
+                  {n.symbols.length ? ` · ${n.symbols.join(", ")}` : ""}
+                </small>
+                <b>{n.summary}</b>
+              </a>
+            );
+          })}
         </div>
       </Spotlight>
 
       {portfolio && (
         <Spotlight className="panel" style={{ marginTop: 16 }}>
-          <div className="panel-head">
-            <h2>My portfolio</h2>
-            <Link href="/terminal/portfolio" className="total">
-              Details →
+          <div className="panel-head" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+            <div>
+              <h2>My portfolio</h2>
+              <span className="total" style={{ marginLeft: 0, marginTop: 4, display: "inline-block" }}>
+                Total: <b>{thb(portfolio.totalThb)}</b>
+                {portfolio.atRiskThb > 0 && (
+                  <span style={{ marginLeft: 8, color: "var(--coral)" }}>
+                    (Facing unlock risk: <b>{thb(portfolio.atRiskThb)}</b>)
+                  </span>
+                )}
+              </span>
+            </div>
+            <Link href="/terminal/portfolio" className="btn btn-sm">
+              Portfolio details →
             </Link>
           </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {portfolio.rows.map((r) => (
-              <Link key={r.symbol} href={`/terminal/tokens/${r.symbol}`} className={`pill lv-${r.card?.level ?? "none"}`} style={{ textDecoration: "none", fontSize: 13, padding: "4px 12px" }}>
-                <span className="dot" /> {r.symbol} · {r.card ? LEVEL_LABEL[r.card.level] : "No unlock"}
-              </Link>
-            ))}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginTop: 14 }}>
+            {portfolio.rows.map((r) => {
+              const lv = r.card?.level ?? "none";
+              return (
+                <Link
+                  key={r.symbol}
+                  href={`/terminal/tokens/${r.symbol}`}
+                  className="portfolio-mini-card"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    padding: "10px 12px",
+                    borderRadius: 10,
+                    background: "var(--surface-2)",
+                    border: "1px solid var(--border)",
+                    textDecoration: "none",
+                    color: "inherit",
+                    gap: 6,
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <span className={`dot ${lv !== "none" ? `dot-${lv}` : ""}`} />
+                      <b style={{ fontSize: 14 }}>{r.symbol}</b>
+                    </div>
+                    <span className={`pill lv-${lv}`} style={{ fontSize: 10.5, padding: "2px 6px" }}>
+                      {r.card ? LEVEL_LABEL[r.card.level] : "No unlock"}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+                    <span style={{ fontSize: 14, fontWeight: 600 }}>{r.valueThb ? thb(r.valueThb) : "–"}</span>
+                    {r.weightPct !== undefined && (
+                      <span className="muted" style={{ fontSize: 11.5 }}>{r.weightPct.toFixed(1)}%</span>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </Spotlight>
       )}

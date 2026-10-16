@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "queryDate": "2026-10-15T19:45:50Z",
+    "queryDate": "2026-10-16T06:04:57Z",
     "credit": {
-      "used": 38,
+      "used": 7891,
       "limit": 50000,
       "resetAt": "2026-11-01T00:00:00Z"
     },
@@ -22,16 +22,16 @@
       "dataSource": "Whitepaper",
       "cliffUnlocks": {
         "cliffAmount": 1666800,
-        "cliffValue": 16784676,
-        "valueToMarketCap": 0.38053774279832014,
+        "cliffValue": 16801344,
+        "valueToMarketCap": 0.37814396720464155,
         "allocationBreakdown": [
           {
             "unlockDate": "2026-11-08T00:00:00Z",
             "allocationName": "Foundation",
             "standardAllocationName": "Reserve",
             "cliffAmount": 1666800,
-            "cliffValue": 16784676,
-            "referencePrice": 10.07,
+            "cliffValue": 16801344,
+            "referencePrice": 10.08,
             "referencePriceUpdatedTime": "2026-11-08T00:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
@@ -48,16 +48,16 @@
       "dataSource": "Whitepaper",
       "cliffUnlocks": {
         "cliffAmount": 1666800,
-        "cliffValue": 16784676,
-        "valueToMarketCap": 0.38053774279832014,
+        "cliffValue": 16801344,
+        "valueToMarketCap": 0.37814396720464155,
         "allocationBreakdown": [
           {
             "unlockDate": "2027-02-06T00:00:00Z",
             "allocationName": "Foundation",
             "standardAllocationName": "Reserve",
             "cliffAmount": 1666800,
-            "cliffValue": 16784676,
-            "referencePrice": 10.07,
+            "cliffValue": 16801344,
+            "referencePrice": 10.08,
             "referencePriceUpdatedTime": "2027-02-06T00:00:00Z",
             "unlockPrecision": "day",
             "committedClaim": null
