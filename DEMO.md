@@ -7,13 +7,16 @@
 
 Plan for the whole day (keys, tests, rehearsal): [DEMO-DAY-PLAN.md](DEMO-DAY-PLAN.md).
 
+**Rehearsed 14:05–14:10 on `release/app-integration` (local):** U-Bot over MCP (0.4.0, 25 tools, ARB HIGH 58, "Tokenomist live") → bell → Approve (simulated receipt) → screener 30 days with countdowns → My plan with the approved rule and stress test → "Is AVAX worrying?" (Low 22, live price, news, trace). The rehearsal found a My plan crash on live data and fixed it (`321295c`).
+
 ---
 
 ## Before going on stage (10 minutes before)
 
 ```bash
-npm run build            # only if the code changed since the last build; never while `npm run dev` runs
-npm start                # .env loaded: LLM, ElevenLabs, Fuji, AUTH_SECRET, MCP_API_KEY, TOKENOMIST_API_KEY
+git checkout release/app-integration   # the rehearsed, integrated version (PR #19)
+# stop every `npm run dev` first: two servers in one folder corrupt .next and double the Tokenomist calls
+npm run build && npm start             # .env loaded: AUTH_SECRET, MCP_API_KEY, TOKENOMIST_API_KEY (+ LLM, ElevenLabs, Fuji if set)
 ```
 
 Open these, left to right, then don't touch the server again:
@@ -57,17 +60,17 @@ Checklist:
 **พูด (TH):** "ผู้ใช้สั่ง U-Bot ซื้อ ARB ห้าพันบาท ก่อนเงินขยับ U-Bot ถาม U-Guard ผ่าน MCP ได้ระดับเสี่ยงสูงจากข้อมูล Tokenomist สด และเสนอกฎป้องกัน แต่ไม่ทำเองเด็ดขาด"
 
 ### 3 · The user decides (1:05 – 1:35) · tab 3, terminal
-**Do:** click the bell → "U-BOT ALERT" with the ARB card → **Listen** (voice) → **Approve** → receipt link.
+**Do:** click the bell → "U-BOT ALERT" with the ARB card and the U-Guard proposal → **Approve** → "Approved · recorded on Avalanche Fuji" ("simulated" without a Fuji key). The bell card has no Listen button: Listen is on the full card in beat 5.
 **Say (EN):** "The user sees it in plain words, can listen to it, and approves. The approval is written to Avalanche, so it can't be changed later."
 **พูด (TH):** "ผู้ใช้เห็นเป็นภาษาง่ายๆ ฟังเป็นเสียงได้ แล้วกดอนุมัติเอง การอนุมัติถูกบันทึกบน Avalanche แก้ย้อนหลังไม่ได้"
 
 ### 4 · The market and my month (1:35 – 2:10) · tabs 4 and 5
-**Do:** tab 4, Token screener → press **30 days**: the large unlocks light up (ARB, HYPE, CRO…) with dates, size and who receives them. Then tab 5, **My plan**: today's ARB unlock, WLD's daily release, the Fed on Oct 28, drift from the target mix → **Save plan as PDF**.
-**Say (EN):** "This is Tokenomist's live data for the top forty tokens, with dates and who gets the tokens. And this is the user's next thirty days: every date that can move their money, what U-Guard found, and what they can do. It saves as a PDF."
-**พูด (TH):** "นี่คือข้อมูลสดจาก Tokenomist ของ 40 เหรียญใหญ่ มีวันที่ ขนาด และใครได้รับ และนี่คือแผน 30 วันของผู้ใช้ ทุกวันที่กระทบเงินของเขา พร้อมสิ่งที่ทำได้ และบันทึกเป็น PDF ได้"
+**Do:** tab 4, Token screener → press **30 days**: the large unlocks light up (ARB, HYPE, CRO…) with dates, size, who receives them and a **live countdown** (ARB reaches 00h 00m at 20:00). Then tab 5, **My plan**: today's ARB unlock, the rule you just approved ("Active: Pause auto-buys of ARB"), WLD's daily release, the Fed on Oct 28, the stress test → **Save plan as PDF**.
+**Say (EN):** "This is Tokenomist's live data for the top thirty tokens, with dates, who gets the tokens and a live countdown. And this is the user's next thirty days: every date that can move their money, what U-Guard found, and what they can do. It saves as a PDF."
+**พูด (TH):** "นี่คือข้อมูลสดจาก Tokenomist ของ 30 เหรียญใหญ่ มีวันที่ ขนาด และใครได้รับ และนี่คือแผน 30 วันของผู้ใช้ ทุกวันที่กระทบเงินของเขา พร้อมสิ่งที่ทำได้ และบันทึกเป็น PDF ได้"
 
 ### 5 · Ask anything, see how it decided (2:10 – 2:40) · tab 5, agent
-**Do:** press the mic, ask **"Is AVAX worrying?"** (or **"AVAX น่ากังวลไหม"** to show the Thai reply and Thai voice). Point at the answer, then the **Agent Trace**.
+**Do:** press the mic, ask **"Is AVAX worrying?"** (or **"AVAX น่ากังวลไหม"** to show the Thai reply and Thai voice). Press **Listen** on the AVAX card, then point at the **U-Guard agent trace** (guard → planner → news → market → unlock risk → compliance). Without an LLM key the trace reads "Offline agent": don't point at the "Inference live" badge.
 **Say (EN):** "AVAX is low: a small release, mostly staking rewards. It stays calm when it's safe. Every number comes from a tool call you can see here, and a compliance check blocks any buy-or-sell advice."
 **พูด (TH):** "AVAX เสี่ยงต่ำ ปลดล็อกน้อยและส่วนใหญ่เป็นรางวัล staking ระบบไม่เตือนพร่ำเพรื่อ ทุกตัวเลขมาจาก tool ที่เห็นตรงนี้ และมีตัวตรวจไม่ให้แนะนำซื้อขาย"
 
