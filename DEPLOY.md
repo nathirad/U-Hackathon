@@ -60,6 +60,9 @@ Expect `u-guard 0.3.0`, 14 tools, ARB HIGH (live score), and "Delivered to demo-
 
 ## 4 · Known limits
 
+- **Hobby: at most 12 functions per deployment.** Vercel groups our ~40 routes into about 5 functions only while each stays under its size budget. `outputFileTracingExcludes` in `next.config.mjs` keeps the restored build cache (`.next/cache`, ~350 MB) and the docs out of every function; without it the deploy fails with `exceeded_serverless_functions_per_deployment`.
+- **No env vars = broken sign-in.** A deploy without `AUTH_SECRET` builds fine, but every request that signs or reads a session throws (demo login, the terminal pages); set the variables in §1 before the first deploy.
+
 - **Tokenomist rate limit:** one key shared by every server. Fallbacks are labelled saved data and kept 5 minutes; run only one `next dev` per folder locally.
 - **Vercel Hobby cron runs once a day.** Alerts also run on "Check now" (Alerts page). A long-running server (`npm start`) checks every `WATCH_INTERVAL_MIN`.
 - **Paper trading only.** Orders are simulated; `BROKER=alpaca-paper` sends approved orders to an Alpaca paper account.
