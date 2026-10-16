@@ -14,6 +14,7 @@ U-Hackathon 2026 · AI Track · FLOW Summit Bangkok
 |---|---|
 | [SPEC.md](SPEC.md) | **Start here.** The whole system: features, architecture, workflows, agents, data model, API, status, decisions (Thai) |
 | [DEMO.md](DEMO.md) | **Stage script:** 3-minute run of show (EN + TH lines), fallbacks, judge Q&A, pre-stage checklist |
+| [DEPLOY.md](DEPLOY.md) | Deploy to Vercel (env vars, Upstash), install as an app, smoke test, laptop fallback |
 | [DEMO-DAY-PLAN.md](DEMO-DAY-PLAN.md) | Step-by-step plan for demo day: keys, MCP demo, tests, rehearsal, risks, post-hackathon roadmap |
 | [TODO.md](TODO.md) | **What is left:** not done, missing, or still waiting on keys/people, with priorities and a plan for demo day (Thai) |
 | [STATUS.md](STATUS.md) | Latest status: every feature built, which flows work, what doesn't fit together yet, Trade/Invest direction, models, integrations, data pipeline (Thai) |
