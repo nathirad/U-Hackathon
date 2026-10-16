@@ -200,6 +200,27 @@ export async function pushStore(): Promise<void> {
   }
 }
 
+/** Reads one JSON value kept beside the store (null when the shared store is off or unreachable). */
+export async function sharedGet<T>(key: string): Promise<T | null> {
+  if (!sharedStoreEnabled) return null;
+  try {
+    const raw = (await kv(`/get/${key}`)) as string | null;
+    return raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Saves one JSON value beside the store. Never throws. */
+export async function sharedSet(key: string, value: unknown): Promise<void> {
+  if (!sharedStoreEnabled) return;
+  try {
+    await kv(`/set/${key}`, JSON.stringify(value));
+  } catch {
+    // best effort: the next run saves it again
+  }
+}
+
 /** Wraps a route handler: pull the shared store first, push it back if the handler changed it. */
 export function withStore<A extends unknown[]>(handler: (...args: A) => Promise<Response>): (...args: A) => Promise<Response> {
   if (!sharedStoreEnabled) return handler;
