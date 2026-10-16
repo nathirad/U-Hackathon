@@ -101,7 +101,14 @@ interface Envelope<T> {
 const TTL_MS = 10 * 60 * 1000;
 // After a failed live call the fallback is kept for a minute only, so live data comes back soon.
 const FALLBACK_TTL_MS = 60 * 1000;
-const cache = new Map<string, { at: number; ttl: number; value: Sourced<unknown> }>();
+// On globalThis so every route (and the warm-up at server start) shares one cache.
+const g = globalThis as typeof globalThis & {
+  __ugTokenomist?: { cache: Map<string, { at: number; ttl: number; value: Sourced<unknown> }>; pending: Map<string, Promise<Sourced<unknown>>> };
+};
+const shared = (g.__ugTokenomist ??= { cache: new Map(), pending: new Map() });
+const cache = shared.cache;
+// One request per key at a time: pages opened together wait on the same call instead of repeating it.
+const pending = shared.pending;
 // The last successful live response per key, kept past the TTL: if Tokenomist fails later,
 // answers use this copy marked stale rather than dropping to saved fixture data.
 const lastGood = new Map<string, Sourced<unknown>>();
@@ -149,7 +156,25 @@ async function load<T>(
 ): Promise<Sourced<T>> {
   const hit = cache.get(cacheKey);
   if (hit && Date.now() - hit.at < hit.ttl) return hit.value as Sourced<T>;
+  // Expired live copy: answer with it now and refresh in the background (stale-while-revalidate),
+  // so a page never waits on Tokenomist for data it already has. Unlock schedules change rarely.
+  if (hit && hit.value.source === "live" && !hit.value.stale) {
+    void refresh(cacheKey, livePath, fixturePath, empty);
+    return hit.value as Sourced<T>;
+  }
+  return refresh(cacheKey, livePath, fixturePath, empty);
+}
 
+function refresh<T>(cacheKey: string, livePath: string, fixturePath: string[], empty: T): Promise<Sourced<T>> {
+  let p = pending.get(cacheKey);
+  if (!p) {
+    p = fetchOrFallback(cacheKey, livePath, fixturePath, empty).finally(() => pending.delete(cacheKey));
+    pending.set(cacheKey, p);
+  }
+  return p as Promise<Sourced<T>>;
+}
+
+async function fetchOrFallback<T>(cacheKey: string, livePath: string, fixturePath: string[], empty: T): Promise<Sourced<T>> {
   let warning: string | undefined;
   if (config.tokenomist.apiKey) {
     try {

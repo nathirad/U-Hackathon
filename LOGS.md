@@ -436,6 +436,15 @@ Built in a separate session without seeing `feat/app-ui`.
   - Checked in Chromium with a fake mic, Scribe and the voice mocked (no ElevenLabs from this sandbox), the agent answering for real: listening → thinking → speaking → listening; the orb followed the mic and the voice; mute pauses; Esc closes. Desktop and phone width.
 - **Tokenomist logo:** the "Data and technology we use" strip now shows Tokenomist's mark (redrawn as SVG from the team's file) next to its name. ElevenLabs already had its wordmark.
 
+### Oct 16, ~12:45 · Pages no longer wait 13 s for Tokenomist (branch `perf/page-speed`)
+- **Why pages were slow:** opening the app fires Today, Unlock calendar, News and the screener together. Each built the 40-token market screen on its own, so ~122 Tokenomist calls queued behind the rate limiter (4 at a time, 120 ms apart): **13–15 s per page** against a stand-in API with 300 ms latency. Then fast for 10 minutes, then slow again for whoever came next. On Vercel every new function starts empty, so it would be slow often.
+- **Fixes:**
+  - `tokenomist.ts`: one request per key at a time (pages share it); an expired live copy is served at once and refreshed in the background; the cache is on `globalThis` so every route shares it.
+  - `screener.ts`: one screen run at a time; the last screen is served at once and refreshed in the background after a minute; with Upstash on, a cold Vercel function starts from the screen another one saved (`sharedGet`/`sharedSet` in `store.ts`).
+  - `instrumentation.ts`: with a Tokenomist key, the screen is built in the background when the server starts.
+- **Measured** (stand-in Tokenomist, 300 ms per call): pages opened right at server start ~3 s (was 13–15 s); afterwards 0.01–0.05 s, including after the cache ages; ~56 Tokenomist calls for a cold start instead of 122.
+- `npm run dev` also compiles each page on its first visit (several seconds). For the demo use `npm run build && npm start`.
+
 ---
 
 ## Adding the next entry
