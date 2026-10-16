@@ -1,20 +1,13 @@
-import { z } from "zod";
 import { getSession } from "@/lib/auth/session";
 import { LIMITS, rateLimit } from "@/lib/guard/rate-limit";
 import { checkOrigin, checkPost, jsonError, tooMany } from "@/lib/http";
 import { thb } from "@/lib/format";
+import { AlertRuleInput, addAlertRule } from "@/lib/alert-rules";
 import { store } from "@/lib/store";
 import { withStore } from "@/lib/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const Rule = z.object({
-  symbol: z.string().trim().toUpperCase().regex(/^[A-Z0-9.\-]{1,20}$/),
-  minLevel: z.enum(["medium", "high"]),
-  daysBefore: z.number().int().min(1).max(30),
-  channel: z.enum(["ubot", "telegram", "line"]),
-});
 
 // Smart alert rules (demo: kept in memory) and the protection decisions made so far, for the
 // signed-in user only.
@@ -45,12 +38,12 @@ async function handlePOST(req: Request) {
   if (!session) return jsonError(401, "Sign in to add alerts.");
   const limit = rateLimit(`alerts:${session.sub}`, LIMITS.alerts.max, LIMITS.alerts.windowMs);
   if (!limit.ok) return tooMany(limit);
-  const parsed = Rule.safeParse(await req.json().catch(() => null));
+  // type: unlock · drift · news; symbol "*" = every non-stablecoin holding.
+  const parsed = AlertRuleInput.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return jsonError(400, "symbol, minLevel, daysBefore (1-30) and channel are required");
-  const rule = { id: crypto.randomUUID(), createdAt: new Date().toISOString(), ownerId: session.sub, ...parsed.data };
-  store.alerts.unshift(rule);
-  store.alerts.splice(200);
-  return Response.json(rule, { status: 201 });
+  // Adding a rule that already exists just returns it.
+  const { rule, created } = addAlertRule(session.sub, parsed.data);
+  return Response.json(rule, { status: created ? 201 : 200 });
 }
 
 async function handleDELETE(req: Request) {

@@ -7,6 +7,7 @@ import { readFixture } from "./fixtures";
 import { getMarkets, perpPrices } from "./market";
 import { classifyRecipient } from "./recipient";
 import { assessUnlockRisk } from "./risk";
+import { sharedGet, sharedSet } from "./store";
 import { getCliffEvents, listTokens, trackedTokens } from "./tokenomist";
 import type { DataSource, RecipientClass, RiskLevel } from "./types";
 
@@ -57,11 +58,45 @@ function sizeGrade(pctCirc: number | null): RiskLevel {
   return pctCirc >= 2 ? "high" : pctCirc >= 0.5 ? "medium" : "low";
 }
 
-let cache: { at: number; day: string; value: ScreenResult } | null = null;
+// A cold screen is ~40 Tokenomist calls (10–15 s through the rate limiter), so nobody should wait
+// for one twice: the last screen is served at once and refreshed in the background after a
+// minute, pages opened together share one run, and with Upstash on (Vercel) a cold function
+// starts from the screen another one saved. On globalThis so the warm-up at start shares it.
+type Screen = { at: number; day: string; value: ScreenResult };
+const FRESH_MS = 60_000;
+const SHARED_KEY = "uguard:screen:v1";
+const sg = globalThis as typeof globalThis & { __ugScreen?: { last: Screen | null; running: Promise<ScreenResult> | null } };
+const screen = (sg.__ugScreen ??= { last: null, running: null });
 
 export async function marketScreen(now: number): Promise<ScreenResult> {
+  const day = new Date(now).toISOString().slice(0, 10);
+  if (!screen.last || screen.last.day !== day) {
+    const saved = await sharedGet<Screen>(SHARED_KEY);
+    if (saved?.day === day) screen.last = saved;
+  }
+  const last = screen.last;
+  if (last && last.day === day) {
+    if (Date.now() - last.at >= FRESH_MS) void runScreen(now, day).catch(() => undefined);
+    return last.value;
+  }
+  return runScreen(now, day);
+}
+
+function runScreen(now: number, day: string): Promise<ScreenResult> {
+  screen.running ??= computeScreen(now)
+    .then(async (value) => {
+      screen.last = { at: Date.now(), day, value };
+      await sharedSet(SHARED_KEY, screen.last);
+      return value;
+    })
+    .finally(() => {
+      screen.running = null;
+    });
+  return screen.running;
+}
+
+async function computeScreen(now: number): Promise<ScreenResult> {
   const start = new Date(now).toISOString().slice(0, 10);
-  if (cache && cache.day === start && Date.now() - cache.at < 60_000) return cache.value;
   const end = new Date(now + WINDOW_DAYS * 86_400_000).toISOString().slice(0, 10);
 
   const [list, tracked, fundraising] = await Promise.all([listTokens(), trackedTokens(), readFixture<FundraisingFile>("screener.json")]);
@@ -132,11 +167,9 @@ export async function marketScreen(now: number): Promise<ScreenResult> {
     };
   });
 
-  const value: ScreenResult = {
+  return {
     rows,
     windowDays: WINDOW_DAYS,
     sources: { tokens: list.source, market: markets || perp ? "live" : "tokenomist", asOf: list.asOf },
   };
-  cache = { at: Date.now(), day: start, value };
-  return value;
 }

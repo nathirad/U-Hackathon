@@ -28,6 +28,8 @@ const PATHS = {
   scan: "M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4M4 12h16",
   calendar: "M4 6h16v15H4zM4 10h16M8 3v4M16 3v4",
   close: "M6 6l12 12M18 6L6 18",
+  mic: "M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21",
+  micOff: "M3 3l18 18M9 9v3a3 3 0 0 0 5.1 2.1M15 9.3V6a3 3 0 0 0-5.7-1.3M5.5 11a6.5 6.5 0 0 0 10.6 5M18.5 11a6.5 6.5 0 0 1-.6 2.7M12 17.5V21",
   home: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z",
   coins: "M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zm0 0v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6",
   bell: "M6 16V11a6 6 0 1 1 12 0v5l2 2H4zM10 21h4",
@@ -38,6 +40,7 @@ const PATHS = {
   search: "M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm9 3-4.35-4.35",
   collapse: "M4 4h16v16H4zM9 4v16M15 10l-2 2 2 2",
   arrow: "M5 12h14M13 6l6 6-6 6",
+  image: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z",
 } satisfies Record<string, string>;
 
 export type IconName = keyof typeof PATHS;

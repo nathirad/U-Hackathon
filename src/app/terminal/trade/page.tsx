@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { Spotlight } from "@/components/fx";
 import { TRADE_EVENT, TradePanel, TradePlanCard } from "@/components/TradePanel";
+import { DataBadge } from "@/components/DataBadge";
 import { thb } from "@/lib/format";
 import type { PaperOrder, RiskLevel, TradePlan } from "@/lib/types";
 
@@ -67,7 +68,10 @@ export default function TradePage() {
     <>
       <div className="page-title">
         <h1>Trade</h1>
-        <p>You pick the token and amount · U-Bot drafts a plan and checks the risk · you approve · orders are simulated (paper trading)</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
+          <DataBadge status="DEMO" tooltip="Paper trading simulation with verified math & safety rules" />
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>U-Bot drafts plans · You review & approve · Orders recorded on Avalanche testnet</span>
+        </div>
       </div>
 
       <div className="trade-picker" role="tablist" aria-label="Pick a token">
@@ -141,6 +145,7 @@ export default function TradePage() {
                   <b>{qtyT(o.qty)} {o.symbol}</b> · {thb(o.amountThb)} at ${o.priceUsd.toLocaleString("en-US", { maximumFractionDigits: o.priceUsd < 1 ? 4 : 2 })}
                   <small className="note" style={{ display: "block" }}>
                     {new Date(o.at).toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" })} · recorded on {o.receipt.chain}
+                    {o.broker && <> · {o.broker.note}</>}
                     {o.receipt.explorerUrl && (
                       <>
                         {" "}·{" "}

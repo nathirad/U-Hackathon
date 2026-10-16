@@ -77,10 +77,21 @@ export const config = {
   auth: {
     secret: env("AUTH_SECRET"),
     demoLogin: env("DEMO_LOGIN", "true") !== "false",
+    // Shared = everyone who taps "demo" is the same demo-user (the laptop stage demo: U-Bot over MCP
+    // acts for demo-user). On Vercel each visitor gets their own demo account unless DEMO_SHARED=true.
+    demoShared: env("DEMO_SHARED", process.env.VERCEL ? "false" : "true") !== "false",
     dataDir: env("DATA_DIR", "data/runtime"),
   },
   mcp: {
     apiKey: env("MCP_API_KEY"),
+  },
+  // Alert watcher: quiet hours (Bangkok time; only high-severity alerts go out) and a daily cap
+  // per user. Vercel Cron calls /api/watch with "Authorization: Bearer $CRON_SECRET".
+  watch: {
+    cronSecret: env("CRON_SECRET"),
+    quietStartHour: Number(env("WATCH_QUIET_START", "22")),
+    quietEndHour: Number(env("WATCH_QUIET_END", "7")),
+    maxPerDay: Number(env("WATCH_MAX_PER_DAY", "5")),
   },
   // Unlocks further out than this are outside the watch window (Keyrock: price pressure
   // typically starts ~30 days before an unlock).

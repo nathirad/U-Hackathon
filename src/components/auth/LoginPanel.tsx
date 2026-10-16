@@ -7,7 +7,7 @@ import { Icon } from "../Icon";
 type EthereumProvider = { request: (args: { method: string; params?: unknown[] }) => Promise<unknown> };
 
 function safeNext(next: string | undefined): string {
-  return next && next.startsWith("/") && !next.startsWith("//") ? next : "/assistant";
+  return next && next.startsWith("/") && !next.startsWith("//") ? next : "/terminal";
 }
 
 export function LoginPanel({ next, demoEnabled }: { next?: string; demoEnabled: boolean }) {

@@ -1,12 +1,20 @@
 // The agent's tools. Every provider (OpenAI-compatible LLM, Anthropic, the rules engine)
 // and the MCP endpoint run tools through executeTool(), so validation, the Agent Trace and
 // citations behave the same everywhere.
+//
+// The three tools that write (draft a trade plan, draft an invest plan, save an alert rule) are for
+// U-Bot over MCP only (MCP_ONLY); the in-app chat reads everything else. No tool approves or
+// executes anything; approval happens only in the app, behind the user's own session.
 
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
+import { addAlertRule } from "../alert-rules";
+import { ADDRESS_RE, lookupOnchain, walletActivity, type AvaxNetwork } from "../avalanche-data";
+import { config } from "../config";
+import { compact, shortDate, thaiDate, thb, usd } from "../format";
+import { asOfEn, asOfTh } from "../freshness";
 import { checkDrift } from "../drift";
 import { stressTest, type StressReport } from "../stress";
-import { compact, shortDate, thaiDate, usd } from "../format";
 import { getEventCalendar } from "../intel/calendar";
 import { searchNews } from "../intel/news";
 import { getEventOdds } from "../intel/odds";
@@ -16,6 +24,7 @@ import { getHoldings } from "../portfolio";
 import { assessUnlockRisk } from "../risk";
 import { store } from "../store";
 import { findToken, getAllocations, getFundraising, getUnlockEvents } from "../tokenomist";
+import { marketUnlocks } from "../unlock-feed";
 import type {
   CalendarEvent,
   Citation,
@@ -31,6 +40,7 @@ import type {
   RiskCard,
   Sourced,
   TraceStep,
+  TradeSide,
 } from "../types";
 
 /** JSON Schema tool spec, written strict-compatible (every property required, no extras). */
@@ -38,6 +48,14 @@ export interface ToolSpec {
   name: ToolName;
   description: string;
   input_schema: { type: "object"; properties: Record<string, unknown>; required: string[]; additionalProperties: false };
+}
+
+/** MCP tool annotations: hints for the client (e.g. when to ask the user first), not enforcement. */
+export interface ToolAnnotations {
+  readOnlyHint: boolean;
+  destructiveHint?: boolean;
+  idempotentHint?: boolean;
+  openWorldHint: boolean;
 }
 
 const symbolProp = { type: "string", description: "Token ticker, e.g. ARB, WLD, AVAX, BTC" } as const;
@@ -163,6 +181,141 @@ export const TOOL_SPECS: ToolSpec[] = [
       additionalProperties: false,
     },
   },
+  // ─── MCP only: plans and rules U-Bot drafts for the user ───
+  {
+    name: "draft_trade_plan",
+    description:
+      "Draft a paper-trade plan around the user's own choice of token, side and THB amount: quantity at the current quote, fee, stop-loss price, the most the user could lose, size vs their risk budget, their share of the portfolio afterwards, what-if rows, and U-Guard's checks (unlock risk, balance, size, concentration, chasing a jump). verdict is ready, caution or blocked. It only drafts: nothing is bought or sold, and only the user can approve it, in the U-Guard app (Trade page), which places a simulated (paper) order recorded on Avalanche. Never pick the token or the amount for the user.",
+    input_schema: {
+      type: "object",
+      properties: {
+        symbol: symbolProp,
+        side: { type: "string", enum: ["buy", "sell"] },
+        amount_thb: { type: "number", description: "THB amount the user chose (100 to 10,000,000)" },
+        order_type: { type: "string", enum: ["market", "limit"] },
+        limit_price_usd: { anyOf: [{ type: "number" }, { type: "null" }], description: "Limit price in USD for a limit order; otherwise null" },
+        stop_loss_pct: { anyOf: [{ type: "number" }, { type: "null" }], description: "Stop-loss distance in % (2-50) if the user gave one; null = 10" },
+        risk_budget_pct: { anyOf: [{ type: "number" }, { type: "null" }], description: "Most of the portfolio the user will risk on one trade, in % (0.5-10); null = 2" },
+      },
+      required: ["symbol", "side", "amount_thb", "order_type", "limit_price_usd", "stop_loss_pct", "risk_budget_pct"],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: "get_paper_trading",
+    description: "The user's paper-trading account: positions (quantity, cost, value now, unrealised P/L in THB), recent paper orders with their Avalanche receipts, and trade plans still waiting for the user's approval.",
+    input_schema: { ...noInput, required: [] },
+  },
+  {
+    name: "get_invest_options",
+    description:
+      "What the Invest planner needs: the five risk-profile questions with their answer choices (1-4), the asset classes with their risk level (Thai SEC 1-8 scale, crypto 8+), and each profile's model portfolio. Ask the user the questions yourself and pass their answers to draft_invest_plan; never answer for them. Sample data.",
+    input_schema: { ...noInput, required: [] },
+  },
+  {
+    name: "draft_invest_plan",
+    description:
+      "Draft an investment plan from the user's own answers to the five risk-profile questions (see get_invest_options): profile, model-portfolio weights (or the user's own weights), lump-sum and monthly DCA split, U-Guard's checks on the crypto part (each pick's unlock risk, crypto share vs the profile) and the next three DCA dates, flagged when one lands near a big unlock. It only drafts: the user reviews and approves it in the U-Guard app (Invest page). Educational model portfolio on sample data, not personal investment advice.",
+    input_schema: {
+      type: "object",
+      properties: {
+        answers: { type: "array", items: { type: "integer" }, description: "The user's five answers in order, each 1-4" },
+        lump_sum_thb: { type: "number", description: "One-off amount in THB (0 if none)" },
+        monthly_thb: { type: "number", description: "Monthly DCA amount in THB (0 if none)" },
+        dca_day: { type: "integer", description: "Day of the month for the DCA buy (1-28)" },
+        crypto_picks: { type: "array", items: symbolProp, description: "Coins for the crypto part, up to 5; empty = BTC and ETH" },
+        weights: {
+          anyOf: [
+            {
+              type: "array",
+              items: {
+                type: "object",
+                properties: { id: { type: "string", description: "Asset class id from get_invest_options" }, pct: { type: "number" } },
+                required: ["id", "pct"],
+                additionalProperties: false,
+              },
+            },
+            { type: "null" },
+          ],
+          description: "The user's own weights per asset class, if they gave them (classes left out keep the profile's weight; all are scaled to 100%); otherwise null for the profile's model portfolio",
+        },
+      },
+      required: ["answers", "lump_sum_thb", "monthly_thb", "dca_day", "crypto_picks", "weights"],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: "list_alerts",
+    description: "The user's alert rules, the alerts U-Guard sent recently, and what the last check held back and why (already sent, quiet hours, daily limit, waiting for a second news source).",
+    input_schema: { ...noInput, required: [] },
+  },
+  {
+    name: "create_alert_rule",
+    description:
+      "Save an alert rule when the user asks to be told about something. unlock: a token's unlock risk reaches min_level within days_before days. drift: the wallet moves outside the band around the user's own target mix (symbol is ignored). news: negative news on the token at min_level or worse. symbol '*' = every token the user holds. Alerts reach the user's U-Bot inbox, never twice, only high severity from 22:00 to 07:00 Bangkok, and at most a few a day. Needs the user the caller acts for. Saving a rule that exists returns it.",
+    input_schema: {
+      type: "object",
+      properties: {
+        type: { type: "string", enum: ["unlock", "drift", "news"] },
+        symbol: { type: "string", description: "Token ticker, or * for every token the user holds" },
+        min_level: { type: "string", enum: ["medium", "high"] },
+        days_before: { type: "integer", description: "Unlock rules: how many days ahead to warn (1-30)" },
+      },
+      required: ["type", "symbol", "min_level", "days_before"],
+      additionalProperties: false,
+    },
+  },
+  // ─── The rest of the app, so the agent can answer about anything the user sees ───
+  {
+    name: "get_my_plan",
+    description:
+      "The user's 30-day plan, as on the My plan page: dated unlocks and daily releases of the coins they hold, Fed dates, their DCA buys, open decisions, alert rules and stop levels, with a short summary. Use it for 'what's coming up for me', 'my plan', 'this month'.",
+    input_schema: { ...noInput, required: [] },
+  },
+  {
+    name: "get_upcoming_unlocks",
+    description:
+      "Market-wide upcoming cliff unlocks (not just the user's coins): the next unlock of the largest tokens Tokenomist covers, with date, size, share of circulating supply and main recipient. Live from Tokenomist when available, otherwise saved public reports (the result says which).",
+    input_schema: {
+      type: "object",
+      properties: { days: { type: "integer", description: "Look-ahead window in days (1-90)" } },
+      required: ["days"],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: "get_invest_plans",
+    description: "The user's investment plans: approved ones and drafts still waiting for their decision (profile, weights, monthly DCA, U-Guard warnings).",
+    input_schema: { ...noInput, required: [] },
+  },
+  {
+    name: "get_wallet_activity",
+    description:
+      "On-chain activity of an Avalanche wallet from the Avalanche Data API: AVAX balance, ERC-20 token balances and the latest transactions (with token transfers and explorer links). address null = the signed-in user's wallet (Sign-In with Ethereum) or the app's configured wallet. network fuji (testnet, where U-Guard records approvals) or mainnet (C-Chain).",
+    input_schema: {
+      type: "object",
+      properties: {
+        address: { anyOf: [{ type: "string" }, { type: "null" }], description: "0x address, or null for the user's own wallet" },
+        network: { type: "string", enum: ["fuji", "mainnet"] },
+      },
+      required: ["address", "network"],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: "lookup_onchain",
+    description:
+      "Look up one thing on Avalanche through the Avalanche Data API: a transaction by hash (status, time, from/to, method, transfers) or a smart contract by address (name, symbol, token standard, deployer).",
+    input_schema: {
+      type: "object",
+      properties: {
+        id: { type: "string", description: "Transaction hash (0x + 64 hex) or contract address (0x + 40 hex)" },
+        network: { type: "string", enum: ["fuji", "mainnet"] },
+      },
+      required: ["id", "network"],
+      additionalProperties: false,
+    },
+  },
 ];
 
 // ─── Input validation (tool inputs are untrusted model or MCP-client output) ──────────
@@ -188,15 +341,108 @@ const INPUTS = {
   get_token_market: z.object({ symbol: Sym }),
   stress_test_portfolio: z.object({}),
   get_event_calendar: z.object({ days: Days.default(45) }),
+  draft_trade_plan: z.object({
+    symbol: Sym,
+    side: z.enum(["buy", "sell"]),
+    amount_thb: z.number().finite().min(100).max(10_000_000),
+    order_type: z.enum(["market", "limit"]).default("market"),
+    limit_price_usd: z.number().finite().positive().nullable().default(null),
+    stop_loss_pct: z.number().finite().min(2).max(50).nullable().default(null),
+    risk_budget_pct: z.number().finite().min(0.5).max(10).nullable().default(null),
+  }),
+  get_paper_trading: z.object({}),
+  get_invest_options: z.object({}),
+  draft_invest_plan: z
+    .object({
+      answers: z.array(z.number().int().min(1).max(4)).length(5),
+      lump_sum_thb: z.number().finite().min(0).max(100_000_000),
+      monthly_thb: z.number().finite().min(0).max(10_000_000),
+      dca_day: z.number().int().min(1).max(28).default(25),
+      crypto_picks: z.array(Sym).max(5).default([]),
+      weights: z
+        .array(z.object({ id: z.string().regex(/^[a-z_]{1,20}$/), pct: z.number().finite().min(0).max(100) }))
+        .max(10)
+        .nullable()
+        .default(null),
+    })
+    .refine((v) => v.lump_sum_thb + v.monthly_thb > 0, "Give a lump sum or a monthly amount"),
+  list_alerts: z.object({}),
+  create_alert_rule: z.object({
+    type: z.enum(["unlock", "drift", "news"]),
+    symbol: z.string().trim().toUpperCase().regex(/^(\*|[A-Z0-9.\-]{1,20})$/),
+    min_level: z.enum(["medium", "high"]).default("medium"),
+    days_before: z.number().int().min(1).max(30).default(7),
+  }),
+  get_my_plan: z.object({}),
+  get_upcoming_unlocks: z.object({ days: Days.default(30) }),
+  get_invest_plans: z.object({}),
+  get_wallet_activity: z.object({
+    address: z.string().trim().regex(ADDRESS_RE).nullable().default(null),
+    network: z.enum(["fuji", "mainnet"]).default("fuji"),
+  }),
+  lookup_onchain: z.object({
+    id: z.string().trim().regex(/^0x[0-9a-fA-F]{40}([0-9a-fA-F]{24})?$/),
+    network: z.enum(["fuji", "mainnet"]).default("fuji"),
+  }),
 } as const;
 
 export type ToolName = keyof typeof INPUTS;
 export const TOOL_NAMES = Object.keys(INPUTS) as ToolName[];
 
+/** Tools that write: U-Bot gets them over MCP. In the app the user drafts on the Trade, Invest and Alerts pages. */
+export const MCP_ONLY = new Set<ToolName>(["draft_trade_plan", "draft_invest_plan", "create_alert_rule"]);
+/** The tools the in-app agent (Claude, OpenAI-compatible) is offered. */
+export const AGENT_TOOL_SPECS = TOOL_SPECS.filter((t) => !MCP_ONLY.has(t.name));
+
+const READ: ToolAnnotations = { readOnlyHint: true, openWorldHint: false };
+const READ_WEB: ToolAnnotations = { readOnlyHint: true, openWorldHint: true };
+// Writes that only create something waiting for the user (a proposal, a plan): never destructive.
+const DRAFT: ToolAnnotations = { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false };
+export const TOOL_ANNOTATIONS: Record<ToolName, ToolAnnotations> = {
+  get_portfolio: READ,
+  lookup_token: READ,
+  get_unlock_schedule: READ,
+  get_allocations: READ,
+  get_fundraising: READ,
+  assess_unlock_risk: READ,
+  propose_protection: DRAFT,
+  get_market_news: READ_WEB,
+  get_event_odds: READ_WEB,
+  get_market_pulse: READ_WEB,
+  get_event_calendar: READ,
+  check_portfolio_drift: READ,
+  get_token_market: READ_WEB,
+  stress_test_portfolio: READ,
+  draft_trade_plan: DRAFT,
+  get_paper_trading: READ,
+  get_invest_options: READ,
+  draft_invest_plan: DRAFT,
+  list_alerts: READ,
+  create_alert_rule: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+  get_my_plan: READ,
+  get_upcoming_unlocks: READ_WEB,
+  get_invest_plans: READ,
+  get_wallet_activity: READ_WEB,
+  lookup_onchain: READ_WEB,
+};
+
 // ─── Per-request context ─────────────────────────────────────────────────────────────
+
+/** Something U-Bot drafted or saved for the user over MCP, and where in the app they act on it. */
+export interface Draft {
+  kind: "trade" | "invest" | "alert_rule";
+  id: string;
+  title: string;
+  titleTh: string;
+  href: string;
+}
 
 export interface RunContext {
   userId: string;
+  /** app = in-app agent and alert engine · mcp = U-Bot (or another MCP client) */
+  channel: "app" | "mcp";
+  /** MCP: a trusted caller named the user it acts for (X-UGuard-User). */
+  actingFor: boolean;
   locale: Locale; // language of the user's message: replies and proposals follow it
   scope: "user" | "public"; // public = signed-out visitor: no wallet tools
   requestId: string;
@@ -210,6 +456,9 @@ export interface RunContext {
   calendar: CalendarEvent[] | null;
   holdings: Holding[] | null;
   drift: DriftReport | null;
+  drafts: Draft[];
+  /** Each tool's last result, by tool name (the rules engine writes its replies from these). */
+  data: Map<string, unknown>;
   stress: StressReport | null;
   markets: Map<string, { symbol: string; priceUsd: number; change24hPct: number | null; volume24hUsd: number; source: DataSource }>;
   citations: Citation[];
@@ -218,10 +467,20 @@ export interface RunContext {
   sources: Set<DataSource>;
 }
 
-export function newContext(init: { userId: string; scope: "user" | "public"; requestId: string; now: number; locale?: Locale }): RunContext {
+export function newContext(init: {
+  userId: string;
+  scope: "user" | "public";
+  requestId: string;
+  now: number;
+  locale?: Locale;
+  channel?: RunContext["channel"];
+  actingFor?: boolean;
+}): RunContext {
   return {
     ...init,
     locale: init.locale ?? "en",
+    channel: init.channel ?? "app",
+    actingFor: init.actingFor ?? false,
     cards: new Map(),
     notes: new Map(),
     proposals: [],
@@ -231,6 +490,8 @@ export function newContext(init: { userId: string; scope: "user" | "public"; req
     calendar: null,
     holdings: null,
     drift: null,
+    drafts: [],
+    data: new Map(),
     stress: null,
     markets: new Map(),
     citations: [],
@@ -316,7 +577,46 @@ function addNews(ctx: RunContext, res: Sourced<NewsItem[]>): { n: number; item: 
   return out;
 }
 
-const WALLET_TOOLS = new Set<ToolName>(["get_portfolio", "propose_protection", "check_portfolio_drift", "stress_test_portfolio"]);
+const VERDICT_EN = { ready: "passes U-Guard's checks", caution: "U-Guard flags things to look at", blocked: "blocked by U-Guard's checks" } as const;
+const VERDICT_TH = { ready: "ผ่านการตรวจของ U-Guard", caution: "U-Guard มีเรื่องให้ดูก่อน", blocked: "ติดการตรวจของ U-Guard" } as const;
+const r2 = (v: number) => Math.round(v * 100) / 100;
+
+function ruleText(type: string, symbol: string, minLevel: string, days: number): { en: string; th: string } {
+  const what = symbol === "*" ? "any token you hold" : symbol;
+  const whatTh = symbol === "*" ? "ทุกเหรียญในพอร์ต" : symbol;
+  if (type === "drift") return { en: "your portfolio drifts outside your target band", th: "พอร์ตเบี้ยวออกนอกกรอบเป้าที่คุณตั้ง" };
+  if (type === "news") return { en: `negative news about ${what} (${minLevel} or worse)`, th: `ข่าวลบของ${whatTh} (ระดับ ${minLevel} ขึ้นไป)` };
+  return { en: `${what} reaches ${minLevel} unlock risk within ${days} days`, th: `${whatTh} มีความเสี่ยง unlock ระดับ ${minLevel} ขึ้นไป ภายใน ${days} วัน` };
+}
+
+const WALLET_TOOLS = new Set<ToolName>([
+  "get_portfolio",
+  "propose_protection",
+  "check_portfolio_drift",
+  "stress_test_portfolio",
+  "get_paper_trading",
+  "list_alerts",
+  "get_my_plan",
+  "get_invest_plans",
+  "get_wallet_activity",
+  ...MCP_ONLY,
+]);
+
+/** The user's own wallet: a Sign-In with Ethereum session, else the app's configured wallet, else the approvals signer. */
+async function ownWallet(ctx: RunContext): Promise<string | null> {
+  const fromSession = ctx.userId.startsWith("wallet:") ? ctx.userId.slice("wallet:".length) : null;
+  if (fromSession && ADDRESS_RE.test(fromSession)) return fromSession;
+  if (config.avalanche.walletAddress && ADDRESS_RE.test(config.avalanche.walletAddress)) return config.avalanche.walletAddress;
+  if (config.avalanche.demoPrivateKey) {
+    const { privateKeyToAccount } = await import("viem/accounts");
+    try {
+      return privateKeyToAccount(config.avalanche.demoPrivateKey as `0x${string}`).address;
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
 
 async function run(name: ToolName, input: Record<string, unknown>, ctx: RunContext): Promise<ToolOutput> {
   if (ctx.scope === "public" && WALLET_TOOLS.has(name)) {
@@ -328,7 +628,14 @@ async function run(name: ToolName, input: Record<string, unknown>, ctx: RunConte
       ctx.holdings = holdings;
       holdings.forEach((h) => ctx.sources.add(h.source));
       return {
-        result: holdings.map((h) => ({ symbol: h.symbol, amount: h.amount, value_thb: Math.round(h.valueThb), data: h.source })),
+        result: holdings.map((h) => ({
+          symbol: h.symbol,
+          amount: h.amount,
+          value_thb: Math.round(h.valueThb),
+          data: h.source,
+          price_as_of: asOfEn(h.asOf, ctx.now),
+          price_as_of_th: asOfTh(h.asOf, ctx.now),
+        })),
         summary: holdings.map((h) => h.symbol).join(", "),
       };
     }
@@ -352,9 +659,13 @@ async function run(name: ToolName, input: Record<string, unknown>, ctx: RunConte
             drift_pp: r.driftPp,
             status: r.status,
             unlock_risk: r.riskLevel,
+            unlock_score: r.riskScore,
             unlock_date: r.unlockDate ? r.unlockDate.slice(0, 10) : null,
+            dilution_6m_pct: r.dilutionPct,
           })),
           summary_lines: report.lines,
+          price_as_of: asOfEn(report.pricesAsOf, ctx.now),
+          price_as_of_th: asOfTh(report.pricesAsOf, ctx.now),
           data: "sample",
         },
         summary: report.hasTargets ? `${report.totalDriftPct}% off target · ${off.length} token(s) outside the band` : "no targets set",
@@ -501,6 +812,9 @@ async function run(name: ToolName, input: Record<string, unknown>, ctx: RunConte
           next_unlock: c.nextUnlock ? { date: c.nextUnlock.date.slice(0, 10), amount: c.nextUnlock.amount } : null,
           reasons: c.reasons,
           data: c.source.mode,
+          as_of: asOfEn(c.source.asOf, ctx.now),
+          as_of_th: asOfTh(c.source.asOf, ctx.now),
+          stale: c.source.stale ?? false,
         },
         summary:
           c.level === "none"
@@ -621,6 +935,296 @@ async function run(name: ToolName, input: Record<string, unknown>, ctx: RunConte
         summary: `${events.length} event(s) in ${input.days}d`,
       };
     }
+    case "draft_trade_plan": {
+      // Imported here: trade.ts reaches the agent, which imports this file.
+      const { draftTradePlan } = await import("../trade");
+      const res = await draftTradePlan(
+        {
+          symbol: input.symbol as string,
+          side: input.side as TradeSide,
+          amountThb: input.amount_thb as number,
+          orderType: input.order_type as "market" | "limit",
+          limitPriceUsd: input.limit_price_usd as number | null,
+          stopLossPct: (input.stop_loss_pct as number | null) ?? undefined,
+          riskBudgetPct: (input.risk_budget_pct as number | null) ?? undefined,
+        },
+        ctx.userId,
+        ctx.now,
+        { explain: false, origin: ctx.channel },
+      );
+      if ("error" in res) return { result: { created: false, note: res.error }, summary: `${String(input.symbol).toUpperCase()}: no plan (${res.error})` };
+      const p = res;
+      ctx.sources.add(p.priceSource);
+      if (p.card) ctx.cards.set(p.card.symbol, p.card);
+      const side = p.side === "buy" ? "Buy" : "Sell";
+      ctx.drafts.push({
+        kind: "trade",
+        id: p.id,
+        title: `${side} ${thb(p.amountThb)} of ${p.symbol} (paper) · ${VERDICT_EN[p.verdict]}`,
+        titleTh: `${p.side === "buy" ? "ซื้อ" : "ขาย"} ${p.symbol} ${thb(p.amountThb)} (จำลอง) · ${VERDICT_TH[p.verdict]}`,
+        href: "/terminal/trade",
+      });
+      return {
+        result: {
+          created: true,
+          plan_id: p.id,
+          status: "pending_user_approval",
+          approve_in: "U-Guard app → Trade → Plans waiting for you",
+          symbol: p.symbol,
+          side: p.side,
+          order_type: p.orderType,
+          amount_thb: p.amountThb,
+          price_usd: p.priceUsd,
+          price_as_of: asOfEn(p.priceAsOf, ctx.now),
+          price_as_of_th: asOfTh(p.priceAsOf, ctx.now),
+          price_stale: p.priceStale,
+          qty: Number(p.qty.toFixed(6)),
+          fee_thb: p.feeThb,
+          stop_loss_pct: p.stopLossPct,
+          stop_price_usd: Number(p.stopPriceUsd.toPrecision(6)),
+          max_loss_thb: p.maxLossThb,
+          risk_budget_pct: p.riskBudgetPct,
+          max_size_in_budget_thb: p.maxSizeThb,
+          portfolio_thb: p.portfolioThb,
+          position_pct_after: Number(p.positionPctAfter.toFixed(1)),
+          verdict: p.verdict,
+          checks: p.checks.map((c) => ({ id: c.id, status: c.status, label: c.label, detail: c.detail })),
+          what_if: p.scenarios.map((x) => ({ label: x.label, move_pct: Number(x.pct.toFixed(1)), pnl_thb: x.pnlThb, basis: x.basis })),
+          unlock_risk: p.card ? { level: p.card.level, score: p.card.score } : null,
+          summary: p.summary,
+          data: p.priceSource,
+          note: "Paper trading: no real order is sent. Only the user can approve this plan, in the app.",
+        },
+        summary: `${p.symbol}: ${p.side} ${thb(p.amountThb)} plan · ${p.verdict} (awaiting approval)`,
+      };
+    }
+    case "get_paper_trading": {
+      const { tradingSummary } = await import("../trade");
+      const s = await tradingSummary(ctx.userId);
+      return {
+        result: {
+          positions: s.positions.map((x) => ({ symbol: x.symbol, qty: Number(x.qty.toFixed(6)), cost_thb: x.costThb, value_thb: x.valueThb, pnl_thb: x.pnlThb })),
+          orders: s.orders.slice(0, 10).map((o) => ({
+            symbol: o.symbol,
+            side: o.side,
+            qty: Number(o.qty.toFixed(6)),
+            amount_thb: o.amountThb,
+            price_usd: o.priceUsd,
+            stop_price_usd: Number(o.stopPriceUsd.toPrecision(6)),
+            at: o.at,
+            receipt: { chain: o.receipt.chain, mode: o.receipt.mode, tx: o.receipt.txHash },
+            broker: o.broker ? { venue: o.broker.venue, ok: o.broker.ok, status: o.broker.status ?? null, note: o.broker.note } : null,
+          })),
+          pending_plans: s.pending.map((p) => ({ plan_id: p.id, symbol: p.symbol, side: p.side, amount_thb: p.amountThb, verdict: p.verdict, drafted_by: p.origin ?? "app", created_at: p.createdAt })),
+          note: "Paper trading only: no real orders.",
+        },
+        summary: `${s.positions.length} position(s) · ${s.orders.length} order(s) · ${s.pending.length} pending`,
+      };
+    }
+    case "get_invest_options": {
+      const { investDefaults } = await import("../invest");
+      const d = await investDefaults();
+      ctx.sources.add(d.source);
+      return {
+        result: {
+          questions: d.questions.map((q, i) => ({ n: i + 1, question: q.q, answers: q.a.map((text, j) => ({ value: j + 1, text })) })),
+          scoring: "Add up the five answers (5-20): up to 9 conservative, up to 14 moderate, up to 17 growth, 18 or more aggressive",
+          asset_classes: d.classes.map((c) => ({ id: c.id, name: c.name, example: c.example, risk_level: c.risk >= 9 ? "8+" : String(c.risk), fee_pct_year: c.feePct })),
+          profiles: Object.fromEntries(
+            Object.entries(d.profiles).map(([id, p]) => [id, { name: p.name, weights_pct: p.weights, crypto_max_pct: p.cryptoMax }]),
+          ),
+          data: d.source,
+        },
+        summary: `${d.questions.length} questions · ${d.classes.length} asset classes`,
+      };
+    }
+    case "draft_invest_plan": {
+      const { draftInvestPlan } = await import("../invest");
+      const weights = input.weights as { id: string; pct: number }[] | null;
+      const picks = input.crypto_picks as string[];
+      const p = await draftInvestPlan(
+        {
+          answers: input.answers as number[],
+          lumpSumThb: input.lump_sum_thb as number,
+          monthlyThb: input.monthly_thb as number,
+          dcaDay: input.dca_day as number,
+          cryptoPicks: picks.length ? picks : undefined,
+          weights: weights ? Object.fromEntries(weights.map((w) => [w.id, w.pct])) : undefined,
+        },
+        ctx.userId,
+        ctx.now,
+        ctx.channel,
+      );
+      ctx.sources.add(p.source);
+      ctx.drafts.push({
+        kind: "invest",
+        id: p.id,
+        title: `"${p.profileName}" investment plan · DCA ${thb(p.monthlyThb)}/month`,
+        titleTh: `แผนลงทุนแบบ "${p.profileName}" · DCA เดือนละ ${thb(p.monthlyThb)}`,
+        href: "/terminal/invest",
+      });
+      return {
+        result: {
+          created: true,
+          plan_id: p.id,
+          status: "pending_user_approval",
+          approve_in: "U-Guard app → Invest → Plans waiting for you",
+          profile: p.profile,
+          profile_name: p.profileName,
+          score: p.score,
+          slices: p.slices.map((x) => ({ id: x.id, name: x.name, pct: x.pct, lump_thb: x.lumpThb, monthly_thb: x.monthlyThb })),
+          crypto: p.crypto.map((c) => ({ symbol: c.symbol, pct_of_crypto: c.pctOfCrypto, unlock_risk: c.level, unlock_score: c.score, note: c.note })),
+          checks: p.checks,
+          dca: p.dca.map((x) => ({ date: x.date, amount_thb: x.amountThb, notes: x.notes })),
+          average_risk_of_8: r2(p.weightedRisk),
+          fees_pct_year: r2(p.feePctYear),
+          summary: p.summary,
+          data: p.source,
+          note: "Educational model portfolio on sample data, not personal investment advice. Only the user can approve it, in the app.",
+        },
+        summary: `${p.profileName} (${p.score}/20) · ${p.checks.filter((c) => c.status === "warn").length} warning(s) (awaiting approval)`,
+      };
+    }
+    case "list_alerts": {
+      const rules = store.alerts.filter((r) => r.ownerId === ctx.userId);
+      const events = store.alertEvents.filter((e) => e.ownerId === ctx.userId).slice(0, 10);
+      const last = store.lastWatch.get(ctx.userId);
+      const { quietStartHour: qs, quietEndHour: qe, maxPerDay } = config.watch;
+      return {
+        result: {
+          rules: rules.map((r) => ({ id: r.id, type: r.type ?? "unlock", symbol: r.symbol, min_level: r.minLevel, days_before: r.daysBefore, channel: r.channel })),
+          recent_alerts: events.map((e) => ({ type: e.type, symbol: e.symbol, severity: e.severity, title: e.title, sent_at: e.firedAt })),
+          last_check: last ? { ran_at: last.ranAt, trigger: last.trigger, sent: last.fired.length, held_back: last.skipped.slice(0, 5) } : null,
+          settings: { quiet_hours_bangkok: qs === qe ? null : `${qs}:00-${qe}:00, high severity only`, max_per_day: maxPerDay, repeats: "never the same alert twice; drift at most once a day" },
+        },
+        summary: `${rules.length} rule(s) · ${events.length} recent alert(s)`,
+      };
+    }
+    case "get_my_plan": {
+      const { buildPlan } = await import("../plan");
+      const p = await buildPlan(ctx.userId, { now: ctx.now, locale: ctx.locale });
+      return {
+        result: {
+          horizon_days: p.horizonDays,
+          summary: p.summary,
+          items: p.items.slice(0, 15).map((i) => ({ date: i.date, kind: i.kind, symbol: i.symbol, title: i.title, detail: i.detail, level: i.level })),
+          open_decisions: p.decisions.length,
+          total_thb: Math.round(p.totalThb),
+        },
+        summary: `${p.items.length} item(s) in ${p.horizonDays}d · ${p.decisions.length} open decision(s)`,
+      };
+    }
+    case "get_upcoming_unlocks": {
+      const feed = await marketUnlocks(ctx.now, { days: input.days as number });
+      ctx.sources.add(feed.source);
+      return {
+        result: {
+          window_days: input.days,
+          unlocks: feed.upcoming.slice(0, 15).map((u) => ({
+            symbol: u.symbol,
+            date: u.date.slice(0, 10),
+            what: u.summary,
+            size: u.sizeNote,
+            grade: u.level ?? null,
+            link: u.url,
+          })),
+          data: feed.source,
+          as_of: asOfEn(feed.asOf, ctx.now),
+          note: feed.note,
+        },
+        summary: `${feed.upcoming.length} unlock(s) in ${input.days}d · ${feed.source}`,
+      };
+    }
+    case "get_invest_plans": {
+      const { myInvestPlans, pendingInvestPlans } = await import("../invest");
+      const shape = (p: import("../types").InvestPlan) => ({
+        plan_id: p.id,
+        status: p.status,
+        profile: p.profileName,
+        monthly_thb: p.monthlyThb,
+        lump_sum_thb: p.lumpSumThb,
+        dca_day: p.dcaDay,
+        weights: p.slices.filter((x) => x.pct > 0).map((x) => ({ name: x.name, pct: x.pct })),
+        warnings: p.checks.filter((c) => c.status === "warn").map((c) => c.label),
+        drafted_by: p.origin ?? "app",
+      });
+      const approved = myInvestPlans(ctx.userId).map(shape);
+      const pending = pendingInvestPlans(ctx.userId).map(shape);
+      return {
+        result: { approved, pending, data: "sample" },
+        summary: `${approved.length} approved · ${pending.length} waiting`,
+      };
+    }
+    case "get_wallet_activity": {
+      const address = (input.address as string | null) ?? (await ownWallet(ctx));
+      if (!address) {
+        return {
+          result: { available: false, note: "No wallet to read: sign in with a wallet, or set WALLET_ADDRESS for the demo." },
+          summary: "no wallet address",
+        };
+      }
+      const a = await walletActivity(address, input.network as AvaxNetwork);
+      return {
+        result: {
+          available: a.source === "live",
+          network: a.network,
+          address: a.address,
+          native: a.native,
+          tokens: a.tokens.slice(0, 10),
+          transactions: a.transactions.slice(0, 8).map((t) => ({
+            hash: t.hash,
+            time: t.time,
+            status: t.status,
+            method: t.method,
+            from: t.from,
+            to: t.to,
+            value_avax: t.valueAvax,
+            transfers: t.transfers,
+            explorer: t.explorerUrl,
+          })),
+          data: a.source === "live" ? "Avalanche Data API (live)" : "unavailable",
+          note: a.note,
+        },
+        summary: a.source === "live" ? `${a.network}: ${a.native?.balance ?? "?"} AVAX · ${a.tokens.length} token(s) · ${a.transactions.length} tx` : `${a.network}: ${a.note}`,
+      };
+    }
+    case "lookup_onchain": {
+      const r = await lookupOnchain(input.id as string, input.network as AvaxNetwork);
+      return {
+        result: { ...r, data: r.source === "live" ? "Avalanche Data API (live)" : "unavailable" },
+        summary: `${r.kind} ${String(input.id).slice(0, 10)}… · ${r.source}${r.note ? ` · ${r.note}` : ""}`,
+      };
+    }
+    case "create_alert_rule": {
+      if (!ctx.actingFor) {
+        return {
+          result: { created: false, error: "acting_for_user_required", note: "Alert rules belong to a user: call with the MCP key and X-UGuard-User." },
+          summary: "no user: rule not saved",
+        };
+      }
+      const type = input.type as "unlock" | "drift" | "news";
+      const { rule, created } = addAlertRule(ctx.userId, {
+        type,
+        symbol: input.symbol as string,
+        minLevel: input.min_level as "medium" | "high",
+        daysBefore: input.days_before as number,
+        channel: "ubot",
+      });
+      const text = ruleText(type, rule.symbol, rule.minLevel, rule.daysBefore);
+      if (created) {
+        ctx.drafts.push({ kind: "alert_rule", id: rule.id, title: `tell you when ${text.en}`, titleTh: `แจ้งเมื่อ${text.th}`, href: "/terminal/alerts" });
+      }
+      return {
+        result: {
+          created,
+          rule: { id: rule.id, type: rule.type ?? "unlock", symbol: rule.symbol, min_level: rule.minLevel, days_before: rule.daysBefore },
+          note: created
+            ? "Saved. U-Guard checks rules on a timer and sends hits to the user's U-Bot inbox. The user can remove it on the Alerts page."
+            : "This rule already exists.",
+        },
+        summary: `${type} ${rule.symbol} ≥ ${rule.minLevel}${created ? " saved" : " (exists)"}`,
+      };
+    }
   }
 }
 
@@ -636,6 +1240,10 @@ export async function executeTool(
     ctx.trace.push({ kind: "tool", name, input: rawInput, summary: "unknown tool", ms: 0, ok: false });
     return { content: `Unknown tool: ${name}`, isError: true };
   }
+  if (MCP_ONLY.has(name as ToolName) && ctx.channel !== "mcp") {
+    ctx.trace.push({ kind: "tool", name, input: rawInput, summary: "MCP only", ms: 0, ok: false });
+    return { content: `${name} is only available to U-Bot over MCP; the app has its own page for it.`, isError: true };
+  }
   const parsed = schema.safeParse(rawInput ?? {});
   if (!parsed.success) {
     ctx.trace.push({ kind: "tool", name, input: rawInput, summary: "invalid input", ms: 0, ok: false });
@@ -645,6 +1253,7 @@ export async function executeTool(
     const out = await run(name as ToolName, parsed.data as Record<string, unknown>, ctx);
     const content = JSON.stringify(out.result);
     ctx.evidence.push(content);
+    ctx.data.set(name, out.result);
     ctx.trace.push({ kind: "tool", name, input: parsed.data, summary: out.summary, ms: Date.now() - t0, ok: true });
     return { content, isError: false };
   } catch (err) {

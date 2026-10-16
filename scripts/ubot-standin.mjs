@@ -4,6 +4,9 @@
 //   npm run ubot                                  # English, ARB, ฿5,000, Enter between steps
 //   npm run ubot -- --symbol AVAX --thb 2000      # another token
 //   npm run ubot -- --auto                        # no pauses (rehearsal, video)
+//   npm run ubot -- --trade                       # also draft a paper-trade plan for the user to approve
+//   npm run ubot -- --coingecko                   # U-Bot also asks CoinGecko's MCP server for 24h volume
+//                                                 # (public keyless server, shared rate limit; --coingecko-url to change)
 //   npm run ubot -- --url https://<host>/api/mcp  # a deployed server
 //
 // Reads MCP_API_KEY from .env (the server must use the same key). With the key, U-Bot acts for
@@ -32,6 +35,11 @@ const symbol = opt("symbol", "ARB").toUpperCase();
 const thb = Number(opt("thb", "5000"));
 const lang = opt("lang", "en");
 const auto = args.includes("--auto");
+const trade = args.includes("--trade");
+const coingecko = args.includes("--coingecko");
+const coingeckoUrl = opt("coingecko-url", "https://mcp.api.coingecko.com/mcp");
+// Ticker → CoinGecko id (same table as src/lib/market.ts).
+const CG_IDS = { ARB: "arbitrum", WLD: "worldcoin-wld", AVAX: "avalanche-2", BTC: "bitcoin", ETH: "ethereum", USDC: "usd-coin", USDT: "tether" };
 const key = process.env.MCP_API_KEY;
 
 const c = { dim: "\x1b[2m", bold: "\x1b[1m", teal: "\x1b[36m", amber: "\x1b[33m", red: "\x1b[31m", green: "\x1b[32m", off: "\x1b[0m" };
@@ -42,14 +50,53 @@ async function step(title) {
   console.log(`\n${c.bold}${title}${c.off}`);
   if (rl) await rl.question(`${c.dim}  (Enter)${c.off}`);
 }
-function sent(method, params) {
-  console.log(`${c.teal}  U-Bot → U-Guard${c.off}  ${method}${params ? ` ${c.dim}${JSON.stringify(params)}${c.off}` : ""}`);
+function sent(method, params, to = "U-Guard") {
+  console.log(`${c.teal}  U-Bot → ${to}${c.off}  ${method}${params ? ` ${c.dim}${JSON.stringify(params)}${c.off}` : ""}`);
 }
 function parse(result) {
   try {
     return JSON.parse(result.content?.[0]?.text ?? "{}");
   } catch {
     return {};
+  }
+}
+
+/**
+ * U-Bot talks to more than one MCP server: here CoinGecko's, for live 24h volume, set against the
+ * unlock size U-Guard reported. CoinGecko's tool names come from its API, so we look them up at
+ * runtime (direct tools, or the dynamic invoke_api_endpoint mode) instead of hard-coding them.
+ */
+async function crossCheckVolume(risk) {
+  const id = CG_IDS[symbol] ?? symbol.toLowerCase();
+  const cg = new Client({ name: "u-bot-standin", version: "1.0.0" });
+  try {
+    sent(`initialize (${coingeckoUrl})`, undefined, "CoinGecko");
+    await cg.connect(new StreamableHTTPClientTransport(new URL(coingeckoUrl)));
+    const { tools: cgTools } = await cg.listTools();
+    const priceArgs = { ids: id, vs_currencies: "usd", include_24hr_vol: true, include_market_cap: true };
+    const direct = cgTools.find((t) => t.name === "get_simple_price") ?? cgTools.find((t) => /simple.*price/i.test(t.name));
+    const call = direct
+      ? { name: direct.name, arguments: priceArgs }
+      : cgTools.some((t) => t.name === "invoke_api_endpoint")
+        ? { name: "invoke_api_endpoint", arguments: { endpoint_name: "get_simple_price", args: priceArgs } }
+        : null;
+    if (!call) throw new Error(`no price tool among ${cgTools.length} tools`);
+    sent(`tools/call ${call.name}`, call.arguments, "CoinGecko");
+    const res = await cg.callTool(call);
+    const text = res.content?.find((x) => x.type === "text")?.text ?? "";
+    const json = JSON.parse(text.slice(text.indexOf("{")));
+    const row = json[id] ?? json.data?.[id];
+    const vol = Number(row?.usd_24h_vol);
+    if (!(vol > 0)) throw new Error("no 24h volume in the answer");
+    console.log(`  ← CoinGecko: ${symbol} $${row.usd} · 24h volume $${(vol / 1e6).toFixed(1)}M`);
+    if (risk.unlock_value_usd > 0) {
+      const share = (risk.unlock_value_usd / vol) * 100;
+      console.log(`     the unlock (~$${(risk.unlock_value_usd / 1e6).toFixed(1)}M) is ${share.toFixed(0)}% of one day's volume (U-Guard's own figure: ${risk.days_of_volume ?? "–"} days)`);
+    }
+  } catch (err) {
+    console.log(`  ${c.amber}CoinGecko MCP didn't answer (${err.message}).${c.off} U-Guard's own figure: ${risk.days_of_volume ?? "–"} days of volume.`);
+  } finally {
+    await cg.close().catch(() => undefined);
   }
 }
 
@@ -90,6 +137,11 @@ try {
     console.log(`     ${c.dim}data: Tokenomist ${risk.data}${c.off}`);
   }
 
+  if (coingecko) {
+    await step(`3b · Cross-check ${symbol}'s trading volume with CoinGecko's MCP server`);
+    await crossCheckVolume(risk);
+  }
+
   if (risk.level === "high" || risk.level === "medium") {
     await step("4 · Propose a protection rule (the user decides)");
     const proposeArgs = { symbol, action: "pause_buying" };
@@ -108,6 +160,22 @@ try {
     }
   } else {
     console.log(`\n  ${c.green}Nothing to protect: U-Bot can go ahead.${c.off} (Calm when it's safe: no alert, no proposal.)`);
+  }
+
+  if (trade) {
+    await step(`5 · Draft the ${symbol} buy as a plan (the user approves it in the app)`);
+    const planArgs = { symbol, side: "buy", amount_thb: thb, order_type: "market", limit_price_usd: null, stop_loss_pct: null, risk_budget_pct: null };
+    sent("tools/call draft_trade_plan", planArgs);
+    const plan = parse(await client.callTool({ name: "draft_trade_plan", arguments: planArgs }));
+    if (plan.created) {
+      const color = plan.verdict === "blocked" ? c.red : plan.verdict === "caution" ? c.amber : c.green;
+      console.log(`  ← ${color}${c.bold}${String(plan.verdict).toUpperCase()}${c.off}  ${plan.summary?.[0] ?? ""}`);
+      for (const ch of (plan.checks ?? []).filter((x) => x.status !== "ok")) console.log(`     ! ${ch.label}`);
+      console.log(`     ${c.dim}plan ${plan.plan_id} · ${plan.status} · ${plan.note}${c.off}`);
+      console.log(key ? `\n  ${c.green}Waiting on ${user}'s Trade page.${c.off} Nothing is bought until they approve.` : "");
+    } else {
+      console.log(`  ← no plan: ${plan.note ?? "unknown reason"}`);
+    }
   }
   console.log(`\n${c.dim}Information only, not investment advice. Every action waits for the user's approval.${c.off}`);
 } catch (err) {

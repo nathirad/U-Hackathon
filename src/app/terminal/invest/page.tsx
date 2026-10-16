@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ensureSession } from "@/components/EnsureSession";
 import { Spotlight } from "@/components/fx";
+import { DataBadge } from "@/components/DataBadge";
 import { LEVEL_LABEL, shortDate, thb } from "@/lib/format";
 import type { InvestPlan } from "@/lib/types";
 
@@ -10,6 +11,7 @@ interface Defaults {
   questions: { q: string; a: string[] }[];
   classes: { id: string; name: string; example: string; risk: number; color: string }[];
   plans: InvestPlan[];
+  pending?: InvestPlan[];
 }
 
 const PICKS = ["BTC", "ETH", "ARB", "WLD", "AVAX"];
@@ -92,6 +94,22 @@ export default function InvestPage() {
     }
   }
 
+  /** Open a plan that is still waiting (e.g. one U-Bot drafted over MCP) with its own inputs. */
+  function review(p: InvestPlan) {
+    setPlan(p);
+    setState("pending");
+    setError(null);
+    setWeights(Object.fromEntries(p.slices.map((s) => [s.id, String(s.pct)])));
+    if (p.answers?.length === 5) setAnswers(p.answers);
+    setLump(String(p.lumpSumThb));
+    setMonthly(String(p.monthlyThb));
+    setDay(String(p.dcaDay));
+    if (p.crypto.length) setPicks(p.crypto.map((c) => c.symbol));
+  }
+
+  // Plans U-Bot drafted in chat (MCP). Drafts made on this page are the one shown on the right.
+  const waiting = (defs?.pending ?? []).filter((p) => p.origin === "mcp" && p.id !== plan?.id);
+
   async function decide(decision: "approve" | "decline") {
     if (!plan) return;
     setState("busy");
@@ -117,7 +135,10 @@ export default function InvestPage() {
     <>
       <div className="page-title">
         <h1>Invest</h1>
-        <p>Answer 5 questions → U-Bot drafts a model portfolio for your risk level → adjust it → U-Guard checks the crypto part and the DCA dates → you approve</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
+          <DataBadge status="DEMO" tooltip="Educational model portfolio on sample asset classes" />
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>5-question risk assessment · U-Guard supply risk check on DCA dates · User approved</span>
+        </div>
       </div>
       <p className="note inv-disclaimer">
         An educational model portfolio on sample data (fund names are examples, not real products) · not personal investment advice · real advice must come from someone licensed by the SEC
@@ -188,6 +209,22 @@ export default function InvestPage() {
         </Spotlight>
 
         <div style={{ display: "grid", gap: 16, alignContent: "start" }}>
+          {waiting.length > 0 && (
+            <Spotlight className="panel">
+              <div className="panel-head"><h2>Plans U-Bot drafted for you</h2><span className="total">{waiting.length}</span></div>
+              {waiting.map((p) => (
+                <div key={p.id} className="event-row" style={{ gridTemplateColumns: "1fr auto" }}>
+                  <span>
+                    <b>{p.profileName}</b> · DCA {thb(p.monthlyThb)}/month
+                    <small className="note" style={{ display: "block" }}>
+                      Score {p.score}/20 · {p.checks.filter((c) => c.status === "warn").length} thing(s) to look at · waiting for your approval
+                    </small>
+                  </span>
+                  <button className="btn btn-sm" onClick={() => review(p)}>Review</button>
+                </div>
+              ))}
+            </Spotlight>
+          )}
           {!plan && (
             <Spotlight className="panel">
               <div className="panel-head"><h2>Your plan</h2></div>

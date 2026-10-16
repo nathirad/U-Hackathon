@@ -1,5 +1,7 @@
 // Formatting helpers shared by the server (agent replies) and the client (UI).
 
+import { asOfLabel, asOfLabelTh } from "./freshness";
+
 export function compact(n: number, digits = 1): string {
   const abs = Math.abs(n);
   const fixed = (v: number) => {
@@ -88,10 +90,11 @@ export function sourceLabel(mode: string): string {
   return mode === "live" ? "Live data" : mode === "snapshot" ? "Real data (snapshot)" : "Sample data";
 }
 
-/** Label plus date for one data section: "Real data (snapshot) · Oct 16", "Live data", "Sample data". */
-export function sourceTag(src: { mode: string; asOf?: string } | null | undefined): string {
+/** Label plus time for one data section: "Real data (snapshot) · as of 15 Oct 07:00", "Live data · as of 14:05", "Sample data". */
+export function sourceTag(src: { mode: string; asOf?: string; stale?: boolean } | null | undefined): string {
   if (!src) return "";
-  return src.mode === "snapshot" && src.asOf ? `${sourceLabel(src.mode)} · ${shortDate(src.asOf)}` : sourceLabel(src.mode);
+  const when = src.mode !== "sample" ? asOfLabel(src.asOf, src.stale) : "";
+  return when ? `${sourceLabel(src.mode)} · ${when}` : sourceLabel(src.mode);
 }
 
 // Thai copy for Thai replies (the agent answers in the user's language).
@@ -129,9 +132,10 @@ export function sourceLabelTh(mode: string): string {
 }
 
 /** Label plus date for one data section: "ข้อมูลจริง (snapshot) · 15 ต.ค.", "ข้อมูลสด", "ข้อมูลตัวอย่าง". */
-export function sourceTagTh(src: { mode: string; asOf?: string } | null | undefined): string {
+export function sourceTagTh(src: { mode: string; asOf?: string; stale?: boolean } | null | undefined): string {
   if (!src) return "";
-  return src.mode === "snapshot" && src.asOf ? `${sourceLabelTh(src.mode)} · ${thaiDate(src.asOf)}` : sourceLabelTh(src.mode);
+  const when = src.mode !== "sample" ? asOfLabelTh(src.asOf, src.stale) : "";
+  return when ? `${sourceLabelTh(src.mode)} · ${when}` : sourceLabelTh(src.mode);
 }
 
 /** Which engine answered: Claude, another LLM (by model name) or the offline rules engine. */

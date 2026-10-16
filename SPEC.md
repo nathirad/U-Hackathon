@@ -1,6 +1,6 @@
 # U-Guard: System Specification (เอกสารหลักสำหรับส่งต่องาน)
 
-> อัปเดต 15 ต.ค. 2026 · ทีม U-Hackathon 2026 (AI Track)
+> อัปเดต 16 ต.ค. 2026 ~11:30 น. · ทีม U-Hackathon 2026 (AI Track) · **สถานะล่าสุดดู §0.1** (หัวข้อ 14 และ 17 เป็นบันทึกของวันที่ 15)
 > เอกสารนี้คือ **แหล่งความจริงหลัก (source of truth)** ใครมาต่องาน (คนหรือ AI session ใหม่) อ่านไฟล์นี้ก่อน
 > รายละเอียดเสริม: [PLAN.md](PLAN.md) (ปัญหา, หลักฐาน, timeline, pitch) · [UI-PLAN.md](UI-PLAN.md) (หน้าเว็บ, nav, auth, loader)
 > **Agent design v2 (English):** [AGENTIC-WORKFLOW.md](AGENTIC-WORKFLOW.md): models per job, LangGraph decision, RAG types, live data, alerts, portfolio drift. It supersedes §7 where they differ.
@@ -12,7 +12,67 @@
 - **U-Guard** คือ agent ใน U-Bot ที่**เช็กความเสี่ยงจาก supply (token unlock / emission) ก่อนเงินของผู้ใช้ขยับ** อธิบายเป็นภาษาไทย 3 บรรทัดพร้อมเสียง แล้วให้ผู้ใช้**อนุมัติเองทุกครั้ง** (บันทึกการอนุมัติบน Avalanche)
 - **Positioning:** *"The safety layer for U-Bot's agentic banking."* U-Bot สร้างบน Visa Intelligent Commerce ซึ่งเน้น spending control + approval workflow + trust signal และ U-Guard คือ trust signal ฝั่ง crypto
 - **ไม่ทายราคา** แต่ forecast **supply** ซึ่งเป็นตัวแปรเดียวที่รู้ล่วงหน้าได้จริง และ**ไม่ให้คำแนะนำการลงทุน** (ไทยต้องมีใบอนุญาตที่ปรึกษาสินทรัพย์ดิจิทัลจาก ก.ล.ต.)
-- **สถานะโค้ด (15 ต.ค. ค่ำ):** รวม branch แล้ว: แอปไทยของเจ้าของ (`/`, `/app`, `/terminal`, `/report`) + แอปอังกฤษ (`/en`, `/assistant`, `/dashboard`, `/method`) ใช้ backend เดียว · agent harness ที่สลับโมเดลได้ (Claude เป็นตัวเลือกของทีม) · 11 tools · RAG + CAG · MCP server · auth · eval 28 เคสผ่าน · build ผ่าน (ดู §14 และตารางการตัดสินใจใน §17)
+- **สถานะโค้ด:** ดู §0.1 ด้านล่าง (ข้อความเดิมของวันที่ 15 อยู่ใน §14 และ §17)
+
+
+## 0.1 สถานะล่าสุด (16 ต.ค. ~11:30 น., `main`)
+
+**แอปเดียว เมนูเรียงตามวันของนักลงทุน** (`/terminal`, ภาษาอังกฤษ · ถ้าถามเป็นภาษาไทย agent ตอบเป็นไทย)
+| กลุ่ม | หน้า | ทำอะไร |
+|---|---|---|
+| Start | Today (`/terminal`) · Ask U-Bot (`/terminal/agent`) | ภาพรวมวันนี้ · แชต agent พร้อมการ์ด, ข้อเสนอ, เสียง, Agent Trace |
+| Markets | Token screener · Unlock calendar · News | เหรียญใหญ่ 40 อันดับ + unlock ครั้งถัดไป (Tokenomist live) · ปฏิทิน unlock · ข่าวสด RSS |
+| My money | Portfolio · My plan · Trade · Invest · Alerts | สัดส่วนเทียบเป้า, กราฟ, ตาราง unlock 6 เดือน · ไทม์ไลน์ 30 วัน + PDF · แผนเทรดจำลอง · แผนลงทุน · กฎแจ้งเตือน + กล่อง U-Bot |
+| อื่น ๆ | `/` landing · `/en` · `/method` · `/login` · `/report` · `/app` (เฉพาะ demo บนเวที) | `/assistant` และ `/dashboard` redirect เข้า terminal |
+
+**Agent (Claude ผ่าน Anthropic SDK, ไม่มี key ใช้ rules engine) · 25 tools**
+- อ่าน 22 ตัว ใช้ทั้งแชตและ MCP:
+  - ความเสี่ยง unlock, ข่าว, odds, market pulse, drift, stress test
+  - ข้อมูลของแอปทั้งหมด: คำสั่งเทรด/สถานะ, กฎแจ้งเตือน, My plan, แผนลงทุน, unlock ทั้งตลาด
+  - บนเชนผ่าน **Avalanche Data API**: ยอดเงิน, ธุรกรรม, smart contract
+- เขียน 3 ตัว ใช้ได้เฉพาะ U-Bot ผ่าน MCP: ร่างแผนเทรด, ร่างแผนลงทุน, ตั้งกฎแจ้งเตือน
+  - **ไม่มี tool ไหนอนุมัติหรือส่งคำสั่ง** ผู้ใช้อนุมัติในแอปเท่านั้น และการอนุมัติถูกบันทึกบน Avalanche Fuji
+- คะแนนความเสี่ยงคำนวณด้วยโค้ด (deterministic) · โมเดลทำหน้าที่อธิบาย · compliance check ห้ามแนะนำซื้อขายหรือทายราคา
+- **ไม่ใช้ VLM:** ข้อมูลเป็น JSON ไม่ใช่ภาพ และ Claude อ่านรูปได้อยู่แล้วถ้าต้องใช้
+
+**แหล่งข้อมูล**
+| ข้อมูล | แหล่ง | ถ้าใช้ไม่ได้ |
+|---|---|---|
+| Unlock, allocation, ระดมทุน | Tokenomist API (`TOKENOMIST_API_KEY`) | snapshot 15 ต.ค. มีป้ายบอก |
+| ราคา, volume | Hyperliquid + CoinGecko (`MARKET_SOURCE=live`) | ไฟล์ตัวอย่าง มีป้ายบอก |
+| ข่าว | RSS: Cointelegraph, CoinDesk, Decrypt (`NEWS_SOURCE=rss`) | snapshot ข่าว |
+| Odds | Polymarket | snapshot |
+| บนเชน | Avalanche Data API (ไม่ต้องมี key) · บันทึกการอนุมัติบน Fuji (`DEMO_PRIVATE_KEY`) | บอกว่าไม่ตอบ · บันทึกแบบ simulated |
+| เช็กสถานะ | `GET /api/status` บอกว่าข้อมูลแต่ละส่วนมาจากไหน (ไม่แสดง key) | – |
+
+**ระบบเตือน:**
+- กฎ 3 แบบ: unlock, drift, ข่าว
+- ไม่ส่งซ้ำ, ช่วง 22:00–07:00 ส่งเฉพาะเรื่องเสี่ยงสูง, วันละไม่เกิน 5 ครั้ง
+- ข่าวสำคัญต้องมี 2 แหล่งยืนยัน
+- watcher ทำงานทุก 10 นาที และมี Vercel Cron
+
+**บัญชีผู้ใช้:**
+- demo (กดครั้งเดียว), email, กระเป๋า (SIWE) · มีปุ่มบัญชีมุมขวาบนของ terminal (Sign out / เข้าระบบแบบอื่น)
+- บน laptop ทุกคนใช้ `demo-user` ร่วมกัน เพราะ U-Bot stand-in ส่งข้อเสนอไปหา user นี้
+- บน Vercel แต่ละคนได้บัญชี demo ของตัวเอง (`DEMO_SHARED` ใช้เปลี่ยนได้)
+
+**ตัวเลือกเพิ่ม (ปิดไว้เป็นค่าเริ่มต้น):**
+- `BROKER=alpaca-paper`: ส่งคำสั่งไป Alpaca บัญชี paper หลังผู้ใช้อนุมัติเท่านั้น
+- `npm run ubot -- --trade --coingecko`: ขั้นเพิ่มใน U-Bot stand-in
+- รายละเอียดใน [MCP-INTEGRATIONS.md](MCP-INTEGRATIONS.md)
+
+**การทดสอบ:**
+- `npm run eval`: 72 เคส (ไทย/อังกฤษ, offline, deterministic)
+- `npm run responsive`: 17 หน้า × 5 อุปกรณ์
+- typecheck และ build ผ่าน
+
+**ยังไม่ได้ทำ / รอ:**
+- เว็บที่ host บน Vercel (connector ของ Claude สร้าง project ไม่ได้: 403)
+- key ของ Claude, ElevenLabs, Fuji
+- โลโก้ Tokenomist
+- spec ของ U-Bot ตัวจริง
+- database จริง (ตอนนี้เก็บในหน่วยความจำ / Upstash)
+- รายละเอียดดู [TODO.md](TODO.md) และ [STATUS.md](STATUS.md)
 
 ---
 
@@ -423,7 +483,7 @@ Type ทั้งหมดอยู่ใน `src/lib/types.ts`
   5. ปิด: "safety layer ของ U-Bot บน Visa Intelligent Commerce"
 - **การเก็บคะแนนแต่ละเกณฑ์:** Execution (สด + fallback + วิดีโอ) · Practicality (ปัญหาจริงในปี 2026, เหรียญ EVM, ทำตามกฎ ก.ล.ต., ตรงกับ VIC/U-Bot) · UX (การ์ดเดียว ภาษาไทย มีเสียง) · Innovation (คะแนนแบบมีเงื่อนไข, 3 sponsor, บันทึกการอนุมัติ on-chain) · U-Bot (เป็น skill/sub-agent ของ orchestrator)
 
-## 14. สถานะและขั้นต่อไป (อัปเดต 15 ต.ค. เย็น)
+## 14. สถานะและขั้นต่อไป (บันทึก 15 ต.ค. เย็น · ล่าสุดดู §0.1)
 
 **ทำแล้ว ✅ (branch `feat/app-ui`, เจ้าของ repo, รายละเอียดใน LOGS.md)**
 - โครง Next.js + deps (next 15.5, react 19, @anthropic-ai/sdk 0.134, zod 4, viem 2, typescript 5.9)
@@ -477,7 +537,7 @@ Type ทั้งหมดอยู่ใน `src/lib/types.ts`
 
 ---
 
-## 17. สิ่งที่สร้างจริงใน branch อังกฤษ (15 ต.ค. เย็น) และการตัดสินใจหลังรวม branch
+## 17. สิ่งที่สร้างจริงใน branch อังกฤษ (15 ต.ค. เย็น) และการตัดสินใจหลังรวม branch (บันทึก · ล่าสุดดู §0.1)
 
 | เรื่อง | ตัดสินใจ | สถานะ |
 |---|---|---|
@@ -504,7 +564,7 @@ Type ทั้งหมดอยู่ใน `src/lib/types.ts`
 - `AGENT_PROVIDER=auto|openai|anthropic|rules` · `openai` = endpoint แบบ OpenAI-compatible ใดก็ได้ (Gemini, OpenAI, Typhoon, Groq, OpenRouter, Vercel AI Gateway, Ollama) · `anthropic` = Claude ผ่าน SDK ตรง · `rules` = planner แบบกำหนดผลตายตัว (ใช้เป็นตัวสำรองอัตโนมัติเมื่อ LLM ล่ม)
 - Reflect: compliance check → ให้ LLM เขียนใหม่ 1 ครั้ง → ถ้ายังไม่ผ่านใช้ template ที่ตรวจแล้ว
 
-### 17.3 Tools (11 ตัว, `src/lib/agent/tools.ts`)
+### 17.3 Tools (ตอนนั้น 11 ตัว · ตอนนี้ 25 ตัว ดู §0.1 และ README)
 เดิม 7 ตัว + `get_market_news` · `get_event_odds` · `get_market_pulse` · `get_event_calendar` · ทุกตัวตรวจ input ด้วย zod และใช้ร่วมกันทั้ง chat และ MCP
 
 ### 17.4 RAG + CAG
@@ -528,7 +588,7 @@ Type ทั้งหมดอยู่ใน `src/lib/types.ts`
 
 ### 17.7 Auth
 - Session: cookie HttpOnly ลงลายเซ็น HMAC (7 วัน) · `npm start` ต้องมี `AUTH_SECRET`
-- Email: scrypt · ล็อก 15 นาทีหลังผิด 5 ครั้ง · เก็บใน `data/runtime/users.json` (ใช้ได้บน localhost/server เดียว; ถ้า deploy serverless ให้ย้ายไป Postgres/Supabase)
+- Email: scrypt · ล็อก 15 นาทีหลังผิด 5 ครั้ง · เก็บใน `data/runtime/users.json` บน localhost/server เดียว · บน Vercel (มี Upstash) เก็บใน shared store แทน สมัครแล้ว login ได้ข้าม function · หลัง hackathon ย้ายไป Postgres/Supabase
 - Wallet: SIWE ด้วย `viem/siwe` · nonce ใช้ได้ครั้งเดียว · ตรวจ domain และเวลา (รองรับ EOA; smart account ต้องใช้ `publicClient.verifySiweMessage`)
 
 ### 17.8 MCP (`/api/mcp`)

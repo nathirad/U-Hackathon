@@ -22,6 +22,8 @@ export interface MarketQuote {
   volume24hUsd: number;
   change24hPct: number | null;
   source: DataSource;
+  asOf: string; // when the price was observed (ISO)
+  stale?: boolean; // live source stopped answering; this is its last good answer
 }
 
 interface MarketFixture {
@@ -122,26 +124,35 @@ async function geckoQuotes() {
   return gecko?.quotes ?? null;
 }
 
+// Older than this, a cached live answer means the source stopped answering (refresh is 30 s for
+// Hyperliquid, 10 min for CoinGecko), so the quote is labelled "may be out of date".
+const PERP_STALE_MS = 3 * 60_000;
+const GECKO_STALE_MS = 20 * 60_000;
+
 export async function getQuote(symbol: string): Promise<MarketQuote | null> {
   const sym = symbol.toUpperCase();
-  const row = (await fixture()).tokens[sym];
+  const fx = await fixture();
+  const row = fx.tokens[sym];
   if (config.market.source === "live") {
     const [perp, cg] = await Promise.all([perpPrices(), COINGECKO_IDS[sym] ? geckoQuotes() : Promise.resolve(null)]);
     const p = perp?.get(sym);
     const g = cg?.get(sym);
     const priceUsd = p?.priceUsd ?? g?.priceUsd;
     if (priceUsd) {
+      const at = p ? (perps?.at ?? Date.now()) : (gecko?.at ?? Date.now());
       return {
         symbol: sym,
         priceUsd,
         volume24hUsd: g?.volume24hUsd ?? row?.volume24hUsd ?? 0,
         change24hPct: p?.change24hPct ?? g?.change24hPct ?? null,
         source: "live",
+        asOf: new Date(at).toISOString(),
+        ...(Date.now() - at > (p ? PERP_STALE_MS : GECKO_STALE_MS) ? { stale: true } : {}),
       };
     }
   }
   return row
-    ? { symbol: sym, priceUsd: row.priceUsd, volume24hUsd: row.volume24hUsd, change24hPct: row.change24hPct ?? null, source: "sample" }
+    ? { symbol: sym, priceUsd: row.priceUsd, volume24hUsd: row.volume24hUsd, change24hPct: row.change24hPct ?? null, source: "sample", asOf: fx.asOf }
     : null;
 }
 

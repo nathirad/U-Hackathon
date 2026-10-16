@@ -2,6 +2,7 @@
 // rules, feedback). Kept on globalThis so every route bundle and hot reload sees the same
 // instance. Swap for Postgres/Supabase before this outlives the hackathon.
 
+import type { UserRecord } from "./auth/users";
 import type { AgentResult, InvestPlan, PaperOrder, Proposal, ProtectionReceipt, TradePlan } from "./types";
 
 export interface InboxItem {
@@ -18,14 +19,40 @@ export interface ProposalRecord {
   receipt?: ProtectionReceipt;
 }
 
+export type AlertType = "unlock" | "drift" | "news";
+
 export interface AlertRule {
   id: string;
   createdAt: string;
   ownerId: string;
-  symbol: string;
-  minLevel: "medium" | "high";
-  daysBefore: number;
+  /** unlock = scheduled supply · drift = wallet off the user's target mix · news = market news */
+  type?: AlertType; // rules saved before types existed are unlock rules
+  symbol: string; // "*" = every non-stablecoin holding (unused for drift)
+  minLevel: "medium" | "high"; // unlock risk level, or news severity
+  daysBefore: number; // unlock only
   channel: "ubot" | "telegram" | "line";
+}
+
+/** One alert that went out (deduplicated by dedupeKey). */
+export interface AlertEvent {
+  id: string;
+  ownerId: string;
+  ruleId: string;
+  type: AlertType;
+  symbol: string;
+  severity: "high" | "medium";
+  dedupeKey: string;
+  firedAt: string;
+  title: string;
+  lines: string[];
+  url?: string;
+}
+
+export interface WatchSummary {
+  ranAt: string;
+  trigger: "timer" | "cron" | "manual";
+  fired: AlertEvent[];
+  skipped: { title: string; reason: string }[];
 }
 
 /** The user's own target mix: percent of portfolio value per token, and the drift band. */
@@ -46,8 +73,10 @@ interface Store {
   proposals: Map<string, ProposalRecord>;
   inbox: Map<string, InboxItem[]>;
   alerts: AlertRule[];
-  /** userId:ruleId:unlockDate → when that alert last fired (cooldown). */
-  alertsFired: Map<string, number>;
+  /** Alerts that went out, newest first (dedupe, daily cap, history). */
+  alertEvents: AlertEvent[];
+  /** Each user's last watch run, for the alerts page. */
+  lastWatch: Map<string, WatchSummary>;
   feedback: FeedbackRecord[];
   /** Trade plans drafted for a user, awaiting their decision. */
   tradePlans: Map<string, { plan: TradePlan; ownerId: string }>;
@@ -57,6 +86,8 @@ interface Store {
   investPlans: Map<string, { plan: InvestPlan; ownerId: string }>;
   /** Target mix per user (portfolio drift). */
   targets: Map<string, Targets>;
+  /** Email + password accounts, kept here only when the shared store is on (see auth/users.ts). */
+  accounts: UserRecord[];
 }
 
 const g = globalThis as typeof globalThis & { __uguard?: Store };
@@ -64,21 +95,25 @@ export const store: Store = (g.__uguard ??= {
   proposals: new Map(),
   inbox: new Map(),
   alerts: [],
-  alertsFired: new Map(),
+  alertEvents: [],
+  lastWatch: new Map(),
   feedback: [],
   tradePlans: new Map(),
   orders: new Map(),
   investPlans: new Map(),
   targets: new Map(),
+  accounts: [],
 });
 // A store created by an older build during hot reload may lack the newer fields.
 store.alerts ??= [];
-store.alertsFired ??= new Map();
+store.alertEvents ??= [];
+store.lastWatch ??= new Map();
 store.feedback ??= [];
 store.tradePlans ??= new Map();
 store.orders ??= new Map();
 store.investPlans ??= new Map();
 store.targets ??= new Map();
+store.accounts ??= [];
 
 // ─── Shared persistence for serverless hosting (optional) ───────────────────────────
 // On Vercel every route runs in its own function with its own memory, so a proposal U-Bot
@@ -99,12 +134,14 @@ function snapshot(): string {
     proposals: [...store.proposals],
     inbox: [...store.inbox],
     alerts: store.alerts,
-    alertsFired: [...store.alertsFired],
+    alertEvents: store.alertEvents,
+    lastWatch: [...store.lastWatch],
     feedback: store.feedback.slice(-200),
     tradePlans: [...store.tradePlans],
     orders: [...store.orders],
     investPlans: [...store.investPlans],
     targets: [...store.targets],
+    accounts: store.accounts,
   });
 }
 
@@ -113,12 +150,14 @@ function restore(json: string): void {
   store.proposals = new Map(s.proposals ?? []);
   store.inbox = new Map(s.inbox ?? []);
   store.alerts = s.alerts ?? [];
-  store.alertsFired = new Map(s.alertsFired ?? []);
+  store.alertEvents = s.alertEvents ?? [];
+  store.lastWatch = new Map(s.lastWatch ?? []);
   store.feedback = s.feedback ?? [];
   store.tradePlans = new Map(s.tradePlans ?? []);
   store.orders = new Map(s.orders ?? []);
   store.investPlans = new Map(s.investPlans ?? []);
   store.targets = new Map(s.targets ?? []);
+  store.accounts = s.accounts ?? [];
 }
 
 async function kv(path: string, body?: string): Promise<unknown> {
@@ -158,6 +197,27 @@ export async function pushStore(): Promise<void> {
     sync.version = v;
   } catch {
     // Best effort; the next write retries with the full state.
+  }
+}
+
+/** Reads one JSON value kept beside the store (null when the shared store is off or unreachable). */
+export async function sharedGet<T>(key: string): Promise<T | null> {
+  if (!sharedStoreEnabled) return null;
+  try {
+    const raw = (await kv(`/get/${key}`)) as string | null;
+    return raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Saves one JSON value beside the store. Never throws. */
+export async function sharedSet(key: string, value: unknown): Promise<void> {
+  if (!sharedStoreEnabled) return;
+  try {
+    await kv(`/set/${key}`, JSON.stringify(value));
+  } catch {
+    // best effort: the next run saves it again
   }
 }
 

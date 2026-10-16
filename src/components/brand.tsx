@@ -1,28 +1,45 @@
 import Link from "next/link";
 
-/** U-shaped shield guarding a keyhole (same geometry as public/brand/logo-mark.svg). */
+/** Neon shield emblem for U-Guard */
 export function LogoMark({ size = 30 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 128 128" aria-hidden="true">
-      <rect x="4" y="4" width="120" height="120" rx="32" fill="#0B1426" />
-      <rect x="4.5" y="4.5" width="119" height="119" rx="31.5" fill="none" stroke="rgba(94,234,212,0.35)" />
-      <path d="M32 30H52V62C52 70 57 76 64 76C71 76 76 70 76 62V30H96V64C96 84 82 98 64 104C46 98 32 84 32 64Z" fill="#2DD4BF" />
-      <circle cx="64" cy="45" r="7" fill="#FBBF24" />
-      <path d="M60.5 49L57.5 63H70.5L67.5 49Z" fill="#FBBF24" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/brand/icon.png"
+      width={size}
+      height={size}
+      alt="U-Guard"
+      style={{
+        width: size,
+        height: size,
+        borderRadius: Math.max(6, Math.round(size * 0.22)),
+        objectFit: "cover",
+        display: "inline-block",
+        verticalAlign: "middle",
+        boxShadow: "0 0 12px rgba(45,212,191,0.3)",
+      }}
+    />
   );
 }
 
-/** U-Bot's face: the same U shield, with eyes and a smile. */
+/** U-Bot's face: the neon shield avatar */
 export function BotFace({ size = 36 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 128 128" aria-hidden="true">
-      <rect x="4" y="4" width="120" height="120" rx="32" fill="#0B1426" />
-      <path d="M32 30H52V62C52 70 57 76 64 76C71 76 76 70 76 62V30H96V64C96 84 82 98 64 104C46 98 32 84 32 64Z" fill="#2DD4BF" />
-      <rect x="55" y="42" width="6" height="11" rx="3" fill="#5EEAD4" />
-      <rect x="67" y="42" width="6" height="11" rx="3" fill="#5EEAD4" />
-      <path d="M55 87Q64 94 73 87" fill="none" stroke="#0B1426" strokeWidth="4" strokeLinecap="round" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/brand/avatar.png"
+      width={size}
+      height={size}
+      alt="U-Bot"
+      style={{
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        objectFit: "cover",
+        display: "inline-block",
+        boxShadow: "0 0 12px rgba(45,212,191,0.35)",
+      }}
+    />
   );
 }
 
@@ -43,3 +60,4 @@ export function Avatar({ level, thinking }: { level?: string | null; thinking?: 
     </span>
   );
 }
+

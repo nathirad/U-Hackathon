@@ -1,7 +1,24 @@
 # สถานะ U-Guard และทิศทางต่อไป (หน้า Trade / ลงทุน)
 
-> บันทึกเมื่อ 16 ต.ค. 2026 ~01:00 น. (เวลาไทย) หลังรวม branch · อัปเดต ~01:50 น. · **demo คือบ่ายวันนี้**
-> branch: `feat/merge-app-ui-agentic` · `main` ยังไม่อัปเดต (ต้องกด merge PR)
+> บันทึกเมื่อ 16 ต.ค. 2026 ~01:00 น. (เวลาไทย) หลังรวม branch · อัปเดต ~12:20 น. · **demo คือบ่ายวันนี้**
+> branch: `main` · Full System Improvement & Hardening Completed
+
+## 0.5 อัปเดตล่าสุด: Full System Hardening & Data Provenance Standard
+- **แก้ Webpack 5 Dynamic Chunk Bug (`src/instrumentation.ts`):** Next.js 15 ในโหมด production build เดิมแคลช runtime chunk (`Cannot find module './6817.js'`) แก้ไขโดยใช้ synchronous `require("./lib/watch")` สำหรับ nodejs runtime ทำให้ production server บูตใน 185ms ได้อย่างสมบูรณ์แบบ
+- **ระบบสัญญาระดับความจริงของข้อมูล (Data Provenance System):**
+  - สร้างคอมโพเนนต์มาตรฐาน `src/components/DataBadge.tsx` แสดง 6 สถานะชัดเจน: `LIVE`, `CACHED`, `DEMO`, `STALE`, `UNAVAILABLE`, `ERROR`
+  - ติดตั้ง DataBadge บนทุกหน้าของ Terminal (`/terminal`, `/terminal/tokens`, `tokens/[symbol]`, `/terminal/unlocks`, `/terminal/news`, `/terminal/portfolio`, `/terminal/trade`, `/terminal/invest`, `/terminal/alerts`, `/terminal/plan`, `/terminal/agent`, `/report`, `/app`)
+  - ห้ามแอบอ้างว่าข้อมูลเป็น Live เมื่อดึงจาก Snapshot หรือ Demo
+- **ปรับปรุง Risk Engine (`src/lib/risk.ts`):**
+  - เพิ่มการตรวจสอบความปลอดภัยของตัวเลข (Safe number finiteness, clamp คะแนนให้อยู่ในช่วง 0–100 แน่นอน)
+  - ป้องกันการเกิด `NaN` เมื่อ recipient breakdown ว่าง หรือได้รับชนิดที่ไม่ได้กำหนดค่าน้ำหนัก
+- **ชุดทดสอบประเมินระบบ (Evals Suite):**
+  - เพิ่มเคสทดสอบความถูกต้องของคะแนนความเสี่ยงและการจำแนกสถานะ DataBadge
+  - ผ่าน 64/64 เคส (`pnpm run eval`) ✅
+- **การตรวจสอบ TypeScript และ Responsive Design:**
+  - `tsc --noEmit` ผ่าน 0 ข้อผิดพลาด ✅
+  - `next build` สร้าง 23 หน้า static และ dynamic routes สำเร็จ 100% ✅
+  - `scripts/responsive.mjs` ผ่านทั้ง 5 ขนาดหน้าจอ (iPhone SE, iPhone 15 Pro, iPhone 15 Pro Max, iPad Mini, Desktop 1440x900) ปราศจาก horizontal scrolling และ iOS zoom issue ✅
 
 ## 0. อัปเดตล่าสุด (~01:50 น.)
 - **หน้าเทรด** (`/terminal/trade` + แผงเทรดบนหน้าเหรียญทุกหน้า แบบ Nansen): คุณเลือกเหรียญ ซื้อ/ขาย และจำนวนเงินเอง → U-Bot ร่างแผน (จำนวนเหรียญ, จุดตัดขาดทุน, เสียสูงสุด, สัดส่วนพอร์ตหลังซื้อ, ตาราง "ถ้าราคาเป็นแบบนี้") → U-Guard ตรวจ (unlock, ยอดเงิน, ขนาดไม้เทียบงบความเสี่ยง, การกระจุก, ซื้อไล่ราคา) → อนุมัติ → คำสั่งจำลอง (paper) + บันทึกบน Avalanche
@@ -12,6 +29,125 @@
 - **ป้ายข้อมูลไม่ขัดกันแล้ว:** แถบบนบอกตามจริงว่า "ARB ข้อมูลจริง 15 ต.ค. · WLD, AVAX ตัวอย่าง" และแต่ละส่วนของหน้าเหรียญบอกแหล่งของตัวเอง
 - **ข้อมูลและเทคโนโลยีที่ใช้ = โลโก้อย่างเดียว:** Tokenomist, ElevenLabs, Avalanche, U-topia, Visa, Claude, Model Context Protocol, Next.js (โลโก้ U-topia ใช้ไฟล์ของทีมตามต้นฉบับ ลบเฉพาะพื้นขาวนอกวงกลม อยู่ที่ `public/brand/utopia-logo.png` · Tokenomist ยังเป็นตัวอักษรจนกว่าจะได้ไฟล์โลโก้จริง)
 - ตรวจแล้ว: typecheck ✅ · build ✅ · eval 28/28 ✅ · responsive 80/80 ✅ (16 หน้า × 5 อุปกรณ์) · ทดสอบ flow เทรด/ลงทุน/แจ้งเตือน/watcher ผ่าน API และเบราว์เซอร์
+
+## 0.1 อัปเดต ~07:00 น.: ย้ายงานจาก branch WIP เข้ามาแล้ว
+- **บั๊ก `npm run dev` ทุกหน้า 500 บน main:** แก้แล้ว (PR #2 ของ nathirad)
+- **"as of HH:MM" ทุกตัวเลข** (เวลาไทย): อยู่บนการ์ดความเสี่ยง, หน้าเหรียญ, แผนเทรด และหน้าพอร์ต ถ้าแหล่งข้อมูลล่มจะใช้ข้อมูลชุดล่าสุดที่ดึงสำเร็จ และติดป้าย "(may be out of date)" · ถ้าถามเป็นภาษาไทย agent ตอบ "ณ HH:MM" / "อาจไม่ล่าสุด"
+- **พอร์ตเทียบเป้า (drift):**
+  - ตั้งเป้าสัดส่วนเองได้ในหน้าพอร์ต
+  - การ์ดแสดงเหรียญที่เกินหรือต่ำกว่าเป้า พร้อมความเสี่ยง unlock ของทั้งพอร์ต
+  - ถามในแชตได้ เช่น "พอร์ตเบี้ยวจากเป้าไหม"
+  - U-Bot เรียกผ่าน MCP ได้ (ตอนนั้น 12 tools · ตอนนี้ 18 ดู §0.3)
+- **ระบบแจ้งเตือนแบบเต็ม:**
+  - กฎ 3 แบบ: unlock, พอร์ตเบี้ยว และข่าวลบ ใช้ `*` แทนทุกเหรียญในพอร์ตได้
+  - ไม่แจ้งซ้ำเรื่องเดิม
+  - ช่วง 22:00–07:00 น. แจ้งเฉพาะเรื่องเสี่ยงสูง
+  - ไม่เกิน 5 ครั้งต่อวัน
+  - ข่าวสำคัญต้องมี 2 แหล่งยืนยันก่อนเตือน
+  - รวมทุกเรื่องเป็นข้อความเดียวใน U-Bot พร้อมการ์ดและข้อเสนอ
+  - หน้าการแจ้งเตือนมีประวัติ และบอกเหตุผลของเรื่องที่ยังไม่ส่ง
+- **Vercel Cron พร้อมใช้:** `vercel.json` ตั้งให้เรียก `GET /api/watch` ทุกวัน 08:00 น. ต้องตั้ง `CRON_SECRET`
+- **ตรวจแล้ว:** typecheck ✅ · eval 32/32 ✅ · build ✅ · `next dev` ทุกหน้า 200 ✅ · responsive 80/80 ✅
+
+## 0.2 อัปเดต ~07:30 น.: รวม `main` ล่าสุด (PR #3 เว็บภาษาอังกฤษ) เข้ามาแล้ว
+- **ทั้งเว็บเป็นภาษาอังกฤษ** ตาม PR #3 ของ nathirad รวมถึงทุกอย่างที่ย้ายมาจาก branch WIP: การ์ด drift, ตัวแก้เป้าสัดส่วน, หน้าแจ้งเตือน (ประวัติ, เหตุผลที่ยังไม่ส่ง, ช่วงเงียบ), ข้อความแจ้งเตือนใน U-Bot, ป้าย "as of HH:MM"
+- **agent ยังตอบไทยเมื่อถามเป็นไทย** (เช่น "พอร์ตเบี้ยวจากเป้าไหม")
+- **Tokenomist live จาก PR #3 อยู่ครบ:** จำกัดจำนวนคำขอพร้อมกัน, retry เมื่อเจอ 429, cache ตัวสำรอง 1 นาที · และเพิ่ม "ใช้ข้อมูลชุดล่าสุดที่ดึงสำเร็จ" เมื่อ API ล่ม
+- **conflict 7 ไฟล์** (LOGS.md, หน้า alerts, หน้า portfolio, Cards.tsx, TradePanel.tsx, alerts.ts, tokenomist.ts) แก้โดยเก็บของทั้งสองฝั่ง
+- **ตรวจแล้ว:** typecheck ✅ · eval 32/32 ✅ · build ✅ · `next dev` ทุกหน้า 200 ✅ · responsive 80/80 ✅ (production build) · ภาพหน้าจอ portfolio / alerts / แชต drift ไม่มี error ✅
+
+## 0.3 อัปเดต ~09:00 น.: MCP tools สำหรับเทรด/ลงทุน/แจ้งเตือน + eval ครบ
+- **MCP tools ใหม่ 6 ตัว (เฉพาะ U-Bot ผ่าน MCP):**
+  - `draft_trade_plan`: ร่างแผนเทรดจำลองจากเหรียญ/ฝั่ง/จำนวนเงินที่ผู้ใช้เลือกเอง พร้อมผลตรวจของ U-Guard
+  - `get_paper_trading`: ดูพอร์ตจำลอง คำสั่งที่ผ่านมา และแผนที่รออนุมัติ
+  - `get_invest_options`: ดึงคำถาม 5 ข้อและพอร์ตตัวอย่าง ให้ U-Bot ถามผู้ใช้เอง
+  - `draft_invest_plan`: ร่างแผนลงทุนจากคำตอบของผู้ใช้
+  - `list_alerts`: ดูกฎแจ้งเตือน ประวัติ และเรื่องที่ยังไม่ส่ง
+  - `create_alert_rule`: ตั้งกฎแจ้งเตือนตามที่ผู้ใช้ขอ (ต้องระบุผู้ใช้)
+- **ไม่มี tool อนุมัติหรือส่งคำสั่ง:**
+  - ทุกแผนรอผู้ใช้กดอนุมัติในแอปเท่านั้น และกฎนี้บังคับที่ server
+  - ระบบอื่น เช่น Alpaca MCP มี tool ส่งคำสั่งซื้อขายให้ AI ยิงเองได้ เราตั้งใจไม่ทำแบบนั้น
+  - ทุก tool มี MCP annotations บอกว่าอ่านอย่างเดียว หรือเขียนแต่ไม่ทำลายข้อมูล
+- **ผู้ใช้เห็นอะไร:**
+  - แผนเทรดที่ U-Bot ร่างจะขึ้นใน "Plans waiting for you" ของหน้า Trade พร้อมป้าย "Drafted by U-Bot in chat (MCP)"
+  - แผนลงทุนขึ้นใน "Plans U-Bot drafted for you" ของหน้า Invest กด Review แล้วเห็นคำตอบเดิมครบ
+  - กระดิ่ง U-Bot มีข้อความพร้อมลิงก์ไปหน้านั้น (ไทยหรืออังกฤษตาม `X-UGuard-Locale`)
+- **แชตในแอปไม่ได้ tool 6 ตัวนี้:** มีหน้า Trade/Invest/Alerts แยกอยู่แล้ว และป้องกันการเรียกซ้อน (แผนเทรดเรียก agent ซ้ำ)
+- **แก้บั๊ก:**
+  - ตัวจับข่าวร้ายแรงเคยนับ "second" / "sector" เป็น SEC และนับ "bank" เป็น ban แก้ให้จับทั้งคำแล้ว
+  - หัวตาราง "P&amp;L" ในแผนเทรด แก้เป็น "P&L"
+- **eval 55 เคส** (จาก 32):
+  - เทรด 5 เคส: ตัวเลขถูก, ยอดเงินไม่พอ, ขายเกินที่มี, อนุมัติซ้ำ, ไม่ใช่เจ้าของ, stop-loss 2–50%
+  - ลงทุน 5 เคส: ระดับความเสี่ยง, สัดส่วนรวม 100%, วัน DCA ชน unlock, คำเตือน, อนุมัติ
+  - แจ้งเตือน 7 เคส: เพดานวันละ 5, ไม่ส่งซ้ำ, ช่วงเงียบ, ต่ำกว่าเกณฑ์, นอกช่วงวัน, ข่าวต้องมี 2 แหล่ง, กฎซ้ำ
+  - MCP 6 เคส: annotations, ไม่มี tool อนุมัติ, ร่างแผนแทนผู้ใช้, ภาษาไทย, ต้องระบุผู้ใช้, input ผิด
+  - ทดสอบแล้วว่า eval จับบั๊กได้จริง: ลองทำ 3 จุดให้พังโดยตั้งใจ แล้ว eval ตกครบทั้ง 3
+- **`npm run ubot -- --trade`:** เพิ่มขั้นที่ 5 ร่างแผนเทรด (บทบนเวทีเดิมยังกด Enter 4 ครั้งเหมือนเดิม)
+- **ตรวจแล้ว:** typecheck ✅ · eval 55/55 ✅ · build ✅ · stand-in กับ production server ✅ · หน้า Trade/Invest/กระดิ่งแสดงแผนจาก MCP ✅
+
+## 0.4 อัปเดต ~13:00 น.: รวม PR #4 + ต่อ MCP ภายนอกแบบปลอดภัย
+- **PR #4 ของ nathirad (Today, My plan, News, ราคาสด, stress test ฯลฯ)** ชนกับ `main` 21 ไฟล์ รวมให้แล้วบน `feat/merge-pr4-with-main`
+  - เก็บของทั้งสองฝั่ง และลบของที่ซ้ำกันออก
+  - ตอนนี้มี 20 tools · eval 58/58 · responsive 17 หน้าผ่าน
+- **ส่งคำสั่งไป Alpaca paper หลังผู้ใช้กดอนุมัติเท่านั้น** (`BROKER=alpaca-paper`, ค่าเริ่มต้นปิด)
+  - URL ล็อกไว้ที่บัญชี paper ไม่มีโหมดเงินจริง
+  - AI และ MCP เรียกส่วนนี้ไม่ได้
+  - ส่งไม่สำเร็จก็เก็บเป็นคำสั่งจำลองในแอป พร้อมบอกเหตุผลในหน้า Trade
+  - กดอนุมัติซ้ำพร้อมกันได้คำสั่งเดียว
+- **U-Bot stand-in ถาม CoinGecko MCP ได้** (`npm run ubot -- --coingecko`, ค่าเริ่มต้นปิด)
+  - เอา volume 24 ชม. มาเทียบกับขนาด unlock ที่ U-Guard ให้มา
+  - ถ้า CoinGecko ไม่ตอบ จะใช้ตัวเลขของ U-Guard แทน
+  - ทดสอบกับ mock server แล้วทั้งโหมด tool ตรงและโหมด dynamic (session นี้ต่อ CoinGecko จริงไม่ได้ เพราะเครือข่ายบล็อก)
+- **[MCP-INTEGRATIONS.md](MCP-INTEGRATIONS.md):** อธิบายว่า CoinGecko, Alpaca, EVM, Coinrule ใช้ตรงไหน ใช้ไม่ได้ตรงไหน และทำไม
+  - EVM MCP ให้ทีมใช้ตอน dev แบบอ่านอย่างเดียว ห้ามใส่ key
+  - Coinrule ไม่ใช้ เพราะเทรดเงินจริงเอง
+- **ตรวจแล้ว:** typecheck ✅ · eval 62/62 ✅ · build ✅ · ทดสอบในเบราว์เซอร์: ร่างผ่าน MCP → กดอนุมัติ → มีโน้ตจาก broker ✅
+  - ลองทำโค้ดพังโดยตั้งใจ 2 จุด (URL เงินจริง, อนุมัติซ้ำ) eval จับได้ทั้งคู่
+
+## 0.5 อัปเดต ~12:00 น.: ข้อมูลสด + AI อ่านข้อมูลได้ทั้งแอป + Avalanche Data API
+- **Unlock ไม่อัปเดต (แก้แล้ว):**
+  - หน้า Unlock calendar และ News เคยอ่าน `unlock-calendar.json` ซึ่งเป็นไฟล์ตายตัว
+  - ตอนนี้ดึง unlock ครั้งถัดไปของเหรียญใหญ่ 40 อันดับจาก Tokenomist แบบสด ถ้า API ไม่ตอบจะใช้รายงานที่บันทึกไว้ และขึ้นป้ายบอก
+  - มี `GET /api/status` บอกว่าข้อมูลแต่ละส่วนมาจากไหน (ไม่แสดง key)
+- **AI ตอบได้ทุกอย่างในแอป:** แชตอ่านข้อมูลเหล่านี้ได้แล้ว
+  - คำสั่งเทรดจำลอง / สถานะ / แผนรออนุมัติ
+  - กฎแจ้งเตือนและประวัติ
+  - My plan 30 วัน และแผนลงทุน
+  - unlock ทั้งตลาด
+  - กระเป๋าบนเชน
+  - ตอบได้ทั้งไทยและอังกฤษ ตอนนี้มี 25 tools (อ่าน 22 ตัว, tool ที่เขียนข้อมูล 3 ตัวยังใช้ได้เฉพาะผ่าน MCP)
+- **Avalanche Data API:**
+  - `get_wallet_activity`: AVAX, token ERC-20 และธุรกรรมล่าสุดพร้อมลิงก์ Snowtrace
+  - `lookup_onchain`: ดูธุรกรรมจาก hash หรือดูข้อมูล smart contract
+  - ไม่ต้องมี key ก็ใช้ได้
+  - **ยังไม่ได้ทดสอบกับ API จริง** เพราะ session นี้ถูกบล็อก ทดสอบด้วยข้อมูลจำลองที่ทำตามรูปแบบเอกสารแทน
+- **ตรวจแล้ว:** typecheck ✅ · eval 72/72 ✅ · ลองทำโค้ดพังโดยตั้งใจ 3 จุด eval จับได้ครบ
+
+## 0.6 อัปเดต ~12:00 น.: บัญชีผู้ใช้, Voice mode, เช็กข้อมูลสด
+- **ปุ่มบัญชีมุมขวาบน:** บอกว่าใช้บัญชีอะไรอยู่ มี Sign out และปุ่มเข้าระบบแบบอื่น
+  - บน Vercel แต่ละคนได้บัญชี demo ของตัวเอง ส่วนบน laptop ใช้ `demo-user` ร่วมกัน (เพราะ U-Bot stand-in ส่งข้อเสนอไปหา user นี้)
+- **Voice mode (ElevenLabs):** พูดถาม → U-Bot ตอบและอ่านออกเสียง → เปิดไมค์รอคำถามต่อเอง
+  - ใช้ ElevenLabs (eleven_v3 พูดไทยได้) และ Scribe ฟังเสียง ถ้าไม่มี key ใช้เสียงของเบราว์เซอร์แทน
+  - **ยังไม่ได้ทดสอบกับ ElevenLabs จริง** เพราะยังไม่มี key
+- **Tokenomist:** ถ้าต่อ live ได้ จะคำนวณคะแนนเต็มของ 10 เหรียญ (`TRACKED_TOKENS`) ไม่ใช่แค่ 3 เหรียญ หน้า Today และ Unlock calendar จึงมีข้อมูลมากขึ้น
+- **`npm run check:live`:** ทดสอบ API ทุกตัวด้วย `.env` บนเครื่องคุณ (session นี้ต่อเน็ตไปไม่ถึง)
+- **`/api/status`:** บอกว่าแชตใช้โมเดลอะไรอยู่ ตอนนี้ขึ้นว่าเป็น rules engine เพราะยังไม่มี key ของ LLM
+- **Vercel:** connector สร้าง project ไม่ได้ (403) ต้องสร้างเองใน dashboard
+- **ตรวจแล้ว:** typecheck ✅ · eval 72/72 ✅ · build ✅ · ทดสอบในเบราว์เซอร์: บัญชีแยกต่อคน, Sign out, Voice mode ✅
+
+## 0.7 อัปเดต ~12:15 น.: Voice mode แบบ ChatGPT, โลโก้ Tokenomist
+- **Voice mode เต็มจอ:** มีลูกบอลที่ขยับตามเสียงเราตอนฟัง หายใจช้าๆ ตอน U-Guard กำลังเช็ก และขยับตามเสียง U-Bot ตอนตอบ
+  - แตะลูกบอลเพื่อขัดจังหวะ · ปุ่มไมค์ = พัก · ปุ่มแดง/Esc = จบ · มีคำบรรยายสิ่งที่ได้ยินและคำตอบ
+  - ใช้ agent และ tools ตัวเดียวกับแชต คำตอบจึงขึ้นในแชตพร้อมการ์ดด้วย
+  - ฟังด้วย ElevenLabs Scribe · พูดด้วย ElevenLabs `eleven_v3` · ไม่มี key ใช้เสียงเบราว์เซอร์
+  - ทดสอบใน Chromium ด้วยไมค์จำลอง (จำลอง Scribe และเสียง เพราะ session นี้ต่อ ElevenLabs ไม่ได้): ฟัง → คิด → พูด → ฟังต่อ ✅ ทั้งจอคอมและมือถือ
+- **โลโก้ Tokenomist** ในแถบ "Data and technology we use" (ElevenLabs มีโลโก้อยู่แล้ว)
+
+## 0.8 อัปเดต ~12:30 น.: หน้าโหลดเร็วขึ้น
+- **สาเหตุที่ช้า:** เปิดแอปครั้งแรก 4 หน้าดึง Tokenomist พร้อมกันและซ้ำกัน (~122 ครั้ง ผ่านตัวจำกัดความถี่) จึงรอหน้าละ 13–15 วินาที
+- **แก้แล้ว:** ดึงครั้งเดียวแล้วแชร์กัน · ข้อมูลเก่าตอบทันทีแล้วอัปเดตเบื้องหลัง · เตรียมข้อมูลตอนเปิดเซิร์ฟเวอร์ · บน Vercel แชร์ผ่าน Upstash
+- **ผล (Tokenomist จำลอง 300 ms):** เปิดทันทีหลังสตาร์ต ~3 วินาที, หลังจากนั้น 0.01–0.05 วินาที
+- **ตอน demo ใช้ `npm run build && npm start`** เพราะ `npm run dev` จะ compile ทุกหน้าตอนเปิดครั้งแรก
 
 ## หน้าแอปทั้งหมด
 
@@ -58,7 +194,7 @@
 
 ### 1.3 Backend (ใช้ร่วมกันทั้งสองแอป)
 - **Agent harness:** guard → plan + act → reflect → observe · โมเดลสลับได้ (Claude ผ่าน Anthropic SDK / Vercel AI Gateway, โมเดล OpenAI-compatible ใดก็ได้, rules engine ที่ไม่ใช้ LLM เป็นตัวสำรองอัตโนมัติ) · ตอบตามภาษาผู้ใช้ (ไทย/อังกฤษ)
-- **11 tools:** `get_portfolio` · `lookup_token` · `get_unlock_schedule` · `get_allocations` · `get_fundraising` · `assess_unlock_risk` · `propose_protection` · `get_market_news` · `get_event_odds` · `get_market_pulse` · `get_event_calendar`
+- **18 tools:** ใช้ร่วมกันทุก provider และ MCP 12 ตัว: `get_portfolio` · `lookup_token` · `get_unlock_schedule` · `get_allocations` · `get_fundraising` · `assess_unlock_risk` · `propose_protection` · `get_market_news` · `get_event_odds` · `get_market_pulse` · `get_event_calendar` · `check_portfolio_drift` · เฉพาะ U-Bot ผ่าน MCP 6 ตัว: `draft_trade_plan` · `get_paper_trading` · `get_invest_options` · `draft_invest_plan` · `list_alerts` · `create_alert_rule`
 - **Risk engine v0.2:** คะแนน 0–100 แบบ deterministic (ไม่ใช้ LLM ให้คะแนน) · สถานะ upcoming / recent / continuous · แยกผู้รับ (ทีม, นักลงทุน, ecosystem) · กำไรของนักลงทุน (เทียบราคารอบระดมทุน)
 - **RAG + CAG:** ดึงข้อมูลสดผ่าน tool (unlock, ข่าว GDELT, Polymarket, CoinGecko + Fear & Greed + Deribit) · ความรู้คงที่ (`data/knowledge/faq.json`) อยู่ใน system prompt ที่ cache ได้
 - **Guardrails:** บล็อก seed phrase / private key · ปิดบัง PII · flag prompt injection · rate limit · ตรวจ Origin · compliance check (ห้ามแนะนำซื้อ/ขาย/ถือ, ห้ามทายราคา, ตัวเลขทุกตัวต้องมาจาก tool) · security headers
@@ -85,20 +221,20 @@
 | เทรด: ร่างแผน → ตรวจ → อนุมัติ → คำสั่งจำลอง | ✅ (บันทึกบน Avalanche แบบจำลองจนกว่าจะมี key) |
 | ลงทุน: แบบประเมิน → แผน → อนุมัติ | ✅ ข้อมูลตัวอย่าง |
 | แอปอังกฤษ: login → แชต/ข่าว/odds → dashboard | ✅ |
-| MCP (initialize / list 11 tools / call) | ✅ |
+| MCP (initialize / list 18 tools / call) · ร่างแผนเทรด/ลงทุน + ตั้งแจ้งเตือนผ่าน MCP | ✅ |
 | เสียง TTS / STT | ✅ ตัวสำรองของเบราว์เซอร์ · ⬜ ElevenLabs จริงยังไม่ได้ทดสอบ (ไม่มี key) |
 | Claude จริง | ⬜ ไม่มี `ANTHROPIC_API_KEY` (ตอนนี้ rules engine ตอบแทน) |
-| Tokenomist สด | ⬜ ยังไม่ได้ใช้ key (ดู §8) |
+| Tokenomist สด | ✅ live mode ใช้ได้ (PR #3): ARB / WLD / AVAX ดึงสดได้ ~0.6 วินาที · ล่มเมื่อไรใช้ชุดล่าสุดที่ดึงสำเร็จ |
 | ขึ้น host | ⬜ Vercel connector มีสิทธิ์แค่อ่าน |
 
 **แผน v2 ใน [AGENTIC-WORKFLOW.md](AGENTIC-WORKFLOW.md) §10:**
 | # | งาน | สถานะ |
 |---|---|---|
 | 1 | ใส่ key จริง | ⬜ |
-| 2 | freshness ("ณ HH:MM", ป้าย stale) | ⚠️ มีป้าย live/snapshot/sample + asOf แต่ยังไม่ครบทุกตัวเลข |
+| 2 | freshness ("as of HH:MM", ป้าย stale) | ✅ การ์ด, หน้าเหรียญ, แผนเทรด, พอร์ต, ผล tool · ใช้ชุดล่าสุดที่ดึงสำเร็จเมื่อแหล่งล่ม |
 | 3 | ข่าวพร้อมแหล่งอ้างอิง | ✅ `get_market_news` (GDELT) · Claude web search เป็นตัวเลือกเพิ่ม |
-| 4 | portfolio drift | ⬜ |
-| 5 | alert engine v0 | ✅ กฎแบบ deterministic + cooldown + watcher ตามเวลา + ส่งเข้า U-Bot inbox |
+| 4 | portfolio drift | ✅ ตั้งเป้าเองในหน้าพอร์ต · `check_portfolio_drift` · การ์ดในแชต |
+| 5 | alert engine | ✅ กฎ unlock / drift / ข่าว · ไม่ส่งซ้ำ · ช่วงเงียบ 22:00–07:00 · วันละไม่เกิน 5 · ข่าวสำคัญต้องมี 2 แหล่ง · Vercel Cron |
 | 6 | GraphRAG-lite (นักลงทุนร่วม) | ⬜ |
 | 7 | eval | ✅ 28 เคส (ไทย + อังกฤษ) |
 | 8 | morning brief | ⬜ |

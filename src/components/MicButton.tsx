@@ -1,25 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { browserRecognition, listenEngine, type Recognition } from "./voice/listen";
 
-// Minimal typing for the browser's (prefixed) Web Speech recognition API.
-interface Recognition {
-  lang: string;
-  interimResults: boolean;
-  onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
-  onerror: (() => void) | null;
-  onend: (() => void) | null;
-  start(): void;
-  stop(): void;
-}
-type RecognitionCtor = new () => Recognition;
-
-function browserRecognition(): RecognitionCtor | null {
-  const w = window as unknown as { SpeechRecognition?: RecognitionCtor; webkitSpeechRecognition?: RecognitionCtor };
-  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
-}
-
-/** Ask by voice: ElevenLabs Scribe when configured, otherwise the browser's own recognition (Thai if the device is set to Thai, else English). */
+/**
+ * Ask by voice, tap to start and tap to stop: ElevenLabs Scribe when configured, otherwise the
+ * browser's own recognition (Thai if the device is set to Thai, else English). The hands-free
+ * conversation lives in voice/VoiceMode.tsx.
+ */
 export function MicButton({
   onText,
   onError,
@@ -35,10 +23,7 @@ export function MicButton({
   const recognition = useRef<Recognition | null>(null);
 
   useEffect(() => {
-    fetch("/api/stt")
-      .then((r) => r.json())
-      .then((b) => setEngine(b.enabled ? "elevenlabs" : browserRecognition() ? "browser" : "none"))
-      .catch(() => setEngine(browserRecognition() ? "browser" : "none"));
+    listenEngine().then(setEngine);
   }, []);
 
   async function startElevenLabs() {

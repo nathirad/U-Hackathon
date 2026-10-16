@@ -8,29 +8,42 @@ const RING: Record<RiskLevel | "idle", string> = {
   high: "#FB7151",
 };
 
-/** U-Guard: a U-shaped shield. The ring shows the risk level of the answer; dashed and spinning while thinking. */
+/** U-Guard glowing neon shield avatar. The ring/glow shows the risk level of the answer; pulsating while thinking. */
 export function Avatar({ level = "idle", thinking = false, size = 32 }: { level?: RiskLevel | "idle"; thinking?: boolean; size?: number }) {
   const color = thinking ? "#5EEAD4" : RING[level];
   return (
-    <svg className="avatar" width={size} height={size} viewBox="0 0 128 128" aria-hidden="true">
-      <rect x="4" y="4" width="120" height="120" rx="32" fill="#0B1426" />
-      <rect
-        className={thinking ? "ring-think" : undefined}
-        x="4"
-        y="4"
-        width="120"
-        height="120"
-        rx="32"
-        fill="none"
-        stroke={color}
-        strokeWidth="5"
-        strokeDasharray={thinking ? "40 22" : undefined}
+    <div
+      className={`avatar ${thinking ? "ring-think" : ""}`}
+      style={{
+        width: size,
+        height: size,
+        position: "relative",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: Math.max(8, Math.round(size * 0.25)),
+        border: `2px solid ${color}`,
+        boxShadow: `0 0 ${Math.round(size * 0.3)}px ${color}88`,
+        overflow: "hidden",
+        background: "#070b14",
+        flexShrink: 0,
+      }}
+      aria-hidden="true"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/brand/icon.png"
+        width={size}
+        height={size}
+        alt="U-Guard"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          display: "block",
+        }}
       />
-      <path d="M32 30H52V62C52 70 57 76 64 76C71 76 76 70 76 62V30H96V64C96 84 82 98 64 104C46 98 32 84 32 64Z" fill="#2DD4BF" />
-      <rect className="eye" x="55" y="42" width="6" height="11" rx="3" fill="#5EEAD4" />
-      <rect className="eye" x="67" y="42" width="6" height="11" rx="3" fill="#5EEAD4" />
-      <path d="M55 87Q64 94 73 87" fill="none" stroke="#0B1426" strokeWidth="4" strokeLinecap="round" />
-    </svg>
+    </div>
   );
 }
 

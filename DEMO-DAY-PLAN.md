@@ -60,7 +60,7 @@ The gap today: an MCP caller acts as an anonymous client, so a proposal it creat
 |---|---|---|---|
 | B1 | **Act for a user** | `/api/mcp` accepts `X-UGuard-User: <userId>` **only** when the caller presents a valid `MCP_API_KEY` (server-to-server trust, like U-Bot). Without the key the header is ignored. Optional `X-UGuard-Locale: th` | A delegated `propose_protection` is owned by `demo-user` |
 | B2 | **Deliver to the user** | After a delegated tool call that produces a risk card or a proposal, push a U-Bot message into that user's inbox | The bell in the Thai app shows the card and the proposal; "อนุมัติ" works and returns a receipt |
-| B3 | **Stand-in client** | `scripts/ubot-standin.mjs` (`npm run ubot`): a real MCP client (`@modelcontextprotocol/sdk`, Streamable HTTP) that does `initialize` → `tools/list` → `assess_unlock_risk ARB 5000` → `propose_protection ARB pause_buying`, printing each request and reply. Press Enter between steps to pace it on stage | Run against the laptop server: 14 tools listed, ARB high, proposal id printed |
+| B3 | **Stand-in client** | `scripts/ubot-standin.mjs` (`npm run ubot`): a real MCP client (`@modelcontextprotocol/sdk`, Streamable HTTP) that does `initialize` → `tools/list` → `assess_unlock_risk ARB 5000` → `propose_protection ARB pause_buying`, printing each request and reply. Press Enter between steps to pace it on stage | Run against the laptop server: 25 tools listed, ARB high, proposal id printed |
 | B4 | Checks | Typecheck, `npm run eval` stays green, plus cases: header ignored without key; with key the proposal belongs to the user | All pass |
 | B5 | Docs | README "How the agent works" + `/method` copy mention delegation | – |
 

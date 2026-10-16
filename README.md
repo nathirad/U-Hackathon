@@ -22,11 +22,12 @@ U-Hackathon 2026 · AI Track · FLOW Summit Bangkok
 | [UI-PLAN.md](UI-PLAN.md) | Pages, navigation, AI gateway, auth and DB, loading page, UI resources (Thai) |
 | [ANALYSIS.md](ANALYSIS.md) | Models and VLMs, Nansen comparison, user segments, regulation, U-topia gaps, roadmap (Thai) |
 | [UI-REVIEW.md](UI-REVIEW.md) | UI test results, fixes, what to show to whom, logo slots |
+| [MCP-INTEGRATIONS.md](MCP-INTEGRATIONS.md) | Other MCP servers (CoinGecko, Alpaca, EVM, Coinrule): what fits where, what we left out and why |
 | [LOGS.md](LOGS.md) | Development log. The agent's runtime log is written to `logs/YYYY-MM-DD.jsonl` (not served as a page) |
 
 ## Pages
 
-One app, one menu that follows an investor's day. It signs the browser into the demo account automatically. The UI is English; ask U-Bot in Thai and it answers in Thai (with voice).
+One app, one menu that follows an investor's day. It signs the browser into the demo account automatically; the account button (top right) shows who is signed in, with Sign out and "Sign in another way" (email or wallet). On Vercel each visitor gets their own demo account, so judges don't see each other's orders; on the laptop everyone shares `demo-user`, which U-Bot over MCP acts for (`DEMO_SHARED` overrides). The UI is English; ask U-Bot in Thai and it answers in Thai (with voice).
 
 | Path | Purpose |
 |---|---|
@@ -50,7 +51,7 @@ Also: `/login` (demo account · email/password · Sign-In with Ethereum) and `/e
 
 ### Hosting (Vercel)
 
-Each route is its own serverless function, so the in-memory store (U-Bot inbox, proposals, plans, alert rules) is shared through **Upstash Redis** when `KV_REST_API_URL`/`KV_REST_API_TOKEN` (Vercel's Upstash integration) or `UPSTASH_REDIS_REST_URL`/`_TOKEN` are set (`withStore()` in `src/lib/store.ts`). Without them, run it on one Node server (`npm run build && npm start`). Set `TOKENOMIST_API_KEY`, `MCP_API_KEY`, `AUTH_SECRET`, `MARKET_SOURCE=live`, `NEWS_SOURCE=rss`, and optionally `ELEVENLABS_API_KEY`, an LLM key and `DEMO_PRIVATE_KEY` (Fuji testnet).
+Each route is its own serverless function, so the in-memory store (U-Bot inbox, proposals, plans, alert rules, email accounts) is shared through **Upstash Redis** when `KV_REST_API_URL`/`KV_REST_API_TOKEN` (Vercel's Upstash integration) or `UPSTASH_REDIS_REST_URL`/`_TOKEN` are set (`withStore()` in `src/lib/store.ts`). Without them, run it on one Node server (`npm run build && npm start`). Set `TOKENOMIST_API_KEY`, `MCP_API_KEY`, `AUTH_SECRET`, `MARKET_SOURCE=live`, `NEWS_SOURCE=rss`, and optionally `ELEVENLABS_API_KEY`, an LLM key and `DEMO_PRIVATE_KEY` (Fuji testnet).
 
 ## Run it
 
@@ -76,21 +77,44 @@ Rehearse demo day today: `DEMO_NOW=2026-10-16T07:00:00Z npm run dev`. The ARB un
 
 - **Model is pluggable**: Claude via the Anthropic SDK (the team's choice; optionally through the Vercel AI Gateway, `AI_GATEWAY=vercel`), any OpenAI-compatible model (`LLM_BASE_URL`), or the deterministic **rules engine** (the offline agent), which is also the automatic fallback. With `AGENT_PROVIDER=auto` the order is OpenAI-compatible (if `LLM_API_KEY` is set), then Claude, then rules; set `AGENT_PROVIDER=anthropic` to force Claude. `AGENT_MODE` (claude/offline/auto) still works as a legacy alias.
 - **Language**: replies follow the user's language. Thai input gets Thai replies, card reasons and proposal text; English input gets English.
-- **14 tools** (`src/lib/agent/tools.ts`, incl. `check_portfolio_drift`, `get_token_market`, `stress_test_portfolio`), zod-validated, shared by every provider and by MCP.
+- **25 tools** (`src/lib/agent/tools.ts`), zod-validated.
+  - **22 read tools** shared by the chat (every provider) and MCP. Besides risk, news, odds, drift and stress, they cover the whole app, so the agent can answer about anything the user sees: `get_paper_trading`, `list_alerts`, `get_my_plan`, `get_invest_plans`, `get_invest_options`, `get_upcoming_unlocks` (market-wide, Tokenomist live), `get_wallet_activity` and `lookup_onchain` (Avalanche Data API).
+  - **3 that write**, for U-Bot over MCP only: `draft_trade_plan`, `draft_invest_plan`, `create_alert_rule`.
+  - **No tool approves or executes anything.** Trade and invest tools only draft a plan; the user approves it in the app, behind their own session. This is a server rule, not just a hint.
+  - Every tool carries MCP annotations (read-only, or a write that is not destructive) so a client can decide when to ask the user.
+  - The in-app chat doesn't get the 3 tools that write; the user drafts on the Trade, Invest and Alerts pages.
+- **Data status**: `GET /api/status` says where each piece of data comes from right now, never a key. It shows:
+  - Tokenomist live or saved, and the tokens scored in full
+  - prices, news, shared store and broker
+  - which model answers (Claude, an OpenAI-compatible model, or the rules engine when no key is set)
+  - ElevenLabs or the browser's voice
+  `npm run check:live` calls every outside service the way the app does (Tokenomist, prices, RSS, Avalanche Data API, Fuji RPC, ElevenLabs, the LLM key) and prints PASS / WARN / FAIL.
+- **Tokens scored in full**: offline, the 3 in the snapshot. With Tokenomist live, also `TRACKED_TOKENS` (default ARB, WLD, AVAX, OP, SUI, APT, TIA, STRK, ZRO, ENA; at most 12).
+- **Voice mode** (Ask U-Bot page) is a full-screen, hands-free conversation in the style of ChatGPT's: an orb that moves with your voice and U-Bot's, captions, tap the orb to interrupt. Speak, U-Bot answers and reads the answer aloud, then the mic opens again. It uses ElevenLabs (`ELEVENLABS_MODEL_ID`, default `eleven_v3`, which speaks Thai) for speech and Scribe for listening, with the browser's voice and recognition as the fallback. Recording stops by itself after a pause.
 - **RAG** for fresh facts (unlocks, news ranked by relevance + recency with citations, odds, pulse); **CAG** for static knowledge (`data/knowledge/faq.json`, preloaded into the cached system prompt).
 - **Guardrails**: input guard (seed phrases/private keys blocked, PII redacted, injection flagged), rate limits, Origin checks, output compliance check (no buy/sell/hold advice or price predictions in EN/TH; every number must come from a tool result; one rewrite, then a checked template).
-- **U-Bot reaches U-Guard three ways**, all through the same tools: the in-app chat, the webhook adapter (`/api/ubot/webhook` + `/api/ubot/inbox`, Bearer `UBOT_API_KEY`), and the **MCP server** at `/api/mcp` (Streamable HTTP, Bearer `MCP_API_KEY`). A caller with the key may act for a user (`X-UGuard-User`, optional `X-UGuard-Locale: th`): proposals it creates belong to that user and land in their U-Bot inbox (the bell), where they approve them. `npm run ubot` is a stand-in MCP client that plays U-Bot for the stage demo.
-- **Watcher**: alert rules are checked on a timer (`WATCH_INTERVAL_MIN`, default 10) in `npm start`; on serverless hosts a cron calls `POST /api/watch` with `Bearer $CRON_SECRET`. Hits go to the U-Bot inbox (bell in the terminal header), with a 12-hour cooldown.
-- **Trade and Invest plans**: every number is arithmetic on the user's own choices, the quote and the wallet, or a cited historical average; no model picks assets or predicts prices. Orders are paper orders; approvals are recorded on Avalanche Fuji (simulated without a key).
+- **U-Bot reaches U-Guard three ways**, all through the same tools: the in-app chat, the webhook adapter (`/api/ubot/webhook` + `/api/ubot/inbox`, Bearer `UBOT_API_KEY`), and the **MCP server** at `/api/mcp` (Streamable HTTP, Bearer `MCP_API_KEY`). A caller with the key may act for a user (`X-UGuard-User`, optional `X-UGuard-Locale: th`): proposals it creates belong to that user and land in their U-Bot inbox (the bell), where they approve them. Trade and invest plans U-Bot drafts wait under "Plans waiting for you" on the Trade page and "Plans U-Bot drafted for you" on the Invest page, with a link in the inbox message. `npm run ubot` is a stand-in MCP client that plays U-Bot for the stage demo (`-- --trade` adds a fifth step that drafts the trade plan).
+- **Watcher** (alert engine): unlock, drift and news rules (`*` = every holding) are checked on a timer (`WATCH_INTERVAL_MIN`, default 10) in `npm start`. On Vercel, `vercel.json` schedules `GET /api/watch` with `Bearer $CRON_SECRET`.
+  - No model decides whether to alert.
+  - Each alert goes out once.
+  - 22:00–07:00 Bangkok sends high severity only (`WATCH_QUIET_START`/`WATCH_QUIET_END`).
+  - At most `WATCH_MAX_PER_DAY` alerts per day.
+  - High-severity news needs a second source.
+  - Hits go to the U-Bot inbox (bell in the terminal header) as one message with cards and proposals. The alerts page shows the history and why anything was held back.
+- **Portfolio drift**: the user sets their own target mix on `/terminal/portfolio`. `check_portfolio_drift` (chat and MCP) reports what is over or under the band, together with unlock risk and dilution; it never says what to buy or sell.
+- **Freshness**: every unlock card, token-page section, trade plan and the portfolio shows "as of HH:MM" (Bangkok time). If Tokenomist or CoinGecko fails after a live success, the last good copy is used and marked "(may be out of date)". Tool results carry `as_of` / `as_of_th` and `stale`; the agent quotes the age in the reply's language.
+- **Trade and Invest plans**: every number is arithmetic on the user's own choices, the quote and the wallet, or a cited historical average; no model picks assets or predicts prices. Orders are paper orders; approvals are recorded on Avalanche Fuji (simulated without a key). With `BROKER=alpaca-paper` an approved order is also sent to an Alpaca **paper** account (hard-coded paper URL, only after the user's approval, never from an AI or MCP tool; see [MCP-INTEGRATIONS.md](MCP-INTEGRATIONS.md)).
 - **Run log**: every agent run is appended to `logs/YYYY-MM-DD.jsonl` (redacted text, tool trace, timings); `LOG_SILENT=true` turns it off.
 
 ## Checks
 
 ```bash
 npm run typecheck
-npm run eval          # 30 golden cases (EN + TH), offline and deterministic (sandboxed shells: node --import tsx evals/run.ts)
+npm run check:live    # PASS/WARN/FAIL for every live service with your .env (run on a machine with internet)
+npm run eval          # 72 golden cases (EN + TH): risk, agent, compliance, guard, MCP, trade, invest, alerts, paper broker, app data, unlock feed, Avalanche Data API · offline and deterministic (sandboxed shells: node --import tsx evals/run.ts)
 npm run ubot          # U-Bot stand-in: MCP client acting for demo-user (needs the server's MCP_API_KEY in .env)
-npm run responsive    # 16 pages × iPhone SE/15 Pro/15 Pro Max/iPad/desktop: screenshots + layout audit
+npm run ubot -- --trade --coingecko   # + draft the trade plan, + cross-check volume with CoinGecko's MCP server
+npm run responsive    # 17 pages × iPhone SE/15 Pro/15 Pro Max/iPad/desktop: screenshots + layout audit
 npm run responsive -- --webkit   # Safari engine (npx playwright install webkit once)
 ```
 

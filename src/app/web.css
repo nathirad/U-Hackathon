@@ -953,27 +953,13 @@
   text-align: center;
   padding: 24px;
 }
-.ug-web .loader svg {
+.ug-web .loader .loader-logo {
   width: 84px;
   height: 84px;
-}
-.ug-web .loader .shield {
-  stroke: var(--teal);
-  stroke-width: 3;
-  fill: none;
-  stroke-dasharray: 320;
-  stroke-dashoffset: 320;
-  animation: ugx-draw 0.9s ease forwards;
-}
-.ug-web .loader .shield-fill {
-  fill: var(--teal);
+  border-radius: 20px;
+  box-shadow: 0 0 32px rgba(45, 212, 191, 0.45);
   opacity: 0;
-  animation: ugx-fadein 0.35s ease 0.75s forwards;
-}
-.ug-web .loader .keyhole {
-  fill: var(--amber);
-  opacity: 0;
-  animation: ugx-fadein 0.3s ease 0.9s forwards;
+  animation: ugx-fadein 0.45s ease 0.1s forwards;
 }
 .ug-web .loader .status {
   font-size: 13px;
@@ -984,11 +970,6 @@
 .ug-web .loader .count {
   font-size: 14px;
   color: var(--text-3);
-}
-@keyframes ugx-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
 }
 @keyframes ugx-fadein {
   to {

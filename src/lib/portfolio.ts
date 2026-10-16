@@ -48,6 +48,7 @@ export async function getHoldings(userId?: string): Promise<Holding[]> {
         valueUsd: amount * priceUsd,
         valueThb: amount * priceUsd * fx,
         source: isLiveAvax ? "live" : "sample",
+        asOf: quote?.asOf,
       };
     }),
   );

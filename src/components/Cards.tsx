@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { compact, LEVEL_LABEL, pct, shortDate, sourceLabel, usd } from "@/lib/format";
+import { compact, LEVEL_LABEL, pct, shortDate, sourceTag, usd } from "@/lib/format";
+import { asOfLabel } from "@/lib/freshness";
 import type { StressReport } from "@/lib/stress";
 import type { DriftReport, Proposal, ProtectionReceipt, RecipientClass, RiskCard } from "@/lib/types";
+
+import { DataBadge } from "./DataBadge";
 
 const RECIPIENT: Record<RecipientClass, { th: string; color: string }> = {
   team: { th: "Team", color: "#FB7151" },
@@ -99,8 +102,10 @@ export function RiskCardView({ card }: { card: RiskCard }) {
         </>
       )}
       <div className="card-foot">
-        <span>
-          Tokenomist · {sourceLabel(card.source.mode)} · not investment advice
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <span>Tokenomist</span>
+          <DataBadge mode={card.source.mode} stale={card.source.stale} asOf={card.source.asOf} />
+          <span>· not investment advice</span>
         </span>
         <button
           className="btn btn-sm"
@@ -216,7 +221,7 @@ export function DriftCardView({ drift }: { drift: DriftReport }) {
         ))}
       </ul>
       <div className="card-foot">
-        <span>Bar = your weight · tick = your target · compared with targets you set, not advice</span>
+        <span>Bar = your weight · tick = your target · compared with targets you set, not advice{drift.pricesAsOf ? ` · prices ${asOfLabel(drift.pricesAsOf)}` : ""}</span>
       </div>
     </article>
   );

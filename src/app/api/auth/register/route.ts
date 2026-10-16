@@ -4,10 +4,11 @@ import { LIMITS, rateLimit } from "@/lib/guard/rate-limit";
 import { sanitize } from "@/lib/guard/input";
 import { anonId, checkPost, handleError, jsonError, readJson, tooMany } from "@/lib/http";
 import { logEvent } from "@/lib/log";
+import { withStore } from "@/lib/store";
 
 export const runtime = "nodejs";
 
-export async function POST(req: Request) {
+async function handlePOST(req: Request) {
   const blocked = checkPost(req);
   if (blocked) return blocked;
   try {
@@ -28,3 +29,5 @@ export async function POST(req: Request) {
     return handleError(err);
   }
 }
+
+export const POST = withStore(handlePOST);

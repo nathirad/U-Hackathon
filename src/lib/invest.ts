@@ -73,7 +73,7 @@ function nextDcaDates(now: number, day: number, n: number): string[] {
 
 const DAY = 86_400_000;
 
-export async function draftInvestPlan(input: InvestInput, userId: string, now: number): Promise<InvestPlan> {
+export async function draftInvestPlan(input: InvestInput, userId: string, now: number, origin: "app" | "mcp" = "app"): Promise<InvestPlan> {
   const u = await universe();
   const score = input.answers.reduce((s, a) => s + a, 0);
   const profile = profileFor(score);
@@ -166,6 +166,7 @@ export async function draftInvestPlan(input: InvestInput, userId: string, now: n
     profile,
     profileName: base.name,
     score,
+    answers: [...input.answers],
     lumpSumThb: input.lumpSumThb,
     monthlyThb: input.monthlyThb,
     dcaDay: Math.round(input.dcaDay),
@@ -179,6 +180,7 @@ export async function draftInvestPlan(input: InvestInput, userId: string, now: n
     source: u.mode ?? "sample",
     createdAt: new Date(now).toISOString(),
     status: "pending",
+    origin,
   };
   store.investPlans.set(plan.id, { plan, ownerId: userId });
   if (store.investPlans.size > 500) store.investPlans.delete(store.investPlans.keys().next().value!);
@@ -212,6 +214,11 @@ export async function decideInvestPlan(planId: string, decision: "approve" | "de
   );
   plan.status = "approved";
   return { ok: true as const, plan };
+}
+
+/** Plans still waiting for the user's decision (drafted on the page or by U-Bot over MCP), newest first. */
+export function pendingInvestPlans(userId: string): InvestPlan[] {
+  return [...store.investPlans.values()].filter((r) => r.ownerId === userId && r.plan.status === "pending").map((r) => r.plan).reverse().slice(0, 5);
 }
 
 export function myInvestPlans(userId: string): InvestPlan[] {

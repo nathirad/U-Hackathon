@@ -11,6 +11,7 @@
     "eval": "tsx evals/run.ts",
     "snapshot": "node scripts/snapshot-tokenomist.mjs",
     "responsive": "node scripts/responsive.mjs",
+    "check:live": "node --import tsx scripts/check-live.ts",
     "ubot": "node scripts/ubot-standin.mjs"
   },
   "dependencies": {

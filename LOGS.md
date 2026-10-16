@@ -217,6 +217,87 @@ Built in a separate session without seeing `feat/app-ui`.
 - **Problem:** live allocations list "Arbitrum DAO Treasury" twice → duplicate React keys. **Fix:** index keys on the allocation table; the risk card merges recipients with the same name.
 - **Checks:** typecheck ✅ · eval 30/30 ✅ · stand-in over MCP: HIGH 67, "Tokenomist live", proposal in the inbox ✅ · every page checked for Thai text ✅ (only "฿").
 
+### Oct 16, ~07:00 · Ported the WIP branch into main's code (branch `feat/merge-app-ui-agentic`)
+- **Found:** `npm run dev` on main returned 500 on every page (`node:crypto` reached the edge bundle through `src/instrumentation.ts`).
+  - nathirad's fix arrived in PR #2 (merged).
+  - This branch restarts from that main.
+- **Ported from `wip/v2-freshness-drift-alerts`:** it was built on the pre-merge code, so its features were rewritten for main instead of merged.
+- **Freshness:**
+  - "ณ HH:MM" on unlock cards, token-page sections, trade plans and the portfolio.
+  - `as_of_th` and `stale` in tool results, plus a prompt rule to quote them.
+  - Last good live copy when Tokenomist or CoinGecko fails, labelled "อาจไม่ล่าสุด".
+- **Portfolio drift:**
+  - Per-user target mix (`data/fixtures/targets.json` as the default), editable on `/terminal/portfolio`.
+  - `/api/portfolio/targets` GET/PUT.
+  - `check_portfolio_drift` tool, so MCP now has 12 tools.
+  - Drift card in chat; "พอร์ตเบี้ยวจากเป้าไหม" is understood by the rules engine.
+- **Alert engine:**
+  - Rule types: unlock, drift, news (`*` = every holding).
+  - Dedupe: unlock and news alerts go out once; drift at most once a day.
+  - Quiet hours 22:00–07:00 Bangkok (high severity only) and a daily cap of 5.
+  - High-severity news needs a second source.
+  - One U-Bot message per run, with cards and proposals.
+  - Alert history and held-back reasons on `/terminal/alerts`.
+  - `GET /api/watch` with Bearer `CRON_SECRET` for Vercel Cron, plus `vercel.json`.
+- **Checked:**
+  - typecheck ✅ · eval 32/32 ✅ · build ✅ · responsive 80/80 ✅
+  - `next dev`: all 17 pages 200 ✅
+  - Alerts at 06:42 (quiet hours): only the 2 high ones went out; a second run sent nothing new.
+  - With a cap of 2: 2 sent, the rest deferred to tomorrow.
+  - Cron: 401 without the secret.
+
+### Oct 16, ~07:30 · Merged the English `main` (PR #3) into the port branch
+- **Merged** `main` at `29abd31` into `feat/merge-app-ui-agentic`, so the PR is one click.
+- **Conflicts (7 files):** LOGS.md, the alerts page, the portfolio page, `Cards.tsx`, `TradePanel.tsx`, `alerts.ts`, `tokenomist.ts`.
+  - `tokenomist.ts`: kept main's in-flight limit, 429 retry and 1-minute fallback cache, plus this branch's last-good-copy fallback.
+  - UI files: kept main's English copy and added the drift card, target editor, alert history, held-back reasons and freshness labels.
+- **Translated the ported UI to English:**
+  - `asOfEn` / `asOfLabel` in `freshness.ts` give "as of 15 Oct 07:00" and "(may be out of date)".
+  - `sourceTag` now appends the age; `sourceTagTh` keeps the Thai label for Thai replies.
+  - Alert engine reasons, drift lines (locale "en" for the watcher), the alerts page and the drift card.
+  - The agent still answers Thai to Thai, with `as_of_th`.
+- **Checked:**
+  - typecheck ✅ · eval 32/32 ✅ · build ✅ · `next dev` all pages 200 ✅
+  - responsive 80/80 ✅ against `next start`. An earlier run failed only because an old server still held the port.
+  - Screenshots of the portfolio drift view, the alerts page after "Watch every token in my portfolio", and the chat drift card: no page errors ✅
+  - API: "U-Guard alert: 2 items", "ARB unlock coming up (High risk 67/100)", "ARB is 8.8 points over your target" ✅
+
+### Oct 16, ~09:00 · MCP tools for trade, invest and alerts; evals for all three
+- **Looked at first:**
+  - Broker MCP servers (e.g. Alpaca's) give the model order tools that execute directly.
+  - Nansen's MCP server is read-only analytics.
+  - MCP tool annotations are hints a client may ignore.
+  - So U-Guard drafts over MCP and never approves. Approval stays in the app, behind the user's session, enforced on the server.
+- **6 MCP-only tools:**
+  - `draft_trade_plan` and `get_paper_trading`.
+  - `get_invest_options` (U-Bot asks the 5 questions itself) and `draft_invest_plan`.
+  - `list_alerts` and `create_alert_rule` (needs the user the caller acts for; deduplicated).
+  - `tools/list` now returns 18, each with annotations. Server version 0.4.0.
+- **Where drafts land:**
+  - A trusted caller acting for a user (`X-UGuard-User`) gets the plan into that user's U-Bot inbox: Thai or English line plus a link.
+  - Trade plans show under "Plans waiting for you", tagged "Drafted by U-Bot in chat (MCP)".
+  - Invest plans show under "Plans U-Bot drafted for you"; Review restores the answers so the user can recalculate.
+- **Kept out of the in-app chat:** `AGENT_TOOL_SPECS` filters them, and `executeTool` refuses them outside MCP.
+  - The pages already cover them.
+  - `draftTradePlan` runs the agent to explain the plan, so a model calling it from chat would recurse. Over MCP the explanation is skipped (`explain: false`), since U-Bot explains it itself.
+- **Refactors:**
+  - Alert-rule creation moved to `src/lib/alert-rules.ts`, shared by `/api/alerts` and MCP, to avoid an import cycle with the alert engine.
+  - Trade and invest modules are imported lazily inside the tools for the same reason.
+- **Bugs found:**
+  - The serious-news regex matched "second" and "sector" (as SEC) and "bank" (as ban); it now matches whole words.
+  - The trade plan table header rendered "P&amp;L".
+- **Evals:** 32 → 55 cases.
+  - Trade arithmetic and checks, blocked plans, approve/decline rules.
+  - Invest profile scoring, weights, DCA-near-unlock, warnings, approval.
+  - Alert cap, dedupe, quiet hours, thresholds, windows, news severity, rule dedupe.
+  - MCP annotations, no approve tool, drafts for a user (EN/TH), alert rules need a user, bad inputs.
+  - Mutation check: breaking the news regex, the MCP-only gate and the max-loss formula fails 3 cases; restoring passes 55/55.
+- **Checked:**
+  - typecheck ✅ · eval 55/55 ✅ · build ✅
+  - `npm run ubot -- --auto --trade` against `next start`: 18 tools, HIGH 67, proposal, CAUTION plan ✅
+  - Invest plan and alert rule over MCP in Thai ✅
+  - Screenshots of Trade, Invest and the bell: no page errors ✅
+
 ### Oct 16, ~09:10–11:45 · Submission day: one app for the investor's day
 - **Deadline found on the event slides:** submissions close **14:00**; judges open a public repo, a hosted demo website ("the real product, not just a landing page") and a pitch deck. Finalists present at 20:00, the minute ARB unlocks. A Tokenomist founder is on the jury. The deck is drafted in a parallel session.
 - **Why the site felt disjointed:** two apps (the terminal and the older `/assistant` `/dashboard` `/en`) with different styles and a menu grouped by implementation. **Now:** one menu by the investor's day (Start · Markets · My money · Help); `/assistant` and `/dashboard` redirect into the app; landing says "Open the app".
@@ -238,6 +319,131 @@ Built in a separate session without seeing `feat/app-ui`.
 - **Roles in the chat:** U-Bot talks, U-Guard checks (tagged cards, proposals and trace), you decide: one chat, not two boxes.
 - Buyback and burn endpoints exist in v5 but don't cover ARB, WLD or AVAX ("token not supported"), so they aren't shown.
 - **Checks:** typecheck ✅ · production build ✅ · eval **33/33** ✅ · 375 px: no sideways scroll on Today, screener, My plan.
+
+### Oct 16, ~12:30 · Merged PR #4 (finance-app flow) with main
+- **Why:** PR #4 (`feat/demo-script-mcp-standin`) and `main` both grew from the same commit. Both added portfolio drift, so 21 files conflicted.
+- **Kept from PR #4:**
+  - Today page, My plan, News, live prices (Hyperliquid + cached CoinGecko), screener, stress test, price charts, unlock schedule, Upstash store sync, installable app.
+  - Its drift card, portfolio page, target fixture (ETH 20, ARB 20, WLD 15) and rules-engine flow (a portfolio question runs the scan with drift and the stress test).
+- **Kept from main:**
+  - The 6 MCP-only tools and their annotations.
+  - The alert engine (unlock/drift/news rules, dedupe, quiet hours, daily cap, cron).
+  - Freshness labels, the invest "Plans U-Bot drafted for you" panel, and the 55 evals.
+- **Joined by hand:**
+  - `drift.ts` and `market.ts`: PR #4's versions plus `pricesAsOf`, `asOf` and `stale`. A Hyperliquid answer older than 3 minutes, or a CoinGecko answer older than 20, counts as stale.
+  - `store.ts`: the Redis snapshot now carries `alertEvents` and `lastWatch` instead of the removed `alertsFired`.
+  - `/api/watch` and `/api/portfolio/targets`: main's logic wrapped in `withStore`.
+- **Duplicates the auto-merge left behind, removed:**
+  - `check_portfolio_drift` spec, input and handler.
+  - `DriftRow`/`DriftReport` types and `AgentResult.drift`.
+  - The drift intent regex (Thai words merged into one) and a second drift path in the rules engine.
+- **Tools:** 20 in total (14 shared + 6 MCP only).
+- **Responsive audit:** `/assistant` and `/dashboard` now redirect into the terminal, so the audit covers `/terminal/news`, `/terminal/plan` and `/terminal/tokens` instead (17 pages).
+- **Checked:**
+  - typecheck ✅ · eval 58/58 ✅ · build ✅
+  - Every page 200 ✅ · responsive 17 pages × 5 devices ✅
+  - `npm run ubot -- --auto --trade`: 20 tools, HIGH 67, proposal, CAUTION plan ✅
+
+### Oct 16, ~13:00 · Outside MCP servers, the safe way (branch `feat/mcp-integrations`)
+- **Context:** the team proposed three MCP servers: CoinGecko, `@mcpdotdirect/evm-mcp-server`, and Coinrule or Alpaca. Checked against their docs:
+  - CoinGecko's keyless server is a public beta with a shared rate limit. The 76+ tools need a key.
+  - The EVM server signs with a private key or mnemonic from the environment.
+  - Alpaca needs API keys, and its MCP server hands the model order tools.
+  - Coinrule trades real exchange accounts on its own.
+- **Alpaca paper broker** (`src/lib/broker.ts`, `BROKER=alpaca-paper`, off by default):
+  - Only `decideTradePlan()` calls it, after the user's approval.
+  - Paper URL hard-coded; market order, `gtc`, USD notional for buys, qty for sells, plan id as `client_order_id`.
+  - Coins outside Alpaca's list, errors, missing keys or no answer keep the local paper order with a note on the Trade page.
+  - `get_paper_trading` reports it.
+  - Also new: approving the same plan twice at once records one order.
+- **CoinGecko in the U-Bot stand-in** (`--coingecko`, off by default):
+  - A second MCP client asks CoinGecko for 24h volume and compares it with U-Guard's unlock value.
+  - Tool names are looked up at runtime: a direct price tool, or `invoke_api_endpoint` in dynamic mode.
+  - Tested against a local mock MCP server in both modes, and with the server down. This session can't reach the real endpoint (proxy).
+- **Not added to the app:**
+  - EVM MCP: dev-only and read-only, no key; `viem` already covers Fuji.
+  - Coinrule: trades real money on its own.
+  - The scorer keeps the cached REST/Hyperliquid feed instead of an MCP hop.
+  - All written up in `MCP-INTEGRATIONS.md`.
+- **Evals 58 → 62:**
+  - Default broker sends nothing.
+  - An MCP draft sends nothing, and the approval sends one paper order (literal paper URL, body, headers, idempotent).
+  - Unlisted coin, Alpaca error and missing keys fall back.
+  - A double approval records one order.
+  - Mutation check: a live URL and a removed double-approve guard both fail.
+- **Checked:**
+  - typecheck ✅ · eval 62/62 ✅ · build ✅
+  - In the browser: MCP draft → approve → order note "Alpaca paper didn't answer (network error) · kept as a local paper order" (sandbox has no route to Alpaca) ✅
+  - Stand-in `--coingecko` against mocks: "the unlock (~$16.5M) is 10% of one day's volume" ✅
+
+### Oct 16, ~12:00 · Live unlock feed, the agent reads the whole app, Avalanche Data API (branch `feat/live-data-sync`)
+- **"Tokenomist doesn't update":**
+  - The Unlock calendar's "Elsewhere in the market" list and the News page's unlock list read `data/fixtures/unlock-calendar.json`, six hand-written events. A key changed nothing.
+  - Only the 3 snapshot tokens are scored in full.
+  - **Fix:** `src/lib/unlock-feed.ts` takes the next cliff of the 40 largest tokens from the live screener (Tokenomist, cached). It falls back to the file with a visible note when Tokenomist doesn't answer.
+  - `GET /api/status` shows the Tokenomist mode, its last problem, prices, news, store and broker (booleans and modes only).
+  - This session's network policy blocks `api.tokenomist.ai` and `data-api.avax.network` (proxy 403), so live calls couldn't be tested here.
+- **The agent reads the whole app:**
+  - The read-only MCP tools are now offered to the in-app chat too.
+  - New tools: `get_my_plan`, `get_invest_plans`, `get_upcoming_unlocks`, `get_wallet_activity`, `lookup_onchain` (25 tools; the 3 that write stay MCP-only).
+  - The rules engine has intents for orders, alerts, my plan, invest plans, market unlocks and on-chain questions (EN/TH). It answers from the tool results only, and asks signed-out users to sign in for personal data.
+  - Every tool result is kept in `ctx.data` for the replies.
+- **Avalanche Data API** (`src/lib/avalanche-data.ts`):
+  - Native and ERC-20 balances, the latest transactions with token transfers, one transaction by hash, contract metadata. Fuji or C-Chain.
+  - Optional `AVALANCHE_DATA_API_KEY`. Fields are read defensively (the API is in beta).
+  - The wallet is the SIWE session's address, else `WALLET_ADDRESS`, else the approvals signer.
+- **Evals 62 → 72:**
+  - App-data questions (EN/TH, signed in and out).
+  - The unlock feed (live mapping, offline label).
+  - The Data API: request URLs, parsing into the reply, an outage said plainly, tx and contract lookups.
+  - Mutation check: 3 deliberate breaks fail 3 cases.
+- **On VLMs:** not needed. The data is structured JSON, the scores are computed in code, and the Claude models read images if screenshot import is ever added. "Not enough data" is solved by more sources and these read tools, not a vision model.
+
+### Oct 16, ~11:30 · Account button, per-visitor demo accounts, SPEC brought up to date (branch `feat/account-and-spec`)
+- **Account button** in the terminal header:
+  - Shows who is signed in (demo, email or a wallet's short address).
+  - "Sign in another way" signs out and opens `/login`; "Sign out" goes back to the landing page.
+- **Per-visitor demo accounts:**
+  - On a hosted site every judge tapping "demo" was the same `demo-user`, so they would have seen each other's paper orders and U-Bot messages.
+  - On Vercel (`VERCEL` is set) each browser now gets `demo-xxxxxxxx`.
+  - The laptop keeps the shared `demo-user`, because the stage's U-Bot stand-in acts for it over MCP. `DEMO_SHARED=true|false` overrides.
+- **SPEC.md:** new §0.1 with the current state (pages, 25 tools, data sources, alerts, accounts, tests, what's missing). §14 and §17 are marked as the 15 Oct record.
+- **"Dashboard data isn't complete":**
+  - Even with a key, only the 3 snapshot tokens were scored in full (`trackedTokens()`), so Today, the ticker and the calendar showed 3 coins.
+  - With Tokenomist live, `TRACKED_TOKENS` is added (default 10 tokens with regular unlocks, at most 12), matched against the live list. Offline stays 3.
+- **`npm run check:live`** (`scripts/check-live.ts`):
+  - Calls Tokenomist (list, tracked, ARB score, screener), prices, RSS, the Avalanche Data API (WAVAX contract, your wallet), the Fuji RPC, ElevenLabs (voices) and the LLM key (models list, no cost) the way the app does.
+  - Prints PASS / WARN / FAIL with reasons; never a key.
+- **`/api/status`** also names the model that answers (rules engine when no key), the voice engines, the tokens scored in full and the Avalanche settings.
+- **Voice mode** on Ask U-Bot (hands-free):
+  - ElevenLabs Scribe listens, and stops itself ~1.4 s after you stop talking (or at 15 s).
+  - U-Bot answers, the reply is read aloud (`eleven_v3`), then the mic reopens.
+  - Falls back to the browser's recognition and voice without a key. Checked in Chromium: the reply triggers `/api/voice`, then it returns to listening.
+- **Email accounts on Vercel:**
+  - Accounts lived in `data/runtime/users.json`. Vercel's file system is read-only, so sign-up would have worked in one function and been gone in the next.
+  - With the shared store on (Upstash), accounts now live in it; the register and login routes are wrapped with `withStore`. Locally the JSON file is used as before.
+  - Checked against a stand-in KV: sign up, restart the server, log in with the same account; a wrong password and a second sign-up are refused; no file was written.
+- **Vercel:** creating the project through the connector was refused twice. The first attempt was blocked by the session's permission check; the second reached Vercel and returned 403 (no permission to create projects in the team). The project has to be created in the dashboard by a team member who can.
+
+### Oct 16, ~12:15 · Voice mode like ChatGPT's, Tokenomist logo (branch `feat/voice-mode-ui`)
+- **Voice mode is now a full-screen conversation** (`src/components/voice/VoiceMode.tsx`), opened from "Voice mode" on Ask U-Bot:
+  - An orb grows with your voice while it listens, breathes while U-Guard checks, and moves with U-Bot's voice while it answers. Then the mic opens again.
+  - Tap the orb to interrupt U-Bot. The mic button pauses; the red button (or Esc) ends it.
+  - Captions show what it heard and the answer. The answer also lands in the chat thread with its cards and trace.
+  - Same agent and tools as typing; voice changes how you ask, not what is checked.
+  - Ears: ElevenLabs Scribe; voice: ElevenLabs `eleven_v3` ("Voice by ElevenLabs" in the corner). Without a key: the browser's own recognition and voice, labelled.
+  - Listening moved to `src/components/voice/listen.ts` (mic level for the orb, stops ~1.4 s after you go quiet). `speakAloud` reports U-Bot's loudness. The Speak button is tap-to-talk again.
+  - Checked in Chromium with a fake mic, Scribe and the voice mocked (no ElevenLabs from this sandbox), the agent answering for real: listening → thinking → speaking → listening; the orb followed the mic and the voice; mute pauses; Esc closes. Desktop and phone width.
+- **Tokenomist logo:** the "Data and technology we use" strip now shows Tokenomist's mark (redrawn as SVG from the team's file) next to its name. ElevenLabs already had its wordmark.
+
+### Oct 16, ~12:30 · Pages no longer wait 13 s for Tokenomist (branch `perf/page-speed`)
+- **Why pages were slow:** opening the app fires Today, Unlock calendar, News and the screener together. Each built the 40-token market screen on its own, so ~122 Tokenomist calls queued behind the rate limiter (4 at a time, 120 ms apart): **13–15 s per page** against a stand-in API with 300 ms latency. Then fast for 10 minutes, then slow again for whoever came next. On Vercel every new function starts empty, so it would be slow often.
+- **Fixes:**
+  - `tokenomist.ts`: one request per key at a time (pages share it); an expired live copy is served at once and refreshed in the background; the cache is on `globalThis` so every route shares it.
+  - `screener.ts`: one screen run at a time; the last screen is served at once and refreshed in the background after a minute; with Upstash on, a cold Vercel function starts from the screen another one saved (`sharedGet`/`sharedSet` in `store.ts`).
+  - `instrumentation.ts`: with a Tokenomist key, the screen is built in the background when the server starts.
+- **Measured** (stand-in Tokenomist, 300 ms per call): pages opened right at server start ~3 s (was 13–15 s); afterwards 0.01–0.05 s, including after the cache ages; ~56 Tokenomist calls for a cold start instead of 122.
+- `npm run dev` also compiles each page on its first visit (several seconds). For the demo use `npm run build && npm start`.
 
 ---
 

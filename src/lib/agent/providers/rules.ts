@@ -3,14 +3,43 @@
 // the same tools as the LLM agents, so the trace and cards look the same. It answers in the
 // language of the question (Thai copy follows the U-topia app's Thai offline agent).
 
-import { compact, LEVEL_LABEL, LEVEL_TH, shortDate, signedPct, thaiDate, usd, usdFull } from "../../format";
+import { compact, LEVEL_LABEL, LEVEL_TH, shortDate, signedPct, thaiDate, thb, usd, usdFull } from "../../format";
 import { usdToThb } from "../../market";
 import { trackedTokens } from "../../tokenomist";
 import type { AnswerMode, ChatTurn, RiskCard } from "../../types";
 import { matchFaq, type FaqEntry } from "../../knowledge";
 import { executeTool, type RunContext } from "../tools";
 
-export type Intent = "buy" | "sell" | "scan" | "drift" | "stress" | "news" | "odds" | "calendar" | "risk" | "learn" | "help";
+export type Intent =
+  | "buy"
+  | "sell"
+  | "scan"
+  | "drift"
+  | "stress"
+  | "news"
+  | "odds"
+  | "calendar"
+  | "risk"
+  | "learn"
+  | "help"
+  // The rest of the app: the agent reads what the user sees on each page.
+  | "orders"
+  | "alerts"
+  | "myplan"
+  | "investplans"
+  | "unlocks"
+  | "onchain";
+
+/** App-data intents and the tool that answers each. */
+const APP_TOOLS: [Intent, string][] = [
+  ["orders", "get_paper_trading"],
+  ["alerts", "list_alerts"],
+  ["myplan", "get_my_plan"],
+  ["investplans", "get_invest_plans"],
+  ["unlocks", "get_upcoming_unlocks"],
+  ["onchain", "get_wallet_activity"],
+];
+const PERSONAL = new Set<Intent>(["orders", "alerts", "myplan", "investplans", "onchain"]);
 
 export interface Plan {
   intents: Intent[];
@@ -67,12 +96,18 @@ const INTENTS: [Intent, RegExp][] = [
   ["buy", /\b(buy|buying|purchase|invest(ing)? in|ape|accumulate|dca)\b|ซื้อ|ลงทุน|เข้าซื้อ/i],
   ["sell", /\b(sell|selling|take profit|cash out)\b|ขาย/i],
   ["scan", /\b(scan|portfolio|my (holdings|wallet|bag|coins|assets)|what do i (own|hold))\b|พอร์ต|สแกน|ถืออะไร|ถืออยู่/i],
-  ["drift", /\b(drift(ed|ing)?|off (plan|target)|from my (plan|target)|rebalanc\w*|target mix|my targets?|balanced|concentrat\w*|diversif\w*)\b|สัดส่วนพอร์ต|ปรับพอร์ต|ห่างจากเป้า|กระจุก|เป้าพอร์ต|ตามแผน/i],
+  ["drift", /\b(drift(ed|ing)?|off[- ](plan|target)|from my (plan|target)|rebalanc\w*|target (mix|allocation|weights?)|my targets?|balanced|concentrat\w*|diversif\w*)\b|สัดส่วนพอร์ต|ปรับพอร์ต|ห่างจากเป้า|กระจุก|เป้าพอร์ต|ตามแผน|เบี้ยว|ปรับสมดุล|สัดส่วน|ตามเป้า|จากเป้า/i],
   ["stress", /\b(stress|what if|worst case|what could go wrong|how (bad|much) could|protect my (portfolio|money)|risk(s|y)? (to|for|in) my (portfolio|money)|how (risky|safe) is my portfolio|handle (it|this|the risk))\b|ความเสี่ยงพอร์ต|พอร์ตเสี่ยง|รับมือ|ป้องกันพอร์ต|ถ้าตลาดลง|แย่ที่สุด/i],
   ["news", /\b(news|headlines?|what'?s (moving|happening|going on)|why (is|did|are|has)|happening|events?)\b|ข่าว|เหตุการณ์|ทำไม/i],
   ["odds", /\b(odds|probabilit(y|ies)|chances?|likely|prediction market|polymarket|fed|fomc|rate (cut|hike)|interest rates?)\b|โอกาส|ความน่าจะเป็น|ดอกเบี้ย|เฟด/i],
   ["calendar", /\b(calendar|upcoming|coming up|next (week|month)|schedule|this week)\b|ปฏิทิน|เร็วๆ\s?นี้|สัปดาห์นี้/i],
   ["risk", /\b(unlocks?|vesting|risk|risky|safe|supply|dilution)\b|ปลดล็อก|เสี่ยง|ปลอดภัย/i],
+  ["orders", /\b(my (paper )?(orders?|trades?|positions?)|paper (trading|orders?|positions?|trades?)|open positions?|p&l|pnl|pending (trade )?plans?)\b|คำสั่ง(ซื้อขาย|เทรด)?ของ(ฉัน|ผม)|ออเดอร์|สถานะ(การ)?เทรด|กำไรขาดทุน|แผนเทรด/i],
+  ["alerts", /\b(my alerts?|alert rules?|what alerts|alerts? (did|have) i|which alerts|notifications?)\b|การแจ้งเตือน(ของ(ฉัน|ผม))?|กฎแจ้งเตือน/i],
+  ["myplan", /\b(my plan|my month|this month for me|next 30 days|what('?s| is) (coming up )?for me|my (calendar|schedule|timeline))\b|แผนของ(ฉัน|ผม)|เดือนนี้(ของ(ฉัน|ผม))?ต้องทำ|ไทม์ไลน์/i],
+  ["investplans", /\b(invest(ment)? plans?|my dca|model portfolio)\b|แผนลงทุน|แผน DCA/i],
+  ["unlocks", /\b(upcoming unlocks|unlocks? (this|next) (week|month)|which (tokens|coins) (will )?unlock|biggest unlocks|market unlocks|unlock calendar)\b|unlock(อะไร|ไหน)บ้าง|เหรียญไหน(จะ)?(ปลดล็อก|unlock)|ปฏิทิน ?unlock/i],
+  ["onchain", /\b(on-?chain|transactions?|txs?|tx hash|wallet activity|transfers?|smart contracts?|contract address|snowtrace)\b|ธุรกรรม|บนเชน|ออนเชน|โอน(เข้า|ออก)|สัญญาอัจฉริยะ|0x[0-9a-f]{40}/i],
 ];
 
 async function extractSymbols(text: string): Promise<string[]> {
@@ -111,16 +146,35 @@ export async function makePlan(message: string): Promise<Plan> {
   const symbols = await extractSymbols(message);
   const amountThb = intents.includes("buy") ? await extractAmountThb(message) : null;
   const tradeOrRisk = intents.some((i) => i === "buy" || i === "sell" || i === "risk");
-  const acting = intents.some((i) => i === "buy" || i === "sell" || i === "scan" || i === "drift" || i === "stress");
+  const app = intents.some((i) => APP_TOOLS.some(([a]) => a === i));
+  const acting = app || intents.some((i) => i === "buy" || i === "sell" || i === "scan" || i === "drift" || i === "stress");
   const faq = !acting && (symbols.length === 0 || intents.includes("learn")) ? matchFaq(message) : null;
   if (intents.length === 0) intents.push(symbols.length ? "risk" : "help");
-  return { intents, symbols, amountThb, faq, needsSymbol: tradeOrRisk && symbols.length === 0 && !intents.includes("scan") };
+  return { intents, symbols, amountThb, faq, needsSymbol: tradeOrRisk && symbols.length === 0 && !intents.includes("scan") && !app };
 }
 
 /** Runs the plan's tools. Independent calls run in parallel. */
 export async function runPlan(plan: Plan, message: string, ctx: RunContext): Promise<void> {
   const has = (i: Intent) => plan.intents.includes(i);
   if (plan.faq || plan.needsSymbol) return;
+
+  // Questions about the app's own data (orders, alerts, plan, invest plans, market unlocks,
+  // on-chain activity) read that data and nothing else. A buy/sell question goes the usual way.
+  const app = APP_TOOLS.filter(([i]) => has(i) && (ctx.scope === "user" || !PERSONAL.has(i)));
+  if (appQuestion(plan) && !has("buy") && !has("sell")) {
+    const id = /0x[0-9a-fA-F]{64}|0x[0-9a-fA-F]{40}/.exec(message)?.[0];
+    const network = /\b(main ?net|c-?chain)\b/i.test(message) ? "mainnet" : "fuji";
+    await Promise.all(
+      app.map(([i, tool]) =>
+        i === "onchain"
+          ? id
+            ? executeTool("lookup_onchain", { id, network }, ctx)
+            : executeTool("get_wallet_activity", { address: null, network }, ctx)
+          : executeTool(tool, tool === "get_upcoming_unlocks" ? { days: 30 } : {}, ctx),
+      ),
+    );
+    return;
+  }
 
   if (has("scan")) {
     if (ctx.scope === "public") return;
@@ -243,9 +297,10 @@ function composeReplyTh(ctx: RunContext, plan: Plan, mode: AnswerMode): string {
   const has = (i: Intent) => plan.intents.includes(i);
 
   if (plan.faq) return plan.faq.a;
-  if ((has("scan") || has("drift") || has("stress")) && ctx.scope === "public") {
+  if ((has("scan") || has("drift") || has("stress") || personalQuestion(plan)) && ctx.scope === "public") {
     return "เข้าสู่ระบบเพื่อสแกนกระเป๋าของคุณ ระหว่างนี้ถามเรื่องเหรียญไหนก็ได้ เช่น “ARB ตอนนี้เสี่ยงไหม”";
   }
+  if (appQuestion(plan) && !has("buy") && !has("sell")) return appReply(ctx, plan, true);
   if (plan.needsSymbol || (plan.intents.includes("help") && ctx.trace.every((s) => s.kind !== "tool"))) {
     return "บอกชื่อเหรียญที่อยากเช็กได้เลย เช่น “ซื้อ ARB 5,000 บาท” หรือ “สแกนพอร์ตของฉัน”";
   }
@@ -312,6 +367,104 @@ function composeReplyTh(ctx: RunContext, plan: Plan, mode: AnswerMode): string {
   return lines.join("\n");
 }
 
+const appQuestion = (plan: Plan) => plan.intents.some((i) => APP_TOOLS.some(([a]) => a === i));
+const personalQuestion = (plan: Plan) => plan.intents.some((i) => PERSONAL.has(i));
+
+/* eslint-disable @typescript-eslint/no-explicit-any -- tool results are plain JSON built in tools.ts */
+/** Replies about the app's own data, from the tool results only (English or Thai). */
+function appReply(ctx: RunContext, plan: Plan, th: boolean): string {
+  const has = (i: Intent) => plan.intents.includes(i);
+  const d = (tool: string) => ctx.data.get(tool) as any;
+  const lines: string[] = [];
+  const signed = (n: number) => `${n >= 0 ? "+" : "−"}${thb(Math.abs(n))}`;
+  const day = (iso: string | null) => (iso ? (th ? thaiDate(iso) : shortDate(iso)) : "–");
+
+  const t = d("get_paper_trading");
+  if (has("orders") && t) {
+    if (t.positions.length) {
+      lines.push(
+        (th ? "สถานะเทรดจำลอง: " : "Paper positions: ") +
+          t.positions.map((p: any) => `${p.symbol} ${p.qty} (${th ? "มูลค่า" : "value"} ${thb(p.value_thb)}, P&L ${signed(p.pnl_thb)})`).join(" · "),
+      );
+    } else lines.push(th ? "ยังไม่มีสถานะเทรดจำลอง" : "No paper positions yet.");
+    for (const o of t.orders.slice(0, 3)) {
+      lines.push(
+        th
+          ? `${o.side === "buy" ? "ซื้อ" : "ขาย"} ${o.symbol} ${thb(o.amount_thb)} เมื่อ ${day(o.at)} · บันทึกบน ${o.receipt.chain}${o.broker ? ` · ${o.broker.note}` : ""}`
+          : `${o.side === "buy" ? "Bought" : "Sold"} ${o.symbol} for ${thb(o.amount_thb)} on ${day(o.at)} · recorded on ${o.receipt.chain}${o.broker ? ` · ${o.broker.note}` : ""}`,
+      );
+    }
+    if (t.pending_plans.length) {
+      lines.push(th ? `มีแผนเทรด ${t.pending_plans.length} แผนรอคุณอนุมัติในหน้า Trade` : `${t.pending_plans.length} trade plan(s) waiting for your approval on the Trade page.`);
+    }
+  }
+
+  const a = d("list_alerts");
+  if (has("alerts") && a) {
+    if (a.rules.length) {
+      const rule = (r: any) => `${r.type} ${r.symbol === "*" ? (th ? "ทุกเหรียญ" : "every holding") : r.symbol} (${r.min_level}+)`;
+      lines.push(th ? `กฎแจ้งเตือน ${a.rules.length} ข้อ: ${a.rules.map(rule).join(", ")}` : `${a.rules.length} alert rule(s): ${a.rules.map(rule).join(", ")}.`);
+    } else lines.push(th ? "ยังไม่ได้ตั้งกฎแจ้งเตือน ตั้งได้ที่หน้า Alerts" : "No alert rules yet. Set them on the Alerts page.");
+    if (a.recent_alerts.length) lines.push((th ? "แจ้งเตือนล่าสุด: " : "Latest alerts: ") + a.recent_alerts.slice(0, 3).map((e: any) => e.title).join(" · "));
+    if (a.last_check?.held_back?.length) {
+      lines.push(th ? `รอบล่าสุดยังไม่ส่ง ${a.last_check.held_back.length} เรื่อง (${a.last_check.held_back[0].reason})` : `${a.last_check.held_back.length} held back on the last check (${a.last_check.held_back[0].reason}).`);
+    }
+  }
+
+  const p = d("get_my_plan");
+  if (has("myplan") && p) {
+    lines.push(...p.summary.slice(0, 2));
+    for (const i of p.items.slice(0, 4)) lines.push(`${day(i.date)} · ${i.title}`);
+  }
+
+  const ip = d("get_invest_plans");
+  if (has("investplans") && ip) {
+    const one = (x: any, state: string) => `"${x.profile}" · DCA ${thb(x.monthly_thb)}${th ? "/เดือน" : "/month"} · ${state}`;
+    for (const x of ip.approved.slice(0, 2)) lines.push(one(x, th ? "อนุมัติแล้ว" : "approved"));
+    for (const x of ip.pending.slice(0, 2)) lines.push(one(x, th ? "รออนุมัติในหน้า Invest" : "waiting for your approval on the Invest page"));
+    if (!ip.approved.length && !ip.pending.length) lines.push(th ? "ยังไม่มีแผนลงทุน ตอบคำถาม 5 ข้อในหน้า Invest ได้เลย" : "No investment plans yet. Answer the 5 questions on the Invest page.");
+  }
+
+  const u = d("get_upcoming_unlocks");
+  if (has("unlocks") && u) {
+    const from = u.data === "live" ? "Tokenomist live" : th ? "รายงานที่บันทึกไว้" : "saved reports";
+    if (u.unlocks.length) {
+      lines.push(
+        (th ? `unlock ใหญ่ที่กำลังมา (${from}): ` : `Next big unlocks (${from}): `) +
+          u.unlocks.slice(0, 5).map((x: any) => `${x.symbol} ${day(x.date)} (${x.size})`).join(" · "),
+      );
+    } else lines.push(th ? `ไม่มี unlock ใหญ่ใน ${u.window_days} วันข้างหน้า (${from})` : `No large cliff unlocks in the next ${u.window_days} days (${from}).`);
+  }
+
+  const w = d("get_wallet_activity");
+  const lk = d("lookup_onchain");
+  if (has("onchain") && w) {
+    if (!w.available) lines.push(w.note ?? (th ? "อ่านข้อมูลบนเชนไม่ได้ตอนนี้" : "On-chain data isn't available right now."));
+    else {
+      const short = `${w.address.slice(0, 6)}…${w.address.slice(-4)}`;
+      lines.push(
+        th
+          ? `กระเป๋า ${short} บน ${w.network}: ${w.native?.balance ?? "–"} AVAX · token ${w.tokens.length} ตัว (Avalanche Data API)`
+          : `Wallet ${short} on ${w.network}: ${w.native?.balance ?? "–"} AVAX · ${w.tokens.length} token(s) (Avalanche Data API)`,
+      );
+      for (const x of w.transactions.slice(0, 3)) {
+        lines.push(`${day(x.time)} · ${x.method ?? (th ? "โอน" : "transfer")}${x.value_avax ? ` · ${x.value_avax} AVAX` : ""} · ${x.status ?? ""} · ${x.explorer}`);
+      }
+      if (!w.transactions.length) lines.push(th ? "ยังไม่มีธุรกรรม" : "No transactions yet.");
+    }
+  } else if (has("onchain") && lk) {
+    if (lk.source !== "live") lines.push(lk.note ?? (th ? "อ่านข้อมูลบนเชนไม่ได้ตอนนี้" : "On-chain data isn't available right now."));
+    else if (lk.tx) lines.push(`${th ? "ธุรกรรม" : "Transaction"} ${lk.tx.hash.slice(0, 10)}… · ${lk.tx.status ?? "?"} · ${lk.tx.method ?? ""} · ${day(lk.tx.time)} · ${lk.tx.explorerUrl}`);
+    else if (lk.contract) lines.push(`${th ? "สัญญา" : "Contract"} ${lk.contract.name ?? "?"}${lk.contract.symbol ? ` (${lk.contract.symbol})` : ""} · ${lk.contract.ercType ?? ""} · ${lk.contract.explorerUrl}`);
+    else lines.push(lk.note ?? "");
+  }
+
+  if (lines.length === 0) lines.push(th ? "ยังไม่มีข้อมูลส่วนนี้" : "Nothing to show for that yet.");
+  if (ctx.sources.has("sample")) lines.push(th ? "(ข้อมูลตัวอย่าง)" : "(sample data)");
+  return lines.join("\n");
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
 /** Writes the answer from what the tools found. Only numbers from tool results appear. */
 export function composeReply(ctx: RunContext, plan: Plan, mode: AnswerMode): string {
   if (ctx.locale === "th") return composeReplyTh(ctx, plan, mode);
@@ -319,9 +472,10 @@ export function composeReply(ctx: RunContext, plan: Plan, mode: AnswerMode): str
   const has = (i: Intent) => plan.intents.includes(i);
 
   if (plan.faq) return plan.faq.a;
-  if ((has("scan") || has("drift") || has("stress")) && ctx.scope === "public") {
+  if ((has("scan") || has("drift") || has("stress") || personalQuestion(plan)) && ctx.scope === "public") {
     return "Sign in to scan your own wallet. Meanwhile, ask me about any token, for example “Is ARB risky right now?”";
   }
+  if (appQuestion(plan) && !has("buy") && !has("sell")) return appReply(ctx, plan, false);
   if (plan.needsSymbol) {
     return "Which token do you mean? Name it, for example ARB, WLD or AVAX, and I'll check its unlock schedule and news before you decide.";
   }

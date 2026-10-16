@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ensureSession } from "@/components/EnsureSession";
 import { thb } from "@/lib/format";
+import { asOfLabel } from "@/lib/freshness";
 import type { PaperOrder, TradePlan, TradeSide } from "@/lib/types";
 
 export const TRADE_EVENT = "trade:changed";
@@ -50,7 +51,7 @@ export function TradePlanCard({ plan, onDone }: { plan: TradePlan; onDone?: (ord
   return (
     <article className={`tp-plan ${v.lv}`} aria-label={`Plan to ${plan.side === "buy" ? "buy" : "sell"} ${plan.symbol}`}>
       <div className="tp-plan-head">
-        <b>Plan drafted by U-Bot</b>
+        <b>{plan.origin === "mcp" ? "Drafted by U-Bot in chat (MCP)" : "Plan drafted by U-Bot"}</b>
         <span className="tp-verdict">
           <span className="dot" />
           {v.th}
@@ -64,7 +65,7 @@ export function TradePlanCard({ plan, onDone }: { plan: TradePlan; onDone?: (ord
 
       <dl className="tp-nums">
         <div><dt>Amount</dt><dd>{qtyT(plan.qty)} {plan.symbol}</dd></div>
-        <div><dt>Price{plan.orderType === "limit" ? " (limit)" : ""}</dt><dd>{usdP(plan.priceUsd)}</dd></div>
+        <div><dt>Price{plan.orderType === "limit" ? " (limit)" : ""} {asOfLabel(plan.priceAsOf, plan.priceStale)}</dt><dd>{usdP(plan.priceUsd)}</dd></div>
         <div><dt>Fee (assumed 0.25%)</dt><dd>{thb(plan.feeThb)}</dd></div>
         {plan.side === "buy" && (
           <>
@@ -92,7 +93,7 @@ export function TradePlanCard({ plan, onDone }: { plan: TradePlan; onDone?: (ord
       <div className="table-scroll">
         <table className="t-table tp-table">
           <thead>
-            <tr><th>Case</th><th className="num">Price</th><th className="num">{plan.side === "buy" ? "P&amp;L" : "Effect for you"}</th></tr>
+            <tr><th>Case</th><th className="num">Price</th><th className="num">{plan.side === "buy" ? "P&L" : "Effect for you"}</th></tr>
           </thead>
           <tbody>
             {plan.scenarios.map((s) => (

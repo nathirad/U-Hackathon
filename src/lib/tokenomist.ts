@@ -101,7 +101,17 @@ interface Envelope<T> {
 const TTL_MS = 10 * 60 * 1000;
 // After a failed live call the fallback is kept for a minute only, so live data comes back soon.
 const FALLBACK_TTL_MS = 60 * 1000;
-const cache = new Map<string, { at: number; ttl: number; value: Sourced<unknown> }>();
+// On globalThis so every route (and the warm-up at server start) shares one cache.
+const g = globalThis as typeof globalThis & {
+  __ugTokenomist?: { cache: Map<string, { at: number; ttl: number; value: Sourced<unknown> }>; pending: Map<string, Promise<Sourced<unknown>>> };
+};
+const shared = (g.__ugTokenomist ??= { cache: new Map(), pending: new Map() });
+const cache = shared.cache;
+// One request per key at a time: pages opened together wait on the same call instead of repeating it.
+const pending = shared.pending;
+// The last successful live response per key, kept past the TTL: if Tokenomist fails later,
+// answers use this copy marked stale rather than dropping to saved fixture data.
+const lastGood = new Map<string, Sourced<unknown>>();
 
 // The API rate-limits bursts (429 with retry-after), so at most a few calls run at once and
 // call starts are spaced out (~8 a second).
@@ -146,7 +156,25 @@ async function load<T>(
 ): Promise<Sourced<T>> {
   const hit = cache.get(cacheKey);
   if (hit && Date.now() - hit.at < hit.ttl) return hit.value as Sourced<T>;
+  // Expired live copy: answer with it now and refresh in the background (stale-while-revalidate),
+  // so a page never waits on Tokenomist for data it already has. Unlock schedules change rarely.
+  if (hit && hit.value.source === "live" && !hit.value.stale) {
+    void refresh(cacheKey, livePath, fixturePath, empty);
+    return hit.value as Sourced<T>;
+  }
+  return refresh(cacheKey, livePath, fixturePath, empty);
+}
 
+function refresh<T>(cacheKey: string, livePath: string, fixturePath: string[], empty: T): Promise<Sourced<T>> {
+  let p = pending.get(cacheKey);
+  if (!p) {
+    p = fetchOrFallback(cacheKey, livePath, fixturePath, empty).finally(() => pending.delete(cacheKey));
+    pending.set(cacheKey, p);
+  }
+  return p as Promise<Sourced<T>>;
+}
+
+async function fetchOrFallback<T>(cacheKey: string, livePath: string, fixturePath: string[], empty: T): Promise<Sourced<T>> {
   let warning: string | undefined;
   if (config.tokenomist.apiKey) {
     try {
@@ -157,11 +185,18 @@ async function load<T>(
         asOf: body.metadata?.queryDate ?? new Date().toISOString(),
       };
       cache.set(cacheKey, { at: Date.now(), ttl: TTL_MS, value });
+      lastGood.set(cacheKey, value);
       return value;
     } catch (err) {
+      logEvent("tokenomist.fallback", { path: livePath.split("?")[0], error: (err as Error).message });
+      const good = lastGood.get(cacheKey);
+      if (good) {
+        const value = { ...(good as Sourced<T>), stale: true, warning: `${(err as Error).message}; showing the last good copy` };
+        cache.set(cacheKey, { at: Date.now(), ttl: FALLBACK_TTL_MS, value });
+        return value;
+      }
       // e.g. 429 after a burst, or 403 for datasets outside the plan
       warning = `${(err as Error).message}; using saved data`;
-      logEvent("tokenomist.fallback", { path: livePath.split("?")[0], error: (err as Error).message });
     }
   }
 
@@ -184,11 +219,16 @@ export function listTokens(): Promise<Sourced<TokenListItem[]>> {
   return load<TokenListItem[]>("list", "/v5/token/list", ["tokenomist", "token-list.json"], []);
 }
 
+/** Tokens scored in full when Tokenomist is live, on top of the snapshot ones (TRACKED_TOKENS overrides). */
+const DEFAULT_TRACKED = "ARB,WLD,AVAX,OP,SUI,APT,TIA,STRK,ZRO,ENA";
+const MAX_TRACKED = 12;
+
 /**
- * Tokens U-Guard follows in full on the ticker, calendar and dashboard: the ones kept in the
- * dated snapshot, so live and offline modes show the same set. The live list has every token
- * Tokenomist covers (650+), and scoring all of them at once trips the API's rate limit.
- * Any other token can still be looked up one at a time (findToken).
+ * Tokens U-Guard follows in full on the ticker, calendar and Today page. Offline: the ones kept in
+ * the dated snapshot. Live: those plus TRACKED_TOKENS (default a list of tokens with regular
+ * unlocks), at most 12. The live list has every token Tokenomist covers (650+), and scoring all
+ * of them at once trips the API's rate limit. Any other token can still be looked up one at a
+ * time (findToken), and the screener shows the next cliff of the 40 largest.
  */
 export async function trackedTokens(): Promise<Sourced<TokenListItem[]>> {
   const [list, snapshot] = await Promise.all([
@@ -196,6 +236,18 @@ export async function trackedTokens(): Promise<Sourced<TokenListItem[]>> {
     readFixture<Envelope<TokenListItem[]>>("tokenomist", "token-list.json"),
   ]);
   const ids = new Set((snapshot?.data ?? []).map((t) => t.id));
+  if (list.source === "live") {
+    const wanted = (process.env.TRACKED_TOKENS?.trim() || DEFAULT_TRACKED)
+      .split(",")
+      .map((s) => s.trim().toUpperCase())
+      .filter(Boolean);
+    for (const sym of wanted) {
+      if (ids.size >= MAX_TRACKED) break;
+      // Several tokens can share a ticker; take the largest.
+      const t = list.data.filter((x) => x.symbol.toUpperCase() === sym).sort((a, b) => b.marketCap - a.marketCap)[0];
+      if (t) ids.add(t.id);
+    }
+  }
   return ids.size ? { ...list, data: list.data.filter((t) => ids.has(t.id)) } : list;
 }
 

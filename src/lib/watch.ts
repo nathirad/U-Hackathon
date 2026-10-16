@@ -25,7 +25,7 @@ export function intervalMin(): number {
 }
 
 /** One pass over every user who has alert rules. */
-export async function runWatch(): Promise<{ users: number; checked: number; fired: number }> {
+export async function runWatch(trigger: "timer" | "cron" | "manual" = "timer"): Promise<{ users: number; checked: number; fired: number }> {
   if (state.running) return { users: 0, checked: 0, fired: 0 };
   state.running = true;
   try {
@@ -33,9 +33,9 @@ export async function runWatch(): Promise<{ users: number; checked: number; fire
     let checked = 0;
     let fired = 0;
     for (const u of users) {
-      const out = await runAlerts(u, now());
-      checked += out.length;
-      fired += out.filter((o) => o.fired).length;
+      const { outcomes, summary } = await runAlerts(u, now(), trigger);
+      checked += outcomes.length;
+      fired += summary.fired.length;
     }
     state.lastRun = new Date().toISOString();
     state.lastChecked = checked;

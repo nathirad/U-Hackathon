@@ -1,6 +1,6 @@
 # แผนงานที่เหลือ: สิ่งที่ยังไม่ได้ทำ · ยังขาด · ยังไม่ได้รับ
 
-> อัปเดต 16 ต.ค. 2026 ~02:10 น. (เวลาไทย) · **demo บ่ายวันนี้**
+> อัปเดต 16 ต.ค. 2026 ~07:30 น. (เวลาไทย) · **demo บ่ายวันนี้**
 > สิ่งที่ทำแล้วดู [STATUS.md](STATUS.md) · ประวัติการทำงานดู [LOGS.md](LOGS.md)
 > ระดับความด่วน: 🔴 ต้องทำก่อน demo · 🟠 ควรทำถ้ามีเวลา · ⚪ หลัง hackathon
 > ผู้รับผิดชอบ: **คุณ** (เจ้าของ repo/ทีม) · **Claude** · **mentor/sponsor**
@@ -10,7 +10,7 @@
 
 ## 0. สรุป 1 นาที
 
-1. ✅ **Done:** PR #1 was merged into `main` (16 Oct 02:00). Demo prep continues on `feat/demo-script-mcp-standin`.
+1. ✅ **Done:** PR #1, #2 and #3 are merged into `main`. The work ported from `wip/v2-freshness-drift-alerts` (drift, full alert engine, "as of HH:MM", Vercel cron) is on `feat/merge-app-ui-agentic`, already merged with the English `main` and translated, waiting for its PR to be merged ([compare](https://github.com/nathirad/U-Hackathon/compare/main...feat/merge-app-ui-agentic)). Don't merge `wip/v2-freshness-drift-alerts` itself: everything in it is now in this branch.
 2. **ยังไม่มี key จริงสักตัว:** Claude, ElevenLabs, Fuji wallet ยังเป็นตัวสำรอง/จำลอง · Tokenomist มี key แล้วแต่เครือข่ายของ session บล็อก
 3. **ยังไม่ได้ขึ้น host:** Vercel connector มีสิทธิ์แค่อ่าน
 4. **บท demo บนเวทีใน SPEC §13 ยังเป็นแบบเก่า** (ใช้ `/app` กรอบโทรศัพท์) ต้องเขียนใหม่ให้มีหน้าเทรด/ลงทุน/แจ้งเตือน
@@ -25,10 +25,10 @@
 | 1 | **Merge PR เข้า `main`** ([ลิงก์](https://github.com/nathirad/U-Hackathon/pull/new/feat/merge-app-ui-agentic)) | ให้ทุกคนดึงโค้ดล่าสุดได้ | `main` ว่าง · ระบบสิทธิ์ของ Claude บล็อกการ push เข้า `main` | คุณ | 🔴 | ✅ merged 16 Oct
 | 2 | `ANTHROPIC_API_KEY` | ให้ U-Bot ตอบด้วย Claude จริง | ตอบด้วย rules engine (ตอบได้ แต่ภาษาแข็งและตอบนอกแบบไม่ได้) | คุณ | 🔴 |
 | 3 | Tokenomist snapshot | ข้อมูล unlock จริงของ ARB/WLD/AVAX | ARB = คัดลอกจากเว็บ 15 ต.ค. · WLD/AVAX = ข้อมูลตัวอย่าง · key มีแล้ว แต่ session นี้เรียก `api.tokenomist.ai` ไม่ได้ | คุณ: รัน `npm run snapshot -- ARB WLD AVAX` บนเครื่อง หรือเพิ่ม `api.tokenomist.ai` ใน Allowed domains ของ environment | 🔴 | ✅ done 16 Oct 02:45 via the API, incl. daily emission (WLD/AVAX continuous releases)
-| 4 | `ELEVENLABS_API_KEY` + `ELEVENLABS_VOICE_ID` (เสียงไทย) | เสียงอ่าน + พูดถาม (STT) | ใช้เสียงของเบราว์เซอร์แทน · ยังไม่เคยทดสอบไมค์จริง | คุณ | 🔴 |
+| 4 | `ELEVENLABS_API_KEY` + `ELEVENLABS_VOICE_ID` (เสียงไทย) | เสียงอ่าน + พูดถาม (STT) + Voice mode แบบ hands-free (ทำแล้ว รอ key) | ใช้เสียงของเบราว์เซอร์แทน · ยังไม่เคยทดสอบไมค์จริง | คุณ | 🔴 |
 | 5 | `DEMO_PRIVATE_KEY` (Fuji testnet เท่านั้น) + AVAX จาก faucet | หลักฐานการอนุมัติบน Avalanche จริง | หลักฐานเป็น "จำลอง" กรรมการกดดู tx ไม่ได้ | คุณ | 🔴 |
 | 6 | `AUTH_SECRET`, `MCP_API_KEY`, `UBOT_API_KEY`, `CRON_SECRET` | ค่าลับสำหรับ production | `npm start` ไม่ขึ้นถ้าไม่มี `AUTH_SECRET` · webhook/MCP ปิดใน production ถ้าไม่มี key | คุณ (สุ่มเองได้ด้วย `openssl rand -base64 32`) | 🔴 |
-| 7 | ตัดสินใจที่รัน demo + host | เปิดให้กรรมการ/ทีมดู | ยังไม่มี URL สาธารณะ · Vercel connector สร้าง project ไม่ได้ (403) | คุณ: เลือก "รันบน laptop" หรือ "import repo ที่ vercel.com" | 🔴 |
+| 7 | ตัดสินใจที่รัน demo + host (connector ของ Claude สร้าง project ไม่ได้ 403 · ต้องสร้างเองใน dashboard) | เปิดให้กรรมการ/ทีมดู | ยังไม่มี URL สาธารณะ · Vercel connector สร้าง project ไม่ได้ (403) | คุณ: เลือก "รันบน laptop" หรือ "import repo ที่ vercel.com" | 🔴 |
 | 8 | Spec / API ของ U-Bot ตัวจริง (`u.bot`) | เชื่อม U-Bot จริง (ส่งแจ้งเตือน, รับพอร์ตผู้ใช้, VIC approval) | ใช้ U-Bot จำลองในแอป + webhook adapter + MCP ที่รอเชื่อม | mentor (U-topia, Maya Nicks) | 🟠 |
 | 9 | ไฟล์โลโก้ Tokenomist (SVG/PNG) | แถบ "ข้อมูลและเทคโนโลยีที่ใช้" เป็นโลโก้ครบ | แสดงเป็นตัวอักษร "Tokenomist" | คุณ / บูธ Tokenomist | 🟠 |
 | 10 | คำตอบ mentor (SPEC §15) | ความถูกต้องของ pitch | ดูข้อ 10.1–10.5 ด้านล่าง | mentor | 🟠 |
@@ -80,7 +80,7 @@
 ### 3.1 เทรด (`/terminal/trade`, แผงเทรดบนหน้าเหรียญ)
 | งาน | สถานะตอนนี้ | ด่วน |
 |---|---|---|
-| ส่งคำสั่งจริง (U-topia swap ผ่าน U-Bot / โบรกเกอร์ที่มีใบอนุญาต) | คำสั่งจำลอง (paper) | ⚪ |
+| ส่งคำสั่งจริง (U-topia swap ผ่าน U-Bot / โบรกเกอร์ที่มีใบอนุญาต) | คำสั่งจำลอง (paper) · ส่งต่อ Alpaca **paper** ได้แล้วหลังผู้ใช้อนุมัติ (`BROKER=alpaca-paper`) · เงินจริงต้องผ่านพาร์ทเนอร์ที่มีใบอนุญาต ก.ล.ต. | ⚪ |
 | ราคาสด | ใช้ราคาใน fixture · `MARKET_SOURCE=live` (CoinGecko) ยังไม่ได้ทดสอบเพราะเครือข่าย session บล็อก | 🟠 |
 | Limit order ที่รอราคาจริง + ยกเลิกคำสั่ง | ตอนนี้ถือว่าได้ราคา limit ทันที | 🟠 |
 | เฝ้าจุดตัดขาดทุน/เป้าของคำสั่งจำลอง แล้วแจ้งเตือน | ยังไม่มี | ⚪ |
@@ -95,7 +95,7 @@
 | ข้อมูลกองทุน/หุ้นจริง (NAV, ค่าธรรมเนียม, factsheet) | ข้อมูลตัวอย่าง ชื่อกองทุนเป็นตัวอย่าง | ⚪ |
 | พอร์ตตัวอย่างผ่านการตรวจของผู้มีใบอนุญาต | ยังไม่ผ่าน (ติดป้าย "เพื่อการศึกษา") | ⚪ |
 | เก็บผลแบบประเมินต่อผู้ใช้ + ให้ทำใหม่ทุกปี | ยังไม่เก็บ | ⚪ |
-| ติดตามพอร์ตเทียบแผนที่อนุมัติ (drift) + เสนอ rebalance | ยังไม่มี | 🟠 |
+| ติดตามพอร์ตเทียบเป้าสัดส่วน (drift) | ✅ ทำแล้วในหน้าพอร์ต (ตั้งเป้าเอง) · ยังไม่ผูกกับแผนลงทุนที่อนุมัติ และไม่เสนอ rebalance (ตั้งใจ: ไม่แนะนำซื้อขาย) | ⚪ |
 | DCA ตัดเงินจริงตามวัน | ยังไม่มี (แสดงแค่ตาราง 3 งวด) | ⚪ |
 | หน้า "ตลาด" แท็บ คริปโต / หุ้นไทย / หุ้น US / กองทุน | ยังไม่ได้ทำ (มีแค่ screener คริปโต) | 🟠 |
 
@@ -106,18 +106,20 @@
 | แบ่งโมเดลตามงาน (Opus วิเคราะห์ · Sonnet แชต · Haiku คัดข่าว) | ใช้ provider เดียวทุกงาน | 🟠 |
 | ข่าวล่าสุดด้วย Claude web search | ใช้ GDELT / snapshot | ⚪ |
 | Pipeline รายงานประจำปี + เทรนด์โลก (Files API, Batches, Haiku ดึงตัวเลขพร้อมเลขหน้า) | ออกแบบไว้ใน STATUS.md §7 ยังไม่ได้สร้าง | ⚪ |
-| MCP tools สำหรับเทรด/ลงทุน/แจ้งเตือน | MCP มี 11 tools เดิม ยังไม่มี tool ใหม่ | 🟠 |
-| Eval สำหรับเทรด/ลงทุน/แจ้งเตือน | eval 28 เคสครอบคลุมแค่ agent | 🟠 |
+| MCP tools สำหรับเทรด/ลงทุน/แจ้งเตือน | ✅ 18 tools: `draft_trade_plan`, `get_paper_trading`, `get_invest_options`, `draft_invest_plan`, `list_alerts`, `create_alert_rule` · ร่างอย่างเดียว ผู้ใช้อนุมัติในแอป | – |
+| Eval สำหรับเทรด/ลงทุน/แจ้งเตือน | ✅ eval 55 เคส (เทรด 5 · ลงทุน 5 · แจ้งเตือน 7 · MCP ใหม่ 6) | – |
 | GraphRAG-lite (เหรียญที่มีนักลงทุนร่วมกัน) · morning brief | ยังไม่มี | ⚪ |
 
 ### 3.4 การเฝ้าดูและแจ้งเตือน
 | งาน | สถานะตอนนี้ | ด่วน |
 |---|---|---|
 | เฝ้า unlock ตามกฎ (ทุก 10 นาที) | ✅ ทำแล้ว | – |
-| **ถ้า deploy Vercel:** Vercel Cron เรียกด้วย GET แต่ `/api/watch` รันรอบเฉพาะ POST → ต้องให้ GET + `CRON_SECRET` รันได้ และเพิ่ม `vercel.json` (crons) · แพ็กเกจ Hobby ตั้ง cron ได้วันละครั้ง | ยังไม่ได้แก้ | 🟠 (เฉพาะ Vercel) |
-| เฝ้าข่าวและเหตุการณ์มหภาค (FOMC, กนง.) แล้วเตือนเมื่อกระทบเหรียญในพอร์ต | ตอบได้เมื่อถาม แต่ยังไม่เตือนเอง | ⚪ |
+| Vercel Cron (GET + `CRON_SECRET`, `vercel.json`) | ✅ ทำแล้ว · แพ็กเกจ Hobby ตั้ง cron ได้วันละครั้ง (ตั้งไว้ 08:00 น.) | – |
+| เฝ้าพอร์ตเบี้ยวจากเป้า + ข่าวลบของเหรียญในพอร์ต | ✅ ทำแล้ว · ข่าวสำคัญต้องมี 2 แหล่งยืนยันก่อนเตือน | – |
+| ช่วงเวลาเงียบ 22:00–07:00 + จำกัดจำนวนต่อวัน + ไม่แจ้งซ้ำ + ประวัติ | ✅ ทำแล้ว | – |
+| เฝ้าเหตุการณ์มหภาค (FOMC, กนง.) แล้วเตือนเอง | ตอบได้เมื่อถาม แต่ยังไม่เตือนเอง | ⚪ |
 | ส่งทาง LINE / Telegram จริง | ตัวเลือกมีในหน้า แต่ส่งเข้า U-Bot ในแอปแทน | ⚪ |
-| Quiet hours, จำกัดจำนวนต่อวัน, สรุปรวมรายวัน | มีแค่ cooldown 12 ชม. | ⚪ |
+| สรุปรวมรายวัน (morning brief) | ยังไม่มี | ⚪ |
 
 ### 3.5 แอปและประสบการณ์ใช้งาน
 | งาน | สถานะตอนนี้ | ด่วน |
@@ -135,7 +137,7 @@
 |---|---|---|
 | Tokenomist จริง: ARB/WLD/AVAX | ARB snapshot 15 ต.ค. · WLD/AVAX ตัวอย่าง · หลัง snapshot ต้อง map ช่อง linear unlock ของ WLD และแก้วันที่ AVAX (SPEC §17.6) | 🔴 | ✅ real data; WLD/AVAX linear releases come from daily emission
 | ราคา/ข่าว/odds สด | โค้ดรองรับแล้ว (`MARKET_SOURCE`, `NEWS_SOURCE`, `ODDS_SOURCE=live`) แต่ยังไม่ได้ทดสอบ | 🟠 |
-| "ณ HH:MM" ทุกตัวเลข + ป้ายข้อมูลเก่า | มีป้าย จริง/ตัวอย่าง + วันที่ แต่ยังไม่ครบทุกตัวเลข | 🟠 |
+| "as of HH:MM" ทุกตัวเลข + ป้ายข้อมูลเก่า | ✅ การ์ด, หน้าเหรียญ, แผนเทรด, พอร์ต, ผล tool · ใช้ข้อมูลชุดล่าสุดที่ดึงสำเร็จเมื่อแหล่งล่ม (ติดป้าย "(may be out of date)"; ตอบไทยใช้ "ณ HH:MM" / "อาจไม่ล่าสุด") | – |
 | คะแนนความเสี่ยง v0.2 ยังไม่ backtest | – | ⚪ |
 | กระเป๋าจริงของผู้ใช้ | ทุกคนใช้ demo wallet เดียวกัน (AVAX อ่านจริงได้ถ้าตั้ง `WALLET_ADDRESS`) | ⚪ |
 

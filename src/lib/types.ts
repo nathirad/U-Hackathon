@@ -11,6 +11,8 @@ export interface Sourced<T> {
   source: DataSource;
   asOf: string;
   warning?: string;
+  /** true when a live source failed and this is the last good copy, not fresh data */
+  stale?: boolean;
 }
 
 export interface SourceRef {
@@ -54,7 +56,7 @@ export interface RiskCard {
   plain: string; // beginner explanation
   factors: { time: number; size: number; liquidity: number; recipient: number; investorBonus: number };
   tradeAmountThb?: number;
-  source: { provider: "Tokenomist"; mode: DataSource; asOf: string };
+  source: { provider: "Tokenomist"; mode: DataSource; asOf: string; stale?: boolean };
 }
 
 export type ProtectionAction = "price_alert" | "reduce_exposure" | "pause_buying";
@@ -170,6 +172,7 @@ export interface DriftReport {
   weightedDilutionPct: number;
   concentration: { symbol: string; weightPct: number } | null;
   lines: string[]; // up to 3 plain-language lines, deterministic
+  pricesAsOf: string | null; // oldest price behind the weights, for "prices as of …"
 }
 
 export interface AgentResult {
@@ -190,6 +193,8 @@ export interface AgentResult {
   model: string | null;
   compliance: ComplianceReport;
   note?: string; // e.g. why we fell back to the rules engine
+  /** Where the user acts on this message, e.g. a plan U-Bot drafted over MCP. */
+  links?: { label: string; href: string }[];
   usage?: { inputTokens: number; outputTokens: number };
   ms: number;
   now: string; // the agent's clock (DEMO_NOW when set), ISO
@@ -208,6 +213,7 @@ export interface Holding {
   valueUsd: number;
   valueThb: number;
   source: DataSource;
+  asOf?: string; // when the price was observed
 }
 
 export interface ProtectionReceipt {
@@ -267,8 +273,12 @@ export interface TradePlan {
   card: RiskCard | null;
   agent: { reply: string; engine: string; trace: TraceStep[] } | null;
   priceSource: DataSource;
+  priceAsOf: string;
+  priceStale: boolean;
   createdAt: string;
   status: "pending" | "approved" | "declined";
+  /** Drafted on the app's own page, or by U-Bot over MCP (still approved only in the app). */
+  origin?: "app" | "mcp";
 }
 
 export interface PaperOrder {
@@ -283,6 +293,16 @@ export interface PaperOrder {
   stopPriceUsd: number;
   at: string;
   receipt: ProtectionReceipt;
+  /** Set when BROKER=alpaca-paper: what the paper broker did with the approved order. */
+  broker?: BrokerFill;
+}
+
+export interface BrokerFill {
+  venue: "alpaca-paper";
+  ok: boolean;
+  orderId?: string;
+  status?: string;
+  note: string;
 }
 
 // ─── Invest plans (model portfolios the user adjusts and approves) ───
@@ -311,6 +331,7 @@ export interface InvestPlan {
   profile: InvestProfile;
   profileName: string;
   score: number; // 5..20 from the five answers
+  answers?: number[]; // the five answers, so the page can recalculate a plan U-Bot drafted
   lumpSumThb: number;
   monthlyThb: number;
   dcaDay: number;
@@ -324,5 +345,7 @@ export interface InvestPlan {
   source: DataSource;
   createdAt: string;
   status: "pending" | "approved" | "declined";
+  origin?: "app" | "mcp";
   receipt?: ProtectionReceipt;
 }
+

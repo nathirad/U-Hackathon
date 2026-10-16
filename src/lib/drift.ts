@@ -146,5 +146,7 @@ export async function checkDrift(
     weightedDilutionPct,
     concentration: top ? { symbol: top.symbol, weightPct: top.weightPct } : null,
     lines: lines.slice(0, 3),
+    // The oldest price behind these weights, for "prices as of …".
+    pricesAsOf: rows.map((r) => r.asOf).filter((x): x is string => Boolean(x)).sort()[0] ?? null,
   };
 }

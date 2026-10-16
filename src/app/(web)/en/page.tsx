@@ -189,7 +189,7 @@ export default async function Home() {
                 </span>
                 <div className="node">
                   <strong>MCP · /api/mcp</strong>
-                  <span>14 tools, one endpoint</span>
+                  <span>25 tools, one endpoint</span>
                 </div>
                 <span className="arrow" aria-hidden="true">
                   <Icon name="arrowRight" />

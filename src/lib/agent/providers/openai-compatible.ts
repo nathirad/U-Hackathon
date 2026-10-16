@@ -6,7 +6,7 @@
 import { config } from "../../config";
 import type { AnswerMode, ChatTurn } from "../../types";
 import { MODE_NOTE, SYSTEM_PROMPT_WITH_KNOWLEDGE } from "../prompt";
-import { TOOL_SPECS, executeTool, type RunContext } from "../tools";
+import { AGENT_TOOL_SPECS, executeTool, type RunContext } from "../tools";
 
 interface ToolCall {
   id: string;
@@ -28,7 +28,7 @@ interface Completion {
 }
 
 /** Strict-style schemas → portable ones: nullable unions become optional plain types. */
-function portable(schema: (typeof TOOL_SPECS)[number]["input_schema"]) {
+function portable(schema: (typeof AGENT_TOOL_SPECS)[number]["input_schema"]) {
   const properties: Record<string, unknown> = {};
   const required = [...schema.required];
   for (const [key, prop] of Object.entries(schema.properties)) {
@@ -44,7 +44,7 @@ function portable(schema: (typeof TOOL_SPECS)[number]["input_schema"]) {
   return { type: "object", properties, required };
 }
 
-const TOOLS = TOOL_SPECS.map((t) => ({
+const TOOLS = AGENT_TOOL_SPECS.map((t) => ({
   type: "function" as const,
   function: { name: t.name, description: t.description, parameters: portable(t.input_schema) },
 }));

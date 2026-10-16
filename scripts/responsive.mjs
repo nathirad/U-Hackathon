@@ -35,12 +35,13 @@ const PAGES = [
   { name: "th-invest", path: "/terminal/invest" },
   { name: "th-alerts", path: "/terminal/alerts" },
   { name: "th-unlocks", path: "/terminal/unlocks" },
-  // English app
+  { name: "th-tokens", path: "/terminal/tokens" },
+  { name: "th-news", path: "/terminal/news" },
+  { name: "th-plan", path: "/terminal/plan" },
+  // English app (/assistant and /dashboard now redirect into the terminal, covered above)
   { name: "landing", path: "/en" },
   { name: "login", path: "/login" },
   { name: "method", path: "/method" },
-  { name: "assistant", path: "/assistant", auth: true, ask: "I want to buy ARB with ฿5,000" },
-  { name: "dashboard", path: "/dashboard", auth: true },
   { name: "ubot-popup", path: "/en", popup: "Is ARB risky right now?" },
 ];
 

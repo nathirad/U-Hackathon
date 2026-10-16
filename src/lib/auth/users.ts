@@ -1,12 +1,14 @@
-// Email + password accounts in a small JSON file (data/runtime/users.json, git-ignored).
-// Good for localhost and a single server; replace with Postgres/Supabase for deployment
-// (serverless file systems are read-only or ephemeral; the store then stays in memory).
+// Email + password accounts. Locally they live in a small JSON file (data/runtime/users.json,
+// git-ignored). On serverless hosting the file system is read-only or wiped, so when the shared
+// store is on (Upstash on Vercel) accounts live in it instead and survive across functions and
+// restarts; the auth routes are wrapped with withStore. A real database is the next step.
 
 import { randomBytes, randomUUID, scrypt as scryptCb, timingSafeEqual, type ScryptOptions } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { config } from "../config";
 import { logEvent } from "../log";
+import { sharedStoreEnabled, store } from "../store";
 
 const scrypt = (pw: string, salt: Buffer, len: number, opts: ScryptOptions) =>
   new Promise<Buffer>((resolve, reject) => scryptCb(pw, salt, len, opts, (err, key) => (err ? reject(err) : resolve(key))));
@@ -30,6 +32,7 @@ const state = (g.__uguardUsers ??= { users: null, writing: Promise.resolve() });
 const file = () => path.join(process.cwd(), config.auth.dataDir, "users.json");
 
 async function load(): Promise<UserRecord[]> {
+  if (sharedStoreEnabled) return store.accounts;
   if (state.users) return state.users;
   try {
     state.users = (JSON.parse(await readFile(file(), "utf8")) as { users: UserRecord[] }).users ?? [];
@@ -40,6 +43,7 @@ async function load(): Promise<UserRecord[]> {
 }
 
 async function save(): Promise<void> {
+  if (sharedStoreEnabled) return; // withStore saves the snapshot after the route
   const users = state.users ?? [];
   state.writing = state.writing.then(async () => {
     try {

@@ -8,7 +8,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { config } from "../../config";
 import type { AnswerMode, ChatTurn } from "../../types";
 import { MODE_NOTE, SYSTEM_PROMPT_WITH_KNOWLEDGE } from "../prompt";
-import { TOOL_SPECS, executeTool, type RunContext } from "../tools";
+import { AGENT_TOOL_SPECS, executeTool, type RunContext } from "../tools";
 import type { LlmRun } from "./openai-compatible";
 
 // Models that accept server-side refusal fallbacks in the `"default"` form. Claude Haiku 5.5
@@ -26,6 +26,9 @@ function getClient(): Anthropic {
   return client;
 }
 
+/** The same client (direct or via the gateway), for the screenshot reader in lib/vision.ts. */
+export const anthropicClient = getClient;
+
 export function anthropicLabel(): string {
   return viaGateway ? "Claude · via Vercel AI Gateway" : "Claude";
 }
@@ -34,7 +37,7 @@ export function anthropicModel(): string {
   return viaGateway ? config.gateway.model : config.anthropic.model;
 }
 
-const TOOLS: Anthropic.Beta.BetaTool[] = TOOL_SPECS.map((t) => ({
+const TOOLS: Anthropic.Beta.BetaTool[] = AGENT_TOOL_SPECS.map((t) => ({
   name: t.name,
   description: t.description,
   input_schema: t.input_schema,

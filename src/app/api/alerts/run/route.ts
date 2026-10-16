@@ -19,8 +19,8 @@ async function handlePOST(req: Request) {
     if (!session) return jsonError(401, "Sign in to check your alerts.");
     const limit = rateLimit(`alerts-run:${session.sub}`, LIMITS.scan.max, LIMITS.scan.windowMs);
     if (!limit.ok) return tooMany(limit);
-    const outcomes = await runAlerts(session.sub, now());
-    return Response.json({ checked: outcomes.length, fired: outcomes.filter((o) => o.fired).length, outcomes });
+    const { outcomes, summary } = await runAlerts(session.sub, now(), "manual");
+    return Response.json({ checked: outcomes.length, fired: summary.fired.length, outcomes, skipped: summary.skipped, events: summary.fired });
   } catch (err) {
     await writeLog({ type: "error", route: "/api/alerts/run", message: (err as Error).message });
     return handleError(err);
