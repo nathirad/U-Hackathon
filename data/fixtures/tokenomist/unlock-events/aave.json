@@ -1,0 +1,11 @@
+{
+ "metadata": {
+  "queryDate": "2026-10-16T06:12:44.657Z",
+  "page": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "mode": "snapshot",
+  "note": "Saved from the Tokenomist API for the screener (2026-10-16 to 2026-12-15), used when the live API rate-limits."
+ },
+ "data": []
+}

@@ -1,0 +1,65 @@
+{
+ "metadata": {
+  "queryDate": "2026-10-16T06:12:09.562Z",
+  "page": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "total": 2,
+  "mode": "snapshot",
+  "note": "Saved from the Tokenomist API for the screener (2026-10-16 to 2026-12-15), used when the live API rate-limits."
+ },
+ "data": [
+  {
+   "unlockDate": "2026-11-06T00:00:00Z",
+   "tokenName": "Hyperliquid",
+   "tokenSymbol": "HYPE",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 9916667,
+    "cliffValue": 801762526.9499999,
+    "valueToMarketCap": 4.4002704795084115,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-11-06T00:00:00Z",
+      "allocationName": "Core Contributors",
+      "standardAllocationName": "Founder / Team",
+      "cliffAmount": 9916667,
+      "cliffValue": 801762526.9499999,
+      "referencePrice": 80.85,
+      "referencePriceUpdatedTime": "2026-11-06T00:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-15T12:18:36Z"
+  },
+  {
+   "unlockDate": "2026-12-06T00:00:00Z",
+   "tokenName": "Hyperliquid",
+   "tokenSymbol": "HYPE",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 9916667,
+    "cliffValue": 801762526.9499999,
+    "valueToMarketCap": 4.4002704795084115,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-12-06T00:00:00Z",
+      "allocationName": "Core Contributors",
+      "standardAllocationName": "Founder / Team",
+      "cliffAmount": 9916667,
+      "cliffValue": 801762526.9499999,
+      "referencePrice": 80.85,
+      "referencePriceUpdatedTime": "2026-12-06T00:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-15T12:18:36Z"
+  }
+ ]
+}

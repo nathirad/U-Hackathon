@@ -1,0 +1,65 @@
+{
+ "metadata": {
+  "queryDate": "2026-10-16T06:12:39.551Z",
+  "page": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "total": 2,
+  "mode": "snapshot",
+  "note": "Saved from the Tokenomist API for the screener (2026-10-16 to 2026-12-15), used when the live API rate-limits."
+ },
+ "data": [
+  {
+   "unlockDate": "2026-10-17T01:03:57Z",
+   "tokenName": "Cronos",
+   "tokenSymbol": "CRO",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 1166666666.6666667,
+    "cliffValue": 68145000,
+    "valueToMarketCap": 2.3716483803835193,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-10-17T01:03:57Z",
+      "allocationName": "Cronos Strategic Reserve",
+      "standardAllocationName": "Reserve",
+      "cliffAmount": 1166666666.6666667,
+      "cliffValue": 68145000,
+      "referencePrice": 0.05841,
+      "referencePriceUpdatedTime": "2026-10-17T01:03:57Z",
+      "unlockPrecision": "second",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-08T11:09:56Z"
+  },
+  {
+   "unlockDate": "2026-11-16T11:03:57Z",
+   "tokenName": "Cronos",
+   "tokenSymbol": "CRO",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 1166666666.6666667,
+    "cliffValue": 68145000,
+    "valueToMarketCap": 2.3716483803835193,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-11-16T11:03:57Z",
+      "allocationName": "Cronos Strategic Reserve",
+      "standardAllocationName": "Reserve",
+      "cliffAmount": 1166666666.6666667,
+      "cliffValue": 68145000,
+      "referencePrice": 0.05841,
+      "referencePriceUpdatedTime": "2026-11-16T11:03:57Z",
+      "unlockPrecision": "second",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-08T11:09:56Z"
+  }
+ ]
+}

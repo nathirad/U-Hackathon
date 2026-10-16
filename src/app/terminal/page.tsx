@@ -9,6 +9,7 @@ import { LEVEL_LABEL, thb, shortDate, unlockWhen, usd, compact } from "@/lib/for
 import type { ScreenRow } from "@/lib/screener";
 import type { NewsItem, RiskCard } from "@/lib/types";
 import { TokenLogo } from "@/components/TokenLogo";
+import { Countdown } from "@/components/Countdown";
 
 const PROMPTS = [
   "Is buying 5,000 THB of ARB risky right now?",
@@ -163,7 +164,7 @@ export default function TerminalHome() {
             <Link key={r.id} href={`/terminal/tokens/${r.symbol}`} className="event-row today-unlock" style={{ textDecoration: "none", color: "inherit" }}>
               <span className="event-date">
                 <b>{r.nextUnlock!.daysUntil <= 0 ? "Today" : shortDate(r.nextUnlock!.date)}</b>
-                {r.nextUnlock!.daysUntil <= 0 ? "today" : `in ${r.nextUnlock!.daysUntil} d`}
+                {r.nextUnlock!.daysUntil <= 7 ? <Countdown to={r.nextUnlock!.date} /> : `in ${r.nextUnlock!.daysUntil} d`}
               </span>
               <span className="tok">
                 <TokenLogo symbol={r.symbol} src={r.image} size={20} />

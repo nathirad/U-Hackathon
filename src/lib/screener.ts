@@ -12,7 +12,7 @@ import { getCliffEvents, listTokens, trackedTokens } from "./tokenomist";
 import type { DataSource, RecipientClass, RiskLevel } from "./types";
 
 export const WINDOW_DAYS = 60;
-const LIMIT = 40;
+const LIMIT = 30;
 
 export interface ScreenRow {
   rank: number;

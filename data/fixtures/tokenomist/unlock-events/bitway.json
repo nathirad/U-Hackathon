@@ -1,0 +1,87 @@
+{
+ "metadata": {
+  "queryDate": "2026-10-16T06:12:35.754Z",
+  "page": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "total": 2,
+  "mode": "snapshot",
+  "note": "Saved from the Tokenomist API for the screener (2026-10-16 to 2026-12-15), used when the live API rate-limits."
+ },
+ "data": [
+  {
+   "unlockDate": "2026-11-02T08:00:00Z",
+   "tokenName": "Bitway",
+   "tokenSymbol": "BTW",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 101628455.6,
+    "cliffValue": 206305764.86799997,
+    "valueToMarketCap": 6.738071128118939,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-11-02T08:00:00Z",
+      "allocationName": "Community",
+      "standardAllocationName": "Community",
+      "cliffAmount": 60165041,
+      "cliffValue": 122135033.22999999,
+      "referencePrice": 2.03,
+      "referencePriceUpdatedTime": "2026-11-02T08:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     },
+     {
+      "unlockDate": "2026-11-02T08:00:00Z",
+      "allocationName": "Ecosystem",
+      "standardAllocationName": "Community",
+      "cliffAmount": 41463414.6,
+      "cliffValue": 84170731.638,
+      "referencePrice": 2.03,
+      "referencePriceUpdatedTime": "2026-11-02T08:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-06T08:35:43Z"
+  },
+  {
+   "unlockDate": "2026-12-02T08:00:00Z",
+   "tokenName": "Bitway",
+   "tokenSymbol": "BTW",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 101628455.6,
+    "cliffValue": 206305764.86799997,
+    "valueToMarketCap": 6.738071128118939,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-12-02T08:00:00Z",
+      "allocationName": "Community",
+      "standardAllocationName": "Community",
+      "cliffAmount": 60165041,
+      "cliffValue": 122135033.22999999,
+      "referencePrice": 2.03,
+      "referencePriceUpdatedTime": "2026-12-02T08:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     },
+     {
+      "unlockDate": "2026-12-02T08:00:00Z",
+      "allocationName": "Ecosystem",
+      "standardAllocationName": "Community",
+      "cliffAmount": 41463414.6,
+      "cliffValue": 84170731.638,
+      "referencePrice": 2.03,
+      "referencePriceUpdatedTime": "2026-12-02T08:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-06T08:35:43Z"
+  }
+ ]
+}

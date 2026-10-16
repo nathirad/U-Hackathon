@@ -17,6 +17,8 @@ const nextConfig = {
   devIndicators: { position: "bottom-right" },
   // Pin the project root so a lockfile higher up the disk isn't picked as the workspace root.
   outputFileTracingRoot: dirname(fileURLToPath(import.meta.url)),
+  // Fixtures are read with fs at runtime (dynamic paths), so bundle them into every server function.
+  outputFileTracingIncludes: { "/**": ["./data/**/*"], "/**/*": ["./data/**/*"] },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
