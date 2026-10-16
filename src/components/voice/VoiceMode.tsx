@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { speakable, speakAloud, stopSpeaking } from "../chat/speak";
+import { primeAudio, speakable, speakAloud, stopSpeaking } from "../chat/speak";
 import { Icon } from "../Icon";
 import { BRANDS, BrandLogo } from "../logos";
 import type { ChatMessage } from "../useAgentChat";
@@ -23,6 +23,7 @@ export function VoiceMode({
   messages,
   busy,
   error,
+  startPaused = false,
 }: {
   onClose: () => void;
   /** Sends a question to the agent (the same path as typing it). */
@@ -30,8 +31,10 @@ export function VoiceMode({
   messages: ChatMessage[];
   busy: boolean;
   error: string | null;
+  /** Open waiting for a tap on the orb (the voice page): the tap lets the browser play U-Bot's voice. */
+  startPaused?: boolean;
 }) {
-  const [phase, setPhase] = useState<Phase>("listening");
+  const [phase, setPhase] = useState<Phase>(startPaused ? "paused" : "listening");
   const [muted, setMuted] = useState(false);
   const [heard, setHeard] = useState("");
   const [reply, setReply] = useState("");
@@ -40,7 +43,7 @@ export function VoiceMode({
   const [voice, setVoice] = useState<"elevenlabs" | "browser" | null>(null);
 
   const orb = useRef<HTMLButtonElement | null>(null);
-  const phaseRef = useRef<Phase>("listening");
+  const phaseRef = useRef<Phase>(startPaused ? "paused" : "listening");
   const mutedRef = useRef(false);
   const level = useRef({ value: 0, at: 0 });
   const listening = useRef<AbortController | null>(null);
@@ -99,7 +102,7 @@ export function VoiceMode({
   useEffect(() => {
     answered.current = lastId.current;
     listenEngine().then(setEars);
-    void listen();
+    if (!startPaused) void listen();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
@@ -167,6 +170,7 @@ export function VoiceMode({
       stopSpeaking();
       void listen();
     } else if (phase === "paused") {
+      primeAudio(); // inside the tap, so U-Bot's voice can play and be measured
       setMuted(false);
       mutedRef.current = false;
       quietRuns.current = 0;
@@ -196,7 +200,9 @@ export function VoiceMode({
           ? "Tap the orb to interrupt"
           : problem
             ? "Paused"
-            : "Paused · tap the orb to talk";
+            : heard
+              ? "Paused · tap the orb to talk"
+              : "Tap the orb to start talking";
   const eleven = voice ? voice === "elevenlabs" : ears === "elevenlabs";
   const shown = reply.length > 260 ? `${reply.slice(0, 260).trimEnd()}…` : reply;
 

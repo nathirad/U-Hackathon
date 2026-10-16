@@ -177,7 +177,7 @@ export function Landing() {
             <Link href="/terminal" className="lp-btn lp-btn-primary">
               Open the app →
             </Link>
-            <Link href="/terminal/agent" className="lp-btn">
+            <Link href="/terminal/voice" className="lp-btn">
               Talk to U-Bot
             </Link>
           </div>
@@ -361,7 +361,7 @@ export function Landing() {
             <Link href="/terminal" className="lp-btn lp-btn-primary">
               Open the app →
             </Link>
-            <Link href="/terminal/agent" className="lp-btn">
+            <Link href="/terminal/voice" className="lp-btn">
               Talk to U-Bot
             </Link>
           </div>

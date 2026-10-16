@@ -1022,6 +1022,14 @@ td.drift-under { color: var(--amber); }
 .sched-recips i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 
 .voice-toggle { margin-left: auto; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.term-voice { display: inline-flex; align-items: center; gap: 6px; border-color: rgba(45, 212, 191, 0.45); color: var(--teal-2); }
+
+/* ─── Voice assistant page (app/terminal/voice) ─── */
+.voice-page { display: grid; gap: 18px; max-width: 880px; }
+.voice-page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.voice-page-head h1 { margin: 0 0 6px; font-size: 24px; }
+.voice-page-head p { margin: 0; max-width: 560px; }
+.voice-page-start { display: inline-flex; align-items: center; gap: 8px; }
 
 /* ─── Voice mode: full screen, an orb that moves with the voice (components/voice/VoiceMode.tsx) ─── */
 .vm {
