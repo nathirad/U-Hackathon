@@ -1090,3 +1090,6 @@ td.drift-under { color: var(--amber); }
 /* Screener: drop the secondary columns on narrower screens so the table fits without scrolling. */
 @media (max-width: 1320px) { .screen-table .col-opt { display: none; } }
 @media (max-width: 1100px) { .screen-table .col-opt2 { display: none; } }
+
+.countdown { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.countdown-soon { color: var(--coral); }

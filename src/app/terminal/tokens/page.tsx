@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Spotlight, RECIPIENT_LABEL } from "@/components/fx";
 import { DataBadge } from "@/components/DataBadge";
+import { Countdown } from "@/components/Countdown";
 import { TokenLogo } from "@/components/TokenLogo";
 import { LEVEL_LABEL, shortDate, usd } from "@/lib/format";
 import type { ScreenResult, ScreenRow } from "@/lib/screener";
@@ -208,7 +209,7 @@ export default function TokensPage() {
                     <span className="next-unlock">
                       <b>{shortDate(r.nextUnlock.date)}</b>
                       <small>
-                        {whenLabel(r.nextUnlock.daysUntil)}
+                        {r.nextUnlock.daysUntil <= 7 ? <Countdown to={r.nextUnlock.date} /> : whenLabel(r.nextUnlock.daysUntil)}
                         {r.nextUnlock.topRecipient ? ` · ${RECIPIENT_LABEL[r.nextUnlock.topRecipient]}` : ""}
                       </small>
                     </span>
