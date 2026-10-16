@@ -436,7 +436,7 @@ Built in a separate session without seeing `feat/app-ui`.
   - Checked in Chromium with a fake mic, Scribe and the voice mocked (no ElevenLabs from this sandbox), the agent answering for real: listening → thinking → speaking → listening; the orb followed the mic and the voice; mute pauses; Esc closes. Desktop and phone width.
 - **Tokenomist logo:** the "Data and technology we use" strip now shows Tokenomist's mark (redrawn as SVG from the team's file) next to its name. ElevenLabs already had its wordmark.
 
-### Oct 16, ~12:45 · Pages no longer wait 13 s for Tokenomist (branch `perf/page-speed`)
+### Oct 16, ~12:30 · Pages no longer wait 13 s for Tokenomist (branch `perf/page-speed`)
 - **Why pages were slow:** opening the app fires Today, Unlock calendar, News and the screener together. Each built the 40-token market screen on its own, so ~122 Tokenomist calls queued behind the rate limiter (4 at a time, 120 ms apart): **13–15 s per page** against a stand-in API with 300 ms latency. Then fast for 10 minutes, then slow again for whoever came next. On Vercel every new function starts empty, so it would be slow often.
 - **Fixes:**
   - `tokenomist.ts`: one request per key at a time (pages share it); an expired live copy is served at once and refreshed in the background; the cache is on `globalThis` so every route shares it.
