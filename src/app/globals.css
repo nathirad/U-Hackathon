@@ -624,21 +624,12 @@ body:has(.report-page) { background: #fff; color: #10151f; color-scheme: light; 
 .gm-ring { fill: none; stroke: var(--gm-color); stroke-width: 5; transition: stroke .5s ease; }
 .gm-ripple { fill: none; stroke: var(--gm-color); stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: gmRipple 1.2s ease-out forwards; }
 .gm-body { transform-box: fill-box; transform-origin: 50% 85%; }
-.gm-fill { fill: #2DD4BF; opacity: 0; animation: gmFade .45s .85s ease forwards; }
-.gm-outline {
-  fill: none; stroke: #5EEAD4; stroke-width: 2.5; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1;
-  animation: gmDraw 1s .05s cubic-bezier(.65,0,.35,1) forwards, gmFadeOut .4s 1.25s ease forwards;
-}
+.gm-logo { opacity: 0; animation: gmFade .5s .15s ease forwards; }
 .gm-face { transition: transform .5s cubic-bezier(.2,.8,.2,1); }
-.gm-eye { fill: #5EEAD4; transform-box: fill-box; transform-origin: center; animation: gmOpen .3s 1.2s both, gmBlink 5s 2.6s infinite; }
-.gm-smile { fill: none; stroke: #0B1426; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: gmDraw .4s 1.35s ease forwards; }
 .gm-up-a { animation: gmUpA .7s cubic-bezier(.3,1.6,.5,1); }
 .gm-up-b { animation: gmUpB .7s cubic-bezier(.3,1.6,.5,1); }
-@keyframes gmDraw { to { stroke-dashoffset: 0; } }
 @keyframes gmFade { to { opacity: 1; } }
 @keyframes gmFadeOut { to { opacity: 0; } }
-@keyframes gmOpen { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-@keyframes gmBlink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.12); } }
 @keyframes gmRipple { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.35); } }
 @keyframes gmUpA { 40% { transform: translateY(-5px) scale(1.04); } }
 @keyframes gmUpB { 40% { transform: translateY(-5px) scale(1.04); } }
@@ -727,9 +718,7 @@ body:has(.report-page) { background: #fff; color: #10151f; color-scheme: light; 
 }
 @media (prefers-reduced-motion: reduce) {
   .lp-marquee-track, .lp-rotate, .lp-loader { animation: none !important; }
-  .gm-fill { animation: none; opacity: 1; }
-  .gm-outline { animation: none; opacity: 0; }
-  .gm-eye, .gm-smile { animation: none; stroke-dashoffset: 0; }
+  .gm-logo { animation: none; opacity: 1; }
   .gm-ripple, .gm-up-a, .gm-up-b, .gw-live, .gw-card li, .gw-voice-on i, .gw-scan { animation: none !important; }
   .gm-face, .gw-track { transition: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
