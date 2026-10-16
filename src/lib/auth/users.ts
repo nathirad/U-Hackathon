@@ -29,7 +29,8 @@ export interface UserRecord {
 
 const g = globalThis as typeof globalThis & { __uguardUsers?: { users: UserRecord[] | null; writing: Promise<void> } };
 const state = (g.__uguardUsers ??= { users: null, writing: Promise.resolve() });
-const file = () => path.join(process.cwd(), config.auth.dataDir, "users.json");
+// path.resolve, not a process.cwd() join, so the file tracer doesn't copy the project (see log.ts).
+const file = () => path.resolve(config.auth.dataDir, "users.json");
 
 async function load(): Promise<UserRecord[]> {
   if (sharedStoreEnabled) return store.accounts;
