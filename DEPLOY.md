@@ -2,6 +2,8 @@
 
 U-Guard is a Next.js app that installs to a phone's home screen (web app manifest, icons, standalone window). One deploy gives you the website, the installable app and the MCP endpoint U-Bot calls.
 
+**Live:** https://u-hackathon-nine.vercel.app (Vercel project `u-hackathon`, production branch `main`). Checked 16 Oct, 22:14: every page in §3 loads, Tokenomist is live (651 tokens), `/api/mcp` is on and the U-Bot stand-in delivers to `demo-user`'s bell. Not done yet: Upstash (§1 step 4), so the inbox and approvals can still be lost between functions.
+
 Checked on `release/app-integration`: typecheck ✅ · evals 74/74 ✅ · `next build` ✅ · the data files (demo wallet, Tokenomist snapshots) are bundled into every server function (`outputFileTracingIncludes`).
 
 ---
@@ -10,11 +12,11 @@ Checked on `release/app-integration`: typecheck ✅ · evals 74/74 ✅ · `next 
 
 1. **vercel.com/new** → *Import Git Repository* → `nathirad/U-Hackathon`. Framework: Next.js (detected). Root: `./`.
 2. **Production branch:** `main` (Settings → Git).
-3. **Environment variables** (Settings → Environment Variables, all environments):
+3. **Environment variables** (Settings → Environment Variables, Production + Preview). Save the keys and secrets as **Sensitive**, then check each one shows in the list: a variable typed but not saved is the usual reason a redeploy still shows snapshots or `MCP is disabled`.
 
 | Variable | Value | Needed for |
 |---|---|---|
-| `AUTH_SECRET` | `openssl rand -base64 32` | **Required.** The app refuses to start in production without it |
+| `AUTH_SECRET` | `openssl rand -base64 32` | **Required.** Without it, demo login and every signed-in page fail in production |
 | `TOKENOMIST_API_KEY` | team key (from `.env`) | Live unlock data; without it, labelled snapshots |
 | `MCP_API_KEY` | from `.env` (the same value `npm run ubot` uses) | U-Bot over MCP; `/api/mcp` is off in production without it |
 | `MARKET_SOURCE` | `live` | Live prices (Hyperliquid + CoinGecko) |
@@ -28,7 +30,8 @@ Checked on `release/app-integration`: typecheck ✅ · evals 74/74 ✅ · `next 
 
 4. **Storage → Create → Upstash for Redis (free) → Connect to project.** This adds `KV_REST_API_URL` / `KV_REST_API_TOKEN`. On Vercel every route is its own function; with Redis connected, `withStore()` shares the U-Bot inbox, proposals, plans, alert rules and email accounts between them. Without it, pages work but approvals and the inbox can be lost between requests.
 5. **Deploy** (or *Redeploy* after changing variables; variables apply to new deployments only).
-6. Use the **Production** domain (`<project>.vercel.app`, Overview → Domains). Preview URLs sit behind Vercel login under the default Deployment Protection.
+6. Use the **Production** domain (Overview → Domains). Vercel gives `<project>.vercel.app` only when the name is free: ours is `u-hackathon-nine.vercel.app` because `u-hackathon.vercel.app` belongs to another team. The `…-nathirad.vercel.app` and preview URLs sit behind Vercel login under the default Deployment Protection, so don't share those.
+7. **Check:** `/api/status` shows `"tokenomist":{"keySet":true,"mode":"live"…}`, and `/api/mcp` answers `401 Invalid MCP token` to a request without a token (`503 MCP is disabled` means `MCP_API_KEY` didn't reach this deploy).
 
 ## 2 · Install it as an app
 
@@ -56,7 +59,7 @@ U-Bot over MCP against the hosted app (needs the same `MCP_API_KEY` locally):
 npm run ubot -- --auto --url https://<your-domain>/api/mcp
 ```
 
-Expect `u-guard 0.3.0`, 14 tools, ARB HIGH (live score), and "Delivered to demo-user's U-Bot inbox". The bell then shows the proposal (with `DEMO_SHARED=true` and Upstash connected).
+Expect `u-guard 0.4.0`, 25 tools, an ARB risk card marked "data: Tokenomist live" (HIGH before the 16 Oct unlock, MEDIUM 50/100 after it), and "Delivered to demo-user's U-Bot inbox". The bell then shows the proposal (with `DEMO_SHARED=true`; connect Upstash so it survives between functions).
 
 ## 4 · Known limits
 
