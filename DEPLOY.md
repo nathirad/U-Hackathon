@@ -47,6 +47,7 @@ Checked on `release/app-integration`: typecheck ✅ · evals 74/74 ✅ · `next 
 | `/terminal/portfolio` | Total value (not ฿0), drift card, 6-month unlock schedule |
 | `/terminal/plan` | Dated timeline, stress test, "Save plan as PDF" |
 | `/terminal/agent` | "Should I buy 5,000 THB of ARB now?" → trade check with options |
+| `/terminal/voice` | Voice assistant page: talk to U-Bot by voice (Thai or English) |
 | `/manifest.webmanifest` | JSON with name "U-Guard" |
 
 U-Bot over MCP against the hosted app (needs the same `MCP_API_KEY` locally):
