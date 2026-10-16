@@ -11,6 +11,13 @@ export interface ChatMessage {
   text: string;
   result?: AgentResult;
   push?: boolean;
+  screenshot?: {
+    previewUrl?: string;
+    kind: string;
+    claims: string[];
+    summary: string;
+    engine: string;
+  };
 }
 
 export interface LastRun {
@@ -98,11 +105,85 @@ export function useAgentChat() {
     }
   }, [busy, absorb]);
 
+  const checkScreenshot = useCallback(
+    async (file: File, typedSymbols?: string) => {
+      if (busy) return;
+      setBusy(true);
+      setError(null);
+      const previewUrl = URL.createObjectURL(file);
+      const userMsgId = crypto.randomUUID();
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: userMsgId,
+          role: "user",
+          text: typedSymbols ? `Screenshot: check ${typedSymbols}` : `Checking screenshot (${file.name})…`,
+          screenshot: { previewUrl, kind: "upload", claims: [], summary: file.name, engine: "" },
+        },
+      ]);
+      const t0 = performance.now();
+      try {
+        await ensureSession();
+        const form = new FormData();
+        form.append("image", file);
+        if (typedSymbols) form.append("symbols", typedSymbols);
+        const locale = navigator.language?.toLowerCase().startsWith("th") ? "th" : "en";
+        form.append("lang", locale);
+
+        const res = await fetch("/api/screenshot", {
+          method: "POST",
+          body: form,
+        });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error ?? "Failed to analyze screenshot.");
+
+        if (body.needsSymbols) {
+          const reason = body.visionError ? `(${body.visionError})` : "";
+          const tip =
+            locale === "th"
+              ? `อ่านภาพไม่พบสัญลักษณ์เหรียญ ${reason} พิมพ์ชื่อเหรียญ (เช่น ARB) เพื่อเช็กได้เลย`
+              : `No token ticker was found in the image ${reason}. Type the ticker below to check it.`;
+          setMessages((prev) => [
+            ...prev,
+            { id: crypto.randomUUID(), role: "bot", text: tip },
+          ]);
+          return;
+        }
+
+        const result = body.result as AgentResult;
+        absorb(result, Math.round(performance.now() - t0));
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            role: "bot",
+            text: result.reply,
+            result,
+            screenshot: body.read
+              ? {
+                  previewUrl,
+                  kind: body.read.kind,
+                  claims: body.read.claims,
+                  summary: body.read.summary,
+                  engine: body.read.engine,
+                }
+              : undefined,
+          },
+        ]);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setBusy(false);
+      }
+    },
+    [busy, absorb],
+  );
+
   /** The user message that led to bot message i (for the PDF report title). */
   const questionFor = useCallback(
     (i: number) => (messages[i - 1]?.role === "user" ? messages[i - 1].text : "Portfolio scan"),
     [messages],
   );
 
-  return { messages, busy, error, setError, levels, last, ask, scan, questionFor };
+  return { messages, busy, error, setError, levels, last, ask, scan, checkScreenshot, questionFor };
 }

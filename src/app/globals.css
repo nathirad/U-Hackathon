@@ -341,9 +341,104 @@ body:has(.report-page) { background: #fff; color: #10151f; color-scheme: light; 
 .kpi > span:where(:not(.ug-web *)) { display: block; font-size: 12px; color: var(--muted); }
 .kpi b:where(:not(.ug-web *)) { display: block; font-size: 22px; font-weight: 600; letter-spacing: -0.4px; margin-top: 2px; }
 .kpi small:where(:not(.ug-web *)) { font-size: 12px; color: var(--text-2); }
-.seg { display: inline-flex; gap: 2px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 3px; }
-.seg button { border: 0; background: transparent; color: var(--text-2); font-size: 13px; padding: 5px 12px; border-radius: 8px; }
+.seg {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.seg::-webkit-scrollbar { display: none; }
+.seg button {
+  border: 0;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: 34px;
+}
 .seg button[aria-pressed="true"] { background: var(--surface-3); color: var(--text); }
+
+/* ─── Data status badges (LIVE / CACHED / DEMO / STALE / UNAVAILABLE / ERROR) ─── */
+.data-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 2.5px 8.5px;
+  border-radius: 6px;
+  line-height: 1.35;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.data-badge .data-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+}
+.data-badge-live {
+  color: var(--teal);
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+}
+.data-badge-live .data-dot {
+  background: var(--teal);
+  box-shadow: 0 0 6px var(--teal);
+}
+.data-badge-cached {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+}
+.data-badge-cached .data-dot {
+  background: #60a5fa;
+}
+.data-badge-demo {
+  color: var(--amber);
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+.data-badge-demo .data-dot {
+  background: var(--amber);
+}
+.data-badge-stale {
+  color: #fb923c;
+  background: rgba(251, 146, 60, 0.12);
+  border: 1px solid rgba(251, 146, 60, 0.35);
+}
+.data-badge-stale .data-dot {
+  background: #fb923c;
+}
+.data-badge-unavailable {
+  color: var(--slate);
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+.data-badge-unavailable .data-dot {
+  background: var(--slate);
+}
+.data-badge-error {
+  color: var(--coral);
+  background: rgba(251, 113, 81, 0.12);
+  border: 1px solid rgba(251, 113, 81, 0.35);
+}
+.data-badge-error .data-dot {
+  background: var(--coral);
+}
+
 .table-wrap:where(:not(.ug-web *)) { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
 .table-scroll { overflow-x: auto; }
 .t-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 760px; }

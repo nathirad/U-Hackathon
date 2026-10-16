@@ -40,6 +40,7 @@ const PATHS = {
   search: "M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm9 3-4.35-4.35",
   collapse: "M4 4h16v16H4zM9 4v16M15 10l-2 2 2 2",
   arrow: "M5 12h14M13 6l6 6-6 6",
+  image: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z",
 } satisfies Record<string, string>;
 
 export type IconName = keyof typeof PATHS;

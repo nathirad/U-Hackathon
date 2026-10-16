@@ -26,6 +26,9 @@ function getClient(): Anthropic {
   return client;
 }
 
+/** The same client (direct or via the gateway), for the screenshot reader in lib/vision.ts. */
+export const anthropicClient = getClient;
+
 export function anthropicLabel(): string {
   return viaGateway ? "Claude · via Vercel AI Gateway" : "Claude";
 }

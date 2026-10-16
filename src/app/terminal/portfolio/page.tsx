@@ -10,6 +10,7 @@ import { LEVEL_LABEL, thb, unlockWhen } from "@/lib/format";
 import { asOfLabel } from "@/lib/freshness";
 import { openReport, type ReportResult } from "@/lib/report";
 import type { DriftReport, Holding, RiskCard } from "@/lib/types";
+import { DataBadge } from "@/components/DataBadge";
 
 interface Row extends Holding {
   weightPct: number;
@@ -95,7 +96,11 @@ export default function PortfolioPage() {
     <>
       <div className="page-title">
         <h1>My portfolio</h1>
-        <p>U-topia wallet (demo) · AVAX reads the real Avalanche balance when WALLET_ADDRESS is set{d.pricesAsOf ? ` · prices ${asOfLabel(d.pricesAsOf)}` : ""}</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
+          <DataBadge status="DEMO" tooltip="Demo wallet holdings for U-Hackathon 2026" />
+          {d.pricesAsOf && <DataBadge mode="snapshot" asOf={d.pricesAsOf} tooltip={`Prices ${asOfLabel(d.pricesAsOf)}`} />}
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>AVAX reads live on-chain balance when WALLET_ADDRESS is set</span>
+        </div>
         <span style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
           <Link className="btn btn-sm" href="/terminal/plan">
             Build my plan →

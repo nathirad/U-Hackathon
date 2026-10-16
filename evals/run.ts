@@ -948,6 +948,51 @@ async function main() {
         return ok ? true : JSON.stringify({ a, b, d });
       },
     },
+    // ── System Hardening & Data Contract ──
+    {
+      name: "Risk engine: deterministic bounds [0, 100], finite numbers, and valid factors across tokens",
+      run: async () => {
+        const tokens = ["ARB", "AVAX", "WLD"];
+        for (const sym of tokens) {
+          const res = await assessUnlockRisk(sym, 1000, { now: DEMO });
+          if (!res.ok) return `Failed for ${sym}: ${JSON.stringify(res)}`;
+          const { score, level, factors } = res.card;
+          if (typeof score !== "number" || !Number.isFinite(score) || score < 0 || score > 100) {
+            return `Score out of bounds for ${sym}: ${score}`;
+          }
+          if (!["low", "medium", "high", "none"].includes(level)) {
+            return `Invalid level for ${sym}: ${level}`;
+          }
+          if (factors.time < 0 || factors.size < 0 || factors.liquidity < 0 || factors.recipient < 0) {
+            return `Negative factor for ${sym}: ${JSON.stringify(factors)}`;
+          }
+        }
+        return true;
+      },
+    },
+    {
+      name: "Data contract: resolveDataStatus strictly preserves provenance and error truth",
+      run: () => {
+        const { resolveDataStatus } = require("../src/components/DataBadge");
+        const tests = [
+          { input: { error: true }, expected: "ERROR" },
+          { input: { stale: true }, expected: "STALE" },
+          { input: { mode: "live" }, expected: "LIVE" },
+          { input: { mode: "snapshot" }, expected: "CACHED" },
+          { input: { mode: "sample" }, expected: "DEMO" },
+          { input: { mode: "" }, expected: "UNAVAILABLE" },
+          { input: { status: "DEMO" }, expected: "DEMO" },
+          { input: { status: "CACHED" }, expected: "CACHED" },
+        ];
+        for (const t of tests) {
+          const actual = resolveDataStatus(t.input);
+          if (actual !== t.expected) {
+            return `Mismatch for input ${JSON.stringify(t.input)}: expected ${t.expected}, got ${actual}`;
+          }
+        }
+        return true;
+      },
+    },
   ];
 
   let failed = 0;

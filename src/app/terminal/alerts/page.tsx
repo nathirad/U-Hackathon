@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Spotlight } from "@/components/fx";
+import { DataBadge } from "@/components/DataBadge";
 import { INBOX_EVENT, InboxList, useInbox } from "@/components/UBotInbox";
 import type { Proposal } from "@/lib/types";
 
@@ -144,9 +145,17 @@ export default function AlertsPage() {
 
   return (
     <>
-      <div className="page-title">
-        <h1>Alerts</h1>
-        <p>U-Guard only speaks up when it matters · delivered through U-Bot (Telegram / LINE on the roadmap)</p>
+      <div className="page-title" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+        <div>
+          <h1>Alerts</h1>
+          <p>U-Guard only speaks up when it matters · delivered through U-Bot (Telegram / LINE on the roadmap)</p>
+        </div>
+        <DataBadge
+          status={watch?.enabled ? "LIVE" : "DEMO"}
+          source={watch?.enabled ? "U-Guard Sentinel" : "Watch Engine"}
+          date={watch?.lastRun ?? undefined}
+          label="Daemon"
+        />
       </div>
       <div className="grid-2">
         <Spotlight className="panel">

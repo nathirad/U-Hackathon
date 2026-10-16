@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { DriftCardView, ProposalCardView, StressCardView } from "@/components/Cards";
 import { Spotlight } from "@/components/fx";
+import { DataBadge } from "@/components/DataBadge";
 import { LEVEL_LABEL, shortDate } from "@/lib/format";
 import type { MyPlan, PlanItem } from "@/lib/plan";
 import { openReport } from "@/lib/report";
@@ -80,17 +81,20 @@ export default function PlanPage() {
 
   return (
     <>
-      <div className="page-title">
-        <h1>My plan · next {plan.horizonDays} days</h1>
-        <p>Every date that can move your money, what U-Guard found, and what you can do · built from live data</p>
-        <span style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+      <div className="page-title" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+        <div>
+          <h1>My plan · next {plan.horizonDays} days</h1>
+          <p>Every date that can move your money, what U-Guard found, and what you can do · built from live data</p>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <DataBadge status="LIVE" source="U-Guard Engine" date={plan.generatedAt} label="Horizon" />
           <Link className="btn btn-sm" href={`/terminal/agent?q=${encodeURIComponent("Explain my plan for the next 30 days")}`}>
             Ask U-Bot to explain
           </Link>
           <button className="btn btn-sm btn-primary" onClick={savePdf}>
             Save plan as PDF
           </button>
-        </span>
+        </div>
       </div>
 
       <div className="kpis">

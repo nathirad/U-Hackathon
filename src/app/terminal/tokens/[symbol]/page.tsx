@@ -10,6 +10,7 @@ import { compact, sourceTag, usd } from "@/lib/format";
 import type { RecipientClass, RiskCard } from "@/lib/types";
 import { classifyRecipient } from "@/lib/recipient";
 import { PriceChart } from "@/components/PriceChart";
+import { DataBadge } from "@/components/DataBadge";
 
 interface TokenData {
   tracked: boolean;
@@ -108,7 +109,12 @@ export default function TokenPage() {
         <h1>
           {t.symbol} <span className="note" style={{ fontSize: 16 }}>{t.name}</span>
         </h1>
-        <p>Price ~${t.priceUsd.toFixed(t.priceUsd < 1 ? 4 : 2)} · unlock schedule: {sourceTag(data.sources?.unlocks ?? { mode: data.source ?? "sample" })}</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
+          <span>Price ~${t.priceUsd.toFixed(t.priceUsd < 1 ? 4 : 2)}</span>
+          <span>·</span>
+          <span>Unlock schedule:</span>
+          <DataBadge mode={data.sources?.unlocks?.mode ?? data.source} asOf={data.sources?.unlocks?.asOf} />
+        </div>
         <button className="btn btn-sm" style={{ marginLeft: "auto" }} onClick={() => router.push(`/terminal/agent?q=${encodeURIComponent(`Buy 5,000 THB of ${t.symbol}`)}`)}>
           Ask U-Guard before buying
         </button>

@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams;
-  if (await getSession()) redirect(next && next.startsWith("/") && !next.startsWith("//") ? next : "/assistant");
+  if (await getSession()) redirect(next && next.startsWith("/") && !next.startsWith("//") ? next : "/terminal");
   return (
     <>
       <SiteNav />

@@ -40,4 +40,5 @@ export const LIMITS = {
   stt: { max: 10, windowMs: 60_000 }, // each call spends ElevenLabs credit
   alerts: { max: 30, windowMs: 60_000 },
   ubot: { max: 30, windowMs: 60_000 },
+  screenshot: { max: 6, windowMs: 60_000 }, // each call can spend vision-model credit
 } as const;
