@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ensureSession } from "@/components/EnsureSession";
 import { Spotlight } from "@/components/fx";
+import { DataBadge } from "@/components/DataBadge";
 import { LEVEL_LABEL, shortDate, thb } from "@/lib/format";
 import type { InvestPlan } from "@/lib/types";
 
@@ -134,7 +135,10 @@ export default function InvestPage() {
     <>
       <div className="page-title">
         <h1>Invest</h1>
-        <p>Answer 5 questions → U-Bot drafts a model portfolio for your risk level → adjust it → U-Guard checks the crypto part and the DCA dates → you approve</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
+          <DataBadge status="DEMO" tooltip="Educational model portfolio on sample asset classes" />
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>5-question risk assessment · U-Guard supply risk check on DCA dates · User approved</span>
+        </div>
       </div>
       <p className="note inv-disclaimer">
         An educational model portfolio on sample data (fund names are examples, not real products) · not personal investment advice · real advice must come from someone licensed by the SEC

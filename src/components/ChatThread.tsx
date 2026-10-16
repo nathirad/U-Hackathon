@@ -28,6 +28,13 @@ export function ChatThread({
       {messages.map((m, i) =>
         m.role === "user" ? (
           <div key={m.id} className="msg msg-user">
+            {m.screenshot?.previewUrl && (
+              <img
+                src={m.screenshot.previewUrl}
+                alt="Uploaded Screenshot"
+                style={{ maxWidth: 220, maxHeight: 160, borderRadius: 8, border: "1px solid rgba(255,255,255,0.15)", marginBottom: 6, display: "block" }}
+              />
+            )}
             <div className="bubble">{m.text}</div>
           </div>
         ) : (
@@ -35,6 +42,23 @@ export function ChatThread({
             <Avatar size={26} level={topLevel(m.result?.cards.map((c) => c.level) ?? [])} />
             <div className="msg-stack">
               {m.push && <span className="push-tag">U-BOT ALERT</span>}
+              {m.screenshot && (
+                <div style={{ padding: "8px 12px", background: "var(--surface-2, rgba(255,255,255,0.04))", border: "1px solid var(--border)", borderRadius: 10, fontSize: 12, margin: "6px 0" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 600, color: "var(--teal)" }}>
+                    <span>📸 Signal Screenshot Check ({m.screenshot.kind})</span>
+                    {m.screenshot.engine && <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--muted)" }}>{m.screenshot.engine}</span>}
+                  </div>
+                  {m.screenshot.summary && <p style={{ margin: "4px 0", color: "var(--text-2)" }}>{m.screenshot.summary}</p>}
+                  {m.screenshot.claims.length > 0 && (
+                    <div style={{ marginTop: 6, borderLeft: "2px solid var(--amber)", paddingLeft: 8 }}>
+                      <span style={{ fontSize: 11, color: "var(--amber)", textTransform: "uppercase", letterSpacing: 0.5 }}>Unverified Claim in Image:</span>
+                      {m.screenshot.claims.map((c, ci) => (
+                        <p key={ci} style={{ margin: "2px 0", fontStyle: "italic", color: "var(--text)" }}>"{c}"</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="bubble">{m.text}</div>
               {m.result?.drift && <DriftCardView drift={m.result.drift} />}
               {m.result?.cards.map((c) => <RiskCardView key={c.symbol} card={c} />)}

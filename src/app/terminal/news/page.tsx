@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { DataBadge } from "@/components/DataBadge";
 import { shortDate } from "@/lib/format";
 import type { NewsItem } from "@/lib/types";
 
@@ -66,9 +67,17 @@ export default function NewsPage() {
 
   return (
     <>
-      <div className="page-title">
-        <h1>News</h1>
-        <p>{data?.sources.live ? `Live headlines from ${data.sources.live}` : "U-Guard's saved news reports"} · tagged by token and topic · tap a headline to read the source</p>
+      <div className="page-title" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+        <div>
+          <h1>News</h1>
+          <p>{data?.sources.live ? `Live headlines from ${data.sources.live}` : "U-Guard's saved news reports"} · tagged by token and topic · tap a headline to read the source</p>
+        </div>
+        <DataBadge
+          status={data?.sources.live ? "LIVE" : "CACHED"}
+          source={data?.sources.live ? data.sources.live : "Curated Dispatch"}
+          date={data?.sources.curatedAsOf ?? undefined}
+          label="Intel"
+        />
       </div>
       <div className="screen-tools">
         <div className="seg" role="group" aria-label="Filter news">

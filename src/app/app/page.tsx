@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Avatar, topLevel } from "@/components/Avatar";
 import { RiskCardView } from "@/components/Cards";
 import { ChatThread } from "@/components/ChatThread";
+import { DataBadge } from "@/components/DataBadge";
 import { MicButton } from "@/components/MicButton";
 import { Ticker } from "@/components/Ticker";
 import { TopBar } from "@/components/TopBar";
@@ -47,9 +48,11 @@ export default function AppPage() {
             Agent: {last.engine}
           </span>
         )}
-        <span className={`pill ${dataMode === "sample" ? "lv-medium" : "lv-low"}`}>
-          {sourceLabel(dataMode)}
-        </span>
+        <DataBadge
+          status={dataMode === "live" ? "LIVE" : dataMode === "snapshot" ? "CACHED" : "DEMO"}
+          source={dataMode === "live" ? "Live Feed" : dataMode === "snapshot" ? "Snapshot" : "Demo Data"}
+          label="Mode"
+        />
       </TopBar>
       <div className="ticker-wrap">
         <Ticker onPick={(s) => send(`Check ${s} for me`)} />

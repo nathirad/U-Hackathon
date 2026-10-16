@@ -1,7 +1,24 @@
 # สถานะ U-Guard และทิศทางต่อไป (หน้า Trade / ลงทุน)
 
-> บันทึกเมื่อ 16 ต.ค. 2026 ~01:00 น. (เวลาไทย) หลังรวม branch · อัปเดต ~07:30 น. · **demo คือบ่ายวันนี้**
-> branch: `feat/merge-app-ui-agentic` (รวม `main` ล่าสุด = PR #3 เว็บภาษาอังกฤษแล้ว) · รอกด merge PR เข้า `main`
+> บันทึกเมื่อ 16 ต.ค. 2026 ~01:00 น. (เวลาไทย) หลังรวม branch · อัปเดต ~12:20 น. · **demo คือบ่ายวันนี้**
+> branch: `main` · Full System Improvement & Hardening Completed
+
+## 0.5 อัปเดตล่าสุด: Full System Hardening & Data Provenance Standard
+- **แก้ Webpack 5 Dynamic Chunk Bug (`src/instrumentation.ts`):** Next.js 15 ในโหมด production build เดิมแคลช runtime chunk (`Cannot find module './6817.js'`) แก้ไขโดยใช้ synchronous `require("./lib/watch")` สำหรับ nodejs runtime ทำให้ production server บูตใน 185ms ได้อย่างสมบูรณ์แบบ
+- **ระบบสัญญาระดับความจริงของข้อมูล (Data Provenance System):**
+  - สร้างคอมโพเนนต์มาตรฐาน `src/components/DataBadge.tsx` แสดง 6 สถานะชัดเจน: `LIVE`, `CACHED`, `DEMO`, `STALE`, `UNAVAILABLE`, `ERROR`
+  - ติดตั้ง DataBadge บนทุกหน้าของ Terminal (`/terminal`, `/terminal/tokens`, `tokens/[symbol]`, `/terminal/unlocks`, `/terminal/news`, `/terminal/portfolio`, `/terminal/trade`, `/terminal/invest`, `/terminal/alerts`, `/terminal/plan`, `/terminal/agent`, `/report`, `/app`)
+  - ห้ามแอบอ้างว่าข้อมูลเป็น Live เมื่อดึงจาก Snapshot หรือ Demo
+- **ปรับปรุง Risk Engine (`src/lib/risk.ts`):**
+  - เพิ่มการตรวจสอบความปลอดภัยของตัวเลข (Safe number finiteness, clamp คะแนนให้อยู่ในช่วง 0–100 แน่นอน)
+  - ป้องกันการเกิด `NaN` เมื่อ recipient breakdown ว่าง หรือได้รับชนิดที่ไม่ได้กำหนดค่าน้ำหนัก
+- **ชุดทดสอบประเมินระบบ (Evals Suite):**
+  - เพิ่มเคสทดสอบความถูกต้องของคะแนนความเสี่ยงและการจำแนกสถานะ DataBadge
+  - ผ่าน 64/64 เคส (`pnpm run eval`) ✅
+- **การตรวจสอบ TypeScript และ Responsive Design:**
+  - `tsc --noEmit` ผ่าน 0 ข้อผิดพลาด ✅
+  - `next build` สร้าง 23 หน้า static และ dynamic routes สำเร็จ 100% ✅
+  - `scripts/responsive.mjs` ผ่านทั้ง 5 ขนาดหน้าจอ (iPhone SE, iPhone 15 Pro, iPhone 15 Pro Max, iPad Mini, Desktop 1440x900) ปราศจาก horizontal scrolling และ iOS zoom issue ✅
 
 ## 0. อัปเดตล่าสุด (~01:50 น.)
 - **หน้าเทรด** (`/terminal/trade` + แผงเทรดบนหน้าเหรียญทุกหน้า แบบ Nansen): คุณเลือกเหรียญ ซื้อ/ขาย และจำนวนเงินเอง → U-Bot ร่างแผน (จำนวนเหรียญ, จุดตัดขาดทุน, เสียสูงสุด, สัดส่วนพอร์ตหลังซื้อ, ตาราง "ถ้าราคาเป็นแบบนี้") → U-Guard ตรวจ (unlock, ยอดเงิน, ขนาดไม้เทียบงบความเสี่ยง, การกระจุก, ซื้อไล่ราคา) → อนุมัติ → คำสั่งจำลอง (paper) + บันทึกบน Avalanche

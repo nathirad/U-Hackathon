@@ -338,7 +338,7 @@ export async function assessUnlockRisk(
         share: c.amount > 0 ? s.amount / c.amount : 0,
       }))
       .sort((a, b) => b.share - a.share);
-    const recipient = breakdown.reduce((sum, s) => sum + s.share * RECIPIENT_WEIGHT[s.recipient], 0);
+    const recipient = breakdown.reduce((sum, s) => sum + s.share * (RECIPIENT_WEIGHT[s.recipient] ?? 0.5), 0);
     const investorShare = breakdown.filter((s) => s.recipient === "investor").reduce((sum, s) => sum + s.share, 0);
     const mult = investorMultiple(fund, priceUsd, token.maxSupply);
     const investorBonus = 10 * investorShare * multipleScore(mult?.multiple ?? null);
@@ -349,10 +349,8 @@ export async function assessUnlockRisk(
       recipient,
       investorBonus,
     };
-    const score = Math.min(
-      100,
-      Math.round(100 * factors.time * (0.35 * factors.size + 0.3 * factors.liquidity + 0.35 * factors.recipient) + investorBonus),
-    );
+    const rawScore = Math.round(100 * factors.time * (0.35 * factors.size + 0.3 * factors.liquidity + 0.35 * factors.recipient) + investorBonus);
+    const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, rawScore)) : 50;
     return { c, valueUsd, pctCirc, daysOfVolume, breakdown, investorShare, mult, factors, score };
   });
   scored.sort((a, b) => b.score - a.score);

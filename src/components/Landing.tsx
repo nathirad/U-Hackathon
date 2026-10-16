@@ -114,16 +114,30 @@ export function Landing() {
     <div className="lp">
       {loading && (
         <div className="lp-loader" role="status" aria-live="polite">
-          <GuardMark size={72} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/icon.png"
+            width={76}
+            height={76}
+            alt="U-Guard"
+            style={{ borderRadius: 18, marginBottom: 12, boxShadow: "0 0 32px rgba(45,212,191,0.5)" }}
+          />
           <p>Scanning the unlock calendar…</p>
           <small>{found === null ? "Connecting to Tokenomist" : `Found ${found} unlocks in the next 30 days`}</small>
         </div>
       )}
 
       <header className={`lp-nav ${scrolled ? "lp-nav-scrolled" : ""}`}>
-        <a href="#home" className="lp-logo">
-          <span className="lp-logo-dot" aria-hidden="true" />
-          U-GUARD
+        <a href="#home" className="lp-logo" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/icon.png"
+            width={32}
+            height={32}
+            alt="U-Guard"
+            style={{ borderRadius: 8, objectFit: "cover", boxShadow: "0 0 12px rgba(45,212,191,0.3)" }}
+          />
+          <span>U-GUARD</span>
         </a>
         <nav className="lp-pills" aria-label="Page sections">
           {SECTIONS.map((s) => (

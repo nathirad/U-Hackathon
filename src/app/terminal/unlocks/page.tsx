@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Spotlight } from "@/components/fx";
+import { DataBadge } from "@/components/DataBadge";
 import { compact, LEVEL_LABEL, shortDate, unlockWhen, untilLabel, usd } from "@/lib/format";
 import { asOfLabel } from "@/lib/freshness";
 import type { RiskCard } from "@/lib/types";
@@ -22,6 +23,7 @@ interface MarketEvent {
 export default function UnlocksPage() {
   const [analysed, setAnalysed] = useState<RiskCard[]>([]);
   const [market, setMarket] = useState<MarketEvent[]>([]);
+  const [loading, setLoading] = useState(true);
   const [marketSource, setMarketSource] = useState<{ mode: string; asOf: string; note: string | null } | null>(null);
 
   useEffect(() => {
@@ -32,17 +34,29 @@ export default function UnlocksPage() {
         setMarket(b.market ?? []);
         setMarketSource(b.marketSource ?? null);
       })
-      .catch(() => undefined);
+      .catch(() => undefined)
+      .finally(() => setLoading(false));
   }, []);
 
   const upcoming = market.filter((e) => !e.past).sort((a, b) => a.date.localeCompare(b.date));
   const past = market.filter((e) => e.past);
 
+  const primaryMode = analysed[0]?.source.mode;
+  const badgeStatus = primaryMode === "live" ? "LIVE" : primaryMode === "snapshot" ? "CACHED" : primaryMode === "sample" ? "DEMO" : "CACHED";
+
   return (
     <>
-      <div className="page-title">
-        <h1>Unlock calendar</h1>
-        <p>Prices often start sliding ~30 days before an unlock (Keyrock) · U-Guard scores size, liquidity and recipients</p>
+      <div className="page-title" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+        <div>
+          <h1>Unlock calendar</h1>
+          <p>Prices often start sliding ~30 days before an unlock (Keyrock) · U-Guard scores size, liquidity and recipients</p>
+        </div>
+        <DataBadge
+          status={badgeStatus}
+          source="Tokenomist v5"
+          date={analysed[0]?.source.asOf}
+          label="Schedule"
+        />
       </div>
 
       <Spotlight className="panel">
@@ -50,6 +64,16 @@ export default function UnlocksPage() {
           <h2>Fully analysed by U-Guard</h2>
           <span className="total">Scores computed in code</span>
         </div>
+        {loading && (
+          <div style={{ padding: "16px 0", display: "grid", gap: 12 }}>
+            <div className="skeleton-row" style={{ height: 44, borderRadius: 8 }} />
+            <div className="skeleton-row" style={{ height: 44, borderRadius: 8 }} />
+            <div className="skeleton-row" style={{ height: 44, borderRadius: 8 }} />
+          </div>
+        )}
+        {!loading && analysed.length === 0 && (
+          <p className="empty" style={{ margin: "16px 0" }}>No upcoming unlock events found in tracked universe.</p>
+        )}
         {analysed.map((c) => (
           <Link key={c.symbol} href={`/terminal/tokens/${c.symbol}`} className="event-row" style={{ textDecoration: "none", color: "inherit" }}>
             <span className="event-date">

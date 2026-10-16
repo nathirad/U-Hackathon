@@ -5,7 +5,8 @@
 // compile node:crypto for the edge runtime.
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    const { startWatcher } = await import("./lib/watch");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { startWatcher } = require("./lib/watch");
     startWatcher();
     if (process.env.TOKENOMIST_API_KEY?.trim()) {
       const [{ marketScreen }, { now }] = await Promise.all([import("./lib/screener"), import("./lib/config")]);

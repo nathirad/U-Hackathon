@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { RECIPIENT_LABEL } from "@/components/fx";
+import { Spotlight, RECIPIENT_LABEL } from "@/components/fx";
+import { DataBadge } from "@/components/DataBadge";
 import { LEVEL_LABEL, shortDate, usd } from "@/lib/format";
 import type { ScreenResult, ScreenRow } from "@/lib/screener";
 
@@ -108,12 +109,20 @@ export default function TokensPage() {
 
   return (
     <>
-      <div className="page-title">
-        <h1>Token screener</h1>
-        <p>
-          Top tokens by market cap · prices {data?.sources.market === "live" ? "live (Hyperliquid, CoinGecko)" : "from Tokenomist"} · unlocks from the Tokenomist API
-          {data ? ` (${data.sources.tokens === "live" ? "live" : "saved"}, ${shortDate(data.sources.asOf)})` : ""}
-        </p>
+      <div className="page-title" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+        <div>
+          <h1>Token screener</h1>
+          <p>
+            Top tokens by market cap · prices {data?.sources.market === "live" ? "live (Hyperliquid, CoinGecko)" : "from Tokenomist"} · unlocks from the Tokenomist API
+            {data ? ` (${data.sources.tokens === "live" ? "live" : "saved"}, ${shortDate(data.sources.asOf)})` : ""}
+          </p>
+        </div>
+        <DataBadge
+          status={data?.sources.tokens === "live" ? "LIVE" : "CACHED"}
+          source="Tokenomist Screener"
+          date={data?.sources.asOf}
+          label="Universe"
+        />
       </div>
 
       <div className="kpis">
