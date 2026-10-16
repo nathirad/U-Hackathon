@@ -2,7 +2,7 @@
 
 U-Guard is a Next.js app that installs to a phone's home screen (web app manifest, icons, standalone window). One deploy gives you the website, the installable app and the MCP endpoint U-Bot calls.
 
-**Live:** https://u-hackathon-nine.vercel.app (Vercel project `u-hackathon`, production branch `main`). Checked 16 Oct, 22:14: every page in §3 loads, Tokenomist is live (651 tokens), `/api/mcp` is on and the U-Bot stand-in delivers to `demo-user`'s bell. Not done yet: Upstash (§1 step 4), so the inbox and approvals can still be lost between functions.
+**Live:** https://u-hackathon-nine.vercel.app (Vercel project `u-hackathon`, production branch `main`). Checked 16 Oct, 22:35: every page in §3 loads, Tokenomist is live (651 tokens), `/api/mcp` is on, Upstash is connected (`/api/status` → `"sharedStore": true`), and a U-Bot proposal reaches `demo-user`'s bell and stays approved across requests. Approval receipts are simulated until `DEMO_PRIVATE_KEY` (Fuji) is set.
 
 Checked on `release/app-integration`: typecheck ✅ · evals 74/74 ✅ · `next build` ✅ · the data files (demo wallet, Tokenomist snapshots) are bundled into every server function (`outputFileTracingIncludes`).
 
@@ -28,7 +28,7 @@ Checked on `release/app-integration`: typecheck ✅ · evals 74/74 ✅ · `next 
 | `DEMO_PRIVATE_KEY` | optional, **Fuji testnet only** | Real approval receipts on Avalanche (otherwise "simulated") |
 | `UBOT_API_KEY` | optional | Inbound `/api/ubot/webhook` |
 
-4. **Storage → Create → Upstash for Redis (free) → Connect to project.** This adds `KV_REST_API_URL` / `KV_REST_API_TOKEN`. On Vercel every route is its own function; with Redis connected, `withStore()` shares the U-Bot inbox, proposals, plans, alert rules and email accounts between them. Without it, pages work but approvals and the inbox can be lost between requests.
+4. **Storage → Create → Upstash for Redis (free) → Connect to project.** In the Connect dialog type **`KV`** as the Custom Prefix (left empty it uses `STORAGE_…`, which the app doesn't read), then press **Connect**, not Skip. This adds `KV_REST_API_URL` / `KV_REST_API_TOKEN`. On Vercel every route is its own function; with Redis connected, `withStore()` shares the U-Bot inbox, proposals, plans, alert rules and email accounts between them. Without it, pages work but approvals and the inbox can be lost between requests.
 5. **Deploy** (or *Redeploy* after changing variables; variables apply to new deployments only).
 6. Use the **Production** domain (Overview → Domains). Vercel gives `<project>.vercel.app` only when the name is free: ours is `u-hackathon-nine.vercel.app` because `u-hackathon.vercel.app` belongs to another team. The `…-nathirad.vercel.app` and preview URLs sit behind Vercel login under the default Deployment Protection, so don't share those.
 7. **Check:** `/api/status` shows `"tokenomist":{"keySet":true,"mode":"live"…}`, and `/api/mcp` answers `401 Invalid MCP token` to a request without a token (`503 MCP is disabled` means `MCP_API_KEY` didn't reach this deploy).
