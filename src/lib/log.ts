@@ -11,7 +11,9 @@ import { appendFile, mkdir, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import type { AgentResult } from "./types";
 
-const LOG_DIR = path.join(process.cwd(), process.env.LOG_DIR || "logs");
+// path.resolve, not a process.cwd() join: a cwd join with a dynamic part makes the file tracer copy
+// the whole project folder into every serverless function (and past Vercel's function limit).
+const LOG_DIR = path.resolve(process.env.LOG_DIR || "logs");
 const silent = () => process.env.LOG_SILENT === "1";
 
 export function logEvent(event: string, fields: Record<string, unknown> = {}): void {
