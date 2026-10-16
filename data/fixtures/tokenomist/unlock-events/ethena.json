@@ -1,0 +1,117 @@
+{
+ "metadata": {
+  "queryDate": "2026-10-16T06:12:41.565Z",
+  "page": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "total": 4,
+  "mode": "snapshot",
+  "note": "Saved from the Tokenomist API for the screener (2026-10-16 to 2026-12-15), used when the live API rate-limits."
+ },
+ "data": [
+  {
+   "unlockDate": "2026-11-02T07:00:00Z",
+   "tokenName": "Ethena",
+   "tokenSymbol": "ENA",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 40625000,
+    "cliffValue": 8249596.875,
+    "valueToMarketCap": 0.3021144265240037,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-11-02T07:00:00Z",
+      "allocationName": "Foundation",
+      "standardAllocationName": "Reserve",
+      "cliffAmount": 40625000,
+      "cliffValue": 8249596.875,
+      "referencePrice": 0.203067,
+      "referencePriceUpdatedTime": "2026-11-02T07:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-07T04:17:57Z"
+  },
+  {
+   "unlockDate": "2026-11-05T07:00:00Z",
+   "tokenName": "Ethena",
+   "tokenSymbol": "ENA",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 93750000,
+    "cliffValue": 19037531.25,
+    "valueToMarketCap": 0.6971871381323164,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-11-05T07:00:00Z",
+      "allocationName": "Core Contributors",
+      "standardAllocationName": "Founder / Team",
+      "cliffAmount": 93750000,
+      "cliffValue": 19037531.25,
+      "referencePrice": 0.203067,
+      "referencePriceUpdatedTime": "2026-11-05T07:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-07T04:17:57Z"
+  },
+  {
+   "unlockDate": "2026-12-02T07:00:00Z",
+   "tokenName": "Ethena",
+   "tokenSymbol": "ENA",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 40625000,
+    "cliffValue": 8249596.875,
+    "valueToMarketCap": 0.3021144265240037,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-12-02T07:00:00Z",
+      "allocationName": "Foundation",
+      "standardAllocationName": "Reserve",
+      "cliffAmount": 40625000,
+      "cliffValue": 8249596.875,
+      "referencePrice": 0.203067,
+      "referencePriceUpdatedTime": "2026-12-02T07:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-07T04:17:57Z"
+  },
+  {
+   "unlockDate": "2026-12-05T07:00:00Z",
+   "tokenName": "Ethena",
+   "tokenSymbol": "ENA",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 93750000,
+    "cliffValue": 19037531.25,
+    "valueToMarketCap": 0.6971871381323164,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-12-05T07:00:00Z",
+      "allocationName": "Core Contributors",
+      "standardAllocationName": "Founder / Team",
+      "cliffAmount": 93750000,
+      "cliffValue": 19037531.25,
+      "referencePrice": 0.203067,
+      "referencePriceUpdatedTime": "2026-12-05T07:00:00Z",
+      "unlockPrecision": "month",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-07T04:17:57Z"
+  }
+ ]
+}

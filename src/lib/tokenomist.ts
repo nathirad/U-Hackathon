@@ -99,8 +99,9 @@ interface Envelope<T> {
 // ─── Transport ──────────────────────────────────────────────────────────────
 
 const TTL_MS = 10 * 60 * 1000;
-// After a failed live call the fallback is kept for a minute only, so live data comes back soon.
-const FALLBACK_TTL_MS = 60 * 1000;
+// After a failed live call the saved fallback is kept for 5 minutes, so a rate limit doesn't turn
+// into a retry storm (several servers share one API key).
+const FALLBACK_TTL_MS = 5 * 60 * 1000;
 // On globalThis so every route (and the warm-up at server start) shares one cache.
 const g = globalThis as typeof globalThis & {
   __ugTokenomist?: { cache: Map<string, { at: number; ttl: number; value: Sourced<unknown> }>; pending: Map<string, Promise<Sourced<unknown>>> };

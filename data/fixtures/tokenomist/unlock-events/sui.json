@@ -1,0 +1,109 @@
+{
+ "metadata": {
+  "queryDate": "2026-10-16T06:12:30.673Z",
+  "page": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "total": 2,
+  "mode": "snapshot",
+  "note": "Saved from the Tokenomist API for the screener (2026-10-16 to 2026-12-15), used when the live API rate-limits."
+ },
+ "data": [
+  {
+   "unlockDate": "2026-11-01T00:00:00Z",
+   "tokenName": "Sui",
+   "tokenSymbol": "SUI",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 13147499.004999999,
+    "cliffValue": 13660251.466194998,
+    "valueToMarketCap": 0.32071658484013815,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-11-01T00:00:00Z",
+      "allocationName": "Early Contributors",
+      "standardAllocationName": "Founder / Team",
+      "cliffAmount": 7078132,
+      "cliffValue": 7354179.147999999,
+      "referencePrice": 1.039,
+      "referencePriceUpdatedTime": "2026-11-01T00:00:00Z",
+      "unlockPrecision": "day",
+      "committedClaim": null
+     },
+     {
+      "unlockDate": "2026-11-01T00:00:00Z",
+      "allocationName": "Community Reserve",
+      "standardAllocationName": "Community",
+      "cliffAmount": 4000000,
+      "cliffValue": 4155999.9999999995,
+      "referencePrice": 1.039,
+      "referencePriceUpdatedTime": "2026-11-01T00:00:00Z",
+      "unlockPrecision": "day",
+      "committedClaim": null
+     },
+     {
+      "unlockDate": "2026-11-01T00:00:00Z",
+      "allocationName": "Mysten Labs Treasury",
+      "standardAllocationName": "Reserve",
+      "cliffAmount": 2069367.005,
+      "cliffValue": 2150072.318195,
+      "referencePrice": 1.039,
+      "referencePriceUpdatedTime": "2026-11-01T00:00:00Z",
+      "unlockPrecision": "day",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-06T07:32:11Z"
+  },
+  {
+   "unlockDate": "2026-12-01T00:00:00Z",
+   "tokenName": "Sui",
+   "tokenSymbol": "SUI",
+   "listedMethod": "INTERNAL",
+   "dataSource": "Whitepaper",
+   "cliffUnlocks": {
+    "cliffAmount": 12971457.004999999,
+    "cliffValue": 13477343.828194998,
+    "valueToMarketCap": 0.3164222632351731,
+    "allocationBreakdown": [
+     {
+      "unlockDate": "2026-12-01T00:00:00Z",
+      "allocationName": "Early Contributors",
+      "standardAllocationName": "Founder / Team",
+      "cliffAmount": 6902090,
+      "cliffValue": 7171271.51,
+      "referencePrice": 1.039,
+      "referencePriceUpdatedTime": "2026-12-01T00:00:00Z",
+      "unlockPrecision": "day",
+      "committedClaim": null
+     },
+     {
+      "unlockDate": "2026-12-01T00:00:00Z",
+      "allocationName": "Community Reserve",
+      "standardAllocationName": "Community",
+      "cliffAmount": 4000000,
+      "cliffValue": 4155999.9999999995,
+      "referencePrice": 1.039,
+      "referencePriceUpdatedTime": "2026-12-01T00:00:00Z",
+      "unlockPrecision": "day",
+      "committedClaim": null
+     },
+     {
+      "unlockDate": "2026-12-01T00:00:00Z",
+      "allocationName": "Mysten Labs Treasury",
+      "standardAllocationName": "Reserve",
+      "cliffAmount": 2069367.005,
+      "cliffValue": 2150072.318195,
+      "referencePrice": 1.039,
+      "referencePriceUpdatedTime": "2026-12-01T00:00:00Z",
+      "unlockPrecision": "day",
+      "committedClaim": null
+     }
+    ]
+   },
+   "latestUpdateDate": "2026-10-06T07:32:11Z"
+  }
+ ]
+}
